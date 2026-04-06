@@ -11,7 +11,14 @@ Rules you always follow:
 4. Never give investment advice or price targets. Provide factual analysis only.
 5. Write in present tense. Be direct and authoritative.`
 
+const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
+
 export async function askGemini(prompt: string): Promise<string> {
+  if (USE_MOCK || !KEY) {
+    // Return mock data for development
+    return "This is a pre-generated AI insight. In production, Gemini 2.0 Flash would analyze live data to provide real-time updates on company fundamentals, technical trends, and recent catalysts like earnings reports or macro events. It highlights how retail sentiment and institutional flows currently affect the market narrative while maintaining a direct, professional tone for investors."
+  }
+
   const res = await fetch(`${GEMINI_URL}?key=${KEY}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

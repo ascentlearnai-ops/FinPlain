@@ -15,7 +15,7 @@ export default function TrendingTickers() {
     <div className="flex flex-wrap gap-3">
       {TRENDING.map(stock => (
         <Link key={stock.ticker} href={`/stock/${stock.ticker}`}
-          className="group flex items-center gap-2.5 glass-card px-5 py-3">
+          className="group flex items-center gap-2.5 glass-card px-5 py-3 text-decoration-none">
           <span className="font-mono font-bold text-sm text-primary group-hover:text-accent transition-colors">{stock.ticker}</span>
           <span className="text-xs text-muted">{stock.label}</span>
           <ArrowUpRight size={12} className="text-muted group-hover:text-accent transition-colors" />

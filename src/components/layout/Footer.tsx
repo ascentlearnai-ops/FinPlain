@@ -10,10 +10,10 @@ export default function Footer() {
             {/* Brand */}
             <div className="flex flex-col gap-4 max-w-xs">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg overflow-hidden bg-gradient-to-br from-blue-600 to-blue-500 p-1">
-                  <Image src="/logo.png" alt="Finplain" width={32} height={32} className="w-full h-full object-cover rounded-md" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <span className="font-sans font-black text-white text-sm">F</span>
                 </div>
-                <span className="font-sans font-extrabold text-lg tracking-tight">Finplain</span>
+                <span className="font-sans font-extrabold text-lg tracking-tight text-primary">Finplain</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed">
                 Market intelligence simplified. Real-time data powered by Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView.
@@ -23,15 +23,15 @@ export default function Footer() {
             {/* Links */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-10 text-sm">
               <div>
-                <p className="font-semibold text-primary mb-3">Product</p>
+                <p className="font-bold text-primary mb-3 uppercase tracking-tighter text-xs">Product</p>
                 <div className="space-y-2.5">
-                  {[{ label: 'Dashboard', href: '/' }, { label: 'News Feed', href: '/news' }, { label: 'Glossary', href: '/learn' }].map(l => (
+                  {[{ label: 'Dashboard', href: '/' }, { label: 'News Feed', href: '/news' }, { label: 'Glossary', href: '/learn' }, { label: 'Watchlist', href: '/watchlist' }].map(l => (
                     <Link key={l.href} href={l.href} className="block text-secondary hover:text-accent transition-colors">{l.label}</Link>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="font-semibold text-primary mb-3">Data Sources</p>
+                <p className="font-bold text-primary mb-3 uppercase tracking-tighter text-xs">Data Sources</p>
                 <div className="space-y-2.5 text-secondary">
                   <p>Alpha Vantage</p>
                   <p>Yahoo Finance</p>
@@ -40,7 +40,7 @@ export default function Footer() {
                 </div>
               </div>
               <div>
-                <p className="font-semibold text-primary mb-3">Legal</p>
+                <p className="font-bold text-primary mb-3 uppercase tracking-tighter text-xs">Legal</p>
                 <div className="space-y-2.5 text-secondary">
                   <p>For informational purposes only</p>
                   <p>Not financial advice</p>

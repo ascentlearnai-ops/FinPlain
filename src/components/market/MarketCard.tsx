@@ -6,7 +6,7 @@ interface Props { name: string; ticker: string; price: number; change: number; c
 export default function MarketCard({ name, ticker, price, change, changePercent, plainLabel }: Props) {
   const isUp = change >= 0
   return (
-    <Link href={`/stock/${ticker}`} className="glass-card p-6 block group">
+    <Link href={`/stock/${ticker}`} className="glass-card p-6 block group text-decoration-none">
       <div className="flex items-start justify-between mb-5">
         <div>
           <p className="font-semibold text-xs tracking-widest uppercase text-muted">{name}</p>

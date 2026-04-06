@@ -5,6 +5,13 @@ import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
 import { Activity, BarChart3, Brain, Globe } from 'lucide-react'
+import { getGlobalQuote } from '@/lib/alphaVantage'
+
+const INDICES_DEFS = [
+  { ticker: 'SPY', name: 'S&P 500', plainLabel: 'Tracks the top 500 US companies' },
+  { ticker: 'QQQ', name: 'Nasdaq', plainLabel: 'Tracks the top tech companies' },
+  { ticker: 'DIA', name: 'Dow Jones', plainLabel: 'Tracks 30 of the biggest US companies' },
+]
 
 export const metadata = { title: 'Finplain — Market Intelligence, Simplified' }
 
@@ -25,7 +32,7 @@ export default function HomePage() {
               <span className="gradient-text">simplified.</span>
             </h1>
 
-            <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed font-sans">
               Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView — 
               paired with AI-powered analysis to decode every market move.
             </p>
@@ -103,19 +110,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === CTA SECTION (dark) === */}
-      <section className="section-dark py-24">
-        <div className="container-full">
+      {/* === CTA SECTION (Clean) === */}
+      <section className="bg-blue-50/50 py-24 mb-20 rounded-[40px] mx-4 md:mx-10 border border-blue-100/50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/20 rounded-full blur-[100px] -mr-48 -mt-48" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/20 rounded-full blur-[100px] -ml-48 -mb-48" />
+        
+        <div className="container-full relative z-10">
           <div className="container-inner text-center">
-            <h2 className="text-headline text-white mb-4">
+            <h2 className="text-headline text-primary mb-6 max-w-2xl mx-auto">
               Intelligence that helps during the trade, not after.
             </h2>
-            <p className="text-base text-blue-200 max-w-lg mx-auto mb-8">
+            <p className="text-lg text-secondary max-w-xl mx-auto mb-10 leading-relaxed">
               Add tickers to your watchlist, track real-time price action, and get AI-powered market briefs — all in one place.
             </p>
-            <a href="/watchlist" className="btn-primary text-sm inline-flex items-center gap-2">
-              Start Tracking
-            </a>
+            <div className="flex items-center justify-center gap-4">
+              <a href="/watchlist" className="btn-primary px-10 py-5 text-base shadow-xl shadow-blue-500/20">
+                Start Tracking Now
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -126,10 +138,19 @@ export default function HomePage() {
 async function MarketSummaryRow() {
   let indices = []
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/market-summary`, { next: { revalidate: 300 } })
-    const data = await res.json()
-    indices = data.indices || []
-  } catch {}
+    indices = await Promise.all(
+      INDICES_DEFS.map(async idx => {
+        try {
+          const quote = await getGlobalQuote(idx.ticker)
+          return { ...idx, ...(quote as any) }
+        } catch {
+          return idx
+        }
+      })
+    )
+  } catch (err) {
+    console.error("MARKET_SUMMARY_LOAD_ERROR:", err);
+  }
 
   if (indices.length === 0) return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
 

@@ -30,7 +30,7 @@ export default function AIExplainer({ ticker, companyName, changePercent }: Prop
               <div className="h-4 bg-white/[0.06] rounded w-full" />
               <div className="h-4 bg-white/[0.06] rounded w-5/6" />
             </div>
-          ) : <p className="text-sm text-blue-50 leading-relaxed">{explanation}</p>}
+          ) : <p className="text-sm text-blue-50 leading-relaxed font-sans">{explanation}</p>}
         </div>
       </div>
     </div>

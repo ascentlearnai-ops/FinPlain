@@ -11,20 +11,34 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-interface Props { params: { ticker: string } }
+import { getGlobalQuote, getCompanyOverview, getTimeSeries } from '@/lib/alphaVantage'
+import { getRecommendationTrends, getEarnings } from '@/lib/finnhub'
+
+interface Props { params: Promise<{ ticker: string }> | { ticker: string } }
 
 export async function generateMetadata({ params }: Props) {
-  return { title: `${params.ticker.toUpperCase()} | Finplain` }
+  const p = await params
+  return { title: `${p.ticker.toUpperCase()} | Finplain` }
 }
 
 export default async function StockPage({ params }: Props) {
-  const ticker = params.ticker.toUpperCase()
+  const p = await params
+  const ticker = p.ticker.toUpperCase()
+  
   let stockData: any = null
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/stock?ticker=${ticker}&range=1M`, { next: { revalidate: 60 } })
-    stockData = await res.json()
-    if (stockData.error === 'RATE_LIMITED') stockData = null
-  } catch {}
+     // Fetch directly from source libs since we are on the server
+     const [quote, overview, chartData, recTrends, earnings] = await Promise.all([
+      getGlobalQuote(ticker),
+      getCompanyOverview(ticker),
+      getTimeSeries(ticker, '1M'),
+      getRecommendationTrends(ticker),
+      getEarnings(ticker),
+    ])
+    stockData = { quote, overview, chartData, recTrends, earnings }
+  } catch (err: any) {
+    console.error("STOCK_PAGE_LOAD_ERROR:", err.message);
+  }
 
   if (!stockData?.quote) return notFound()
   const { quote, overview, chartData, recTrends } = stockData
