@@ -36,10 +36,10 @@ export default function Navbar() {
             
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/25 transition-transform group-hover:scale-105">
-                <span className="font-sans font-black text-white text-base">F</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/10 transition-transform group-hover:scale-110">
+                <Image src="/logo.png" alt="Finplain" width={40} height={40} className="w-full h-full object-cover" />
               </div>
-              <span className="font-sans font-extrabold text-lg text-primary tracking-tight group-hover:text-accent transition-colors">
+              <span className="font-sans font-extrabold text-xl text-primary tracking-tighter group-hover:text-accent transition-colors">
                 Finplain
               </span>
             </Link>

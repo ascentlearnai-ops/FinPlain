@@ -10,10 +10,10 @@ export default function Footer() {
             {/* Brand */}
             <div className="flex flex-col gap-4 max-w-xs">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <span className="font-sans font-black text-white text-sm">F</span>
+                <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/5">
+                  <Image src="/logo.png" alt="Finplain" width={40} height={40} className="w-full h-full object-cover" />
                 </div>
-                <span className="font-sans font-extrabold text-lg tracking-tight text-primary">Finplain</span>
+                <span className="font-sans font-extrabold text-xl tracking-tighter text-primary">Finplain</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed">
                 Market intelligence simplified. Real-time data powered by Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView.
