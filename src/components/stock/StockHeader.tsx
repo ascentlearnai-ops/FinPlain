@@ -22,7 +22,7 @@ export default function StockHeader({ quote, overview }: Props) {
       <div className="flex items-end gap-3 mt-4 flex-wrap">
         <span className="font-mono font-bold text-4xl md:text-5xl text-primary">{formatPrice(quote.price)}</span>
         <div className={`flex items-center gap-2 font-mono font-semibold text-sm px-3 py-2 rounded-xl ${getChangeBg(quote.changePercent)} ${getChangeColor(quote.changePercent)}`}>
-          {getChangeArrow(quote.changePercent)} {formatPercent(Math.abs(quote.changePercent))}
+          {getChangeArrow(quote.changePercent)} {formatPercent(Math.abs(quote.changePercent || 0))}
           <span className="text-xs opacity-60">today</span>
         </div>
       </div>

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { formatPrice, formatChange, formatPercent, getChangeColor, getChangeBg, getChangeArrow } from '@/lib/formatters'
 
-interface Props { name: string; ticker: string; price: number; change: number; changePercent: number; plainLabel: string }
+interface Props { name: string; ticker: string; price?: number; change?: number; changePercent?: number; plainLabel: string }
 
 export default function MarketCard({ name, ticker, price, change, changePercent, plainLabel }: Props) {
-  const isUp = change >= 0
+  const isUp = change !== undefined ? change >= 0 : true
   return (
     <Link href={`/stock/${ticker}`} className="glass-card p-6 block group text-decoration-none">
       <div className="flex items-start justify-between mb-5">
@@ -20,7 +20,7 @@ export default function MarketCard({ name, ticker, price, change, changePercent,
       <p className={`font-mono text-sm ${getChangeColor(change)}`}>{getChangeArrow(change)} {formatChange(change)} today</p>
       <div className="mt-5 h-1 bg-gray-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full transition-all ${isUp ? 'bg-green-500' : 'bg-red-500'}`}
-          style={{ width: `${Math.min(Math.abs(changePercent) * 20, 100)}%` }} />
+          style={{ width: `${Math.min(Math.abs(changePercent || 0) * 20, 100)}%` }} />
       </div>
     </Link>
   )

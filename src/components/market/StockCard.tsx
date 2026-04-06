@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { formatPrice, formatPercent, getChangeColor, getChangeBg, getChangeArrow } from '@/lib/formatters'
 
-interface Props { ticker: string; price: number; changePercent: number }
+interface Props { ticker: string; price?: number; changePercent?: number }
 
 export default function StockCard({ ticker, price, changePercent }: Props) {
   return (
@@ -15,7 +15,7 @@ export default function StockCard({ ticker, price, changePercent }: Props) {
       <div className="text-right">
         <p className="font-mono font-semibold text-sm text-primary">{formatPrice(price)}</p>
         <span className={`inline-block mt-0.5 font-mono text-xs px-2 py-0.5 rounded-md ${getChangeBg(changePercent)} ${getChangeColor(changePercent)}`}>
-          {getChangeArrow(changePercent)} {formatPercent(Math.abs(changePercent))}
+          {getChangeArrow(changePercent)} {formatPercent(Math.abs(changePercent || 0))}
         </span>
       </div>
     </Link>
