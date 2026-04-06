@@ -21,26 +21,42 @@ export async function generateMetadata({ params }: Props) {
   return { title: `${p.ticker.toUpperCase()} | Finplain` }
 }
 
+import { getYahooQuote, getYahooOverview, getYahooChart } from '@/lib/yahooFinance'
+
 export default async function StockPage({ params }: Props) {
   const p = await params
   const ticker = p.ticker.toUpperCase()
   
   let stockData: any = null
   try {
-     // Fetch directly from source libs since we are on the server
-     const [quote, overview, chartData, recTrends, earnings] = await Promise.all([
-      getGlobalQuote(ticker),
-      getCompanyOverview(ticker),
-      getTimeSeries(ticker, '1M'),
-      getRecommendationTrends(ticker),
-      getEarnings(ticker),
+    // Attempt fetch from Yahoo Finance first as requested
+    const [yahooQuote, yahooOverview, yahooChart] = await Promise.all([
+      getYahooQuote(ticker),
+      getYahooOverview(ticker),
+      getYahooChart(ticker, '1M'),
     ])
-    stockData = { quote, overview, chartData, recTrends, earnings }
+
+    // If Yahoo fails, try Alpha Vantage as a fallback
+    const finalQuote = yahooQuote || await getGlobalQuote(ticker).catch(() => null)
+    const finalOverview = yahooOverview || await getCompanyOverview(ticker).catch(() => null)
+    const finalChart = (yahooChart && yahooChart.length > 0) ? yahooChart : await getTimeSeries(ticker, '1M').catch(() => [])
+    
+    // Auxiliary data from Finnhub (safe to fail)
+    const recTrends = await getRecommendationTrends(ticker).catch(() => [])
+
+    if (finalQuote && finalQuote.price) {
+      stockData = { 
+        quote: finalQuote, 
+        overview: finalOverview || { ticker, companyName: ticker, sector: 'Equity', industry: 'Market' }, 
+        chartData: finalChart, 
+        recTrends 
+      }
+    }
   } catch (err: any) {
     console.error("STOCK_PAGE_LOAD_ERROR:", err.message);
   }
 
-  if (!stockData?.quote) return notFound()
+  if (!stockData?.quote || !stockData?.quote.price) return notFound()
   const { quote, overview, chartData, recTrends } = stockData
 
   return (

@@ -135,24 +135,49 @@ export default function HomePage() {
   )
 }
 
+import { getSerpApiMarketData, formatSerpApiIndices } from '@/lib/serpapi'
+import { getYahooQuote } from '@/lib/yahooFinance'
+
 async function MarketSummaryRow() {
-  let indices = []
+  let indices: any[] = []
+  
   try {
-    indices = await Promise.all(
-      INDICES_DEFS.map(async idx => {
-        try {
-          const quote = await getGlobalQuote(idx.ticker)
-          return { ...idx, ...(quote as any) }
-        } catch {
-          return idx
-        }
+    // Try SerpApi first as requested by user
+    const serpData = await getSerpApiMarketData()
+    const formatted = formatSerpApiIndices(serpData)
+
+    if (formatted) {
+      indices = INDICES_DEFS.map(idx => {
+        const data = (formatted as any)[idx.ticker]
+        return { ...idx, ...data }
       })
-    )
+    }
   } catch (err) {
-    console.error("MARKET_SUMMARY_LOAD_ERROR:", err);
+    console.error("SERPAPI_ERROR_IN_HOME:", err)
   }
 
-  if (indices.length === 0) return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
+  // Fallback or fill in missing data with Yahoo Finance
+  if (indices.length === 0 || indices.some(idx => !idx.price)) {
+    try {
+      const fallbackIndices = await Promise.all(
+        INDICES_DEFS.map(async idx => {
+          try {
+            const quote = await getYahooQuote(idx.ticker)
+            return { ...idx, ...quote }
+          } catch {
+            return idx
+          }
+        })
+      )
+      indices = fallbackIndices
+    } catch (err) {
+      console.error("YAHOO_FALLBACK_ERROR:", err);
+    }
+  }
+
+  if (indices.length === 0 || indices.every(idx => !idx.price)) {
+    return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

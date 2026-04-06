@@ -1,6 +1,57 @@
 import yahooFinance from 'yahoo-finance2'
 import type { ChartDataPoint, ChartRange } from './types'
 
+export async function getYahooQuote(ticker: string) {
+  try {
+    const result: any = await yahooFinance.quote(ticker)
+    if (!result) return null
+
+    return {
+      ticker,
+      price: result.regularMarketPrice,
+      change: result.regularMarketChange,
+      changePercent: result.regularMarketChangePercent,
+      volume: result.regularMarketVolume,
+      prevClose: result.regularMarketPreviousClose,
+      open: result.regularMarketOpen,
+      high: result.regularMarketDayHigh,
+      low: result.regularMarketDayLow,
+    }
+  } catch (err) {
+    console.error(`YAHOO_QUOTE_ERROR (${ticker}):`, err)
+    return null
+  }
+}
+
+export async function getYahooOverview(ticker: string) {
+  try {
+    const result: any = await yahooFinance.quoteSummary(ticker, { modules: ['summaryProfile', 'summaryDetail', 'price'] })
+    if (!result) return null
+
+    const profile = result.summaryProfile || {}
+    const detail = result.summaryDetail || {}
+    const price = result.price || {}
+
+    return {
+      ticker,
+      companyName: price.longName || price.shortName || ticker,
+      description: profile.longBusinessSummary || '',
+      sector: profile.sector || '',
+      industry: profile.industry || '',
+      marketCap: detail.marketCap || 0,
+      peRatio: detail.forwardPE || detail.trailingPE || null,
+      dividendYield: (detail.dividendYield || 0) * 100,
+      week52High: detail.fiftyTwoWeekHigh || 0,
+      week52Low: detail.fiftyTwoWeekLow || 0,
+      avgVolume: detail.averageVolume || 0,
+      eps: detail.trailingEps || null,
+    }
+  } catch (err) {
+    console.error(`YAHOO_OVERVIEW_ERROR (${ticker}):`, err)
+    return null
+  }
+}
+
 export async function getYahooChart(ticker: string, range: ChartRange): Promise<ChartDataPoint[]> {
   try {
     const period1 = getPeriod1(range)
@@ -27,17 +78,22 @@ export async function getYahooChart(ticker: string, range: ChartRange): Promise<
         volume: q.volume || 0,
       })) as ChartDataPoint[]
   } catch (err) {
-    console.error('YAHOO_CHART_ERROR:', err)
+    console.error(`YAHOO_CHART_ERROR (${ticker}):`, err)
     return []
   }
 }
 
 function getPeriod1(range: ChartRange): string {
   const now = new Date()
-  if (range === '1D') return new Date(now.setDate(now.getDate() - 1)).toISOString()
-  if (range === '1W') return new Date(now.setDate(now.getDate() - 7)).toISOString()
-  if (range === '1M') return new Date(now.setMonth(now.getMonth() - 1)).toISOString()
-  if (range === '3M') return new Date(now.setMonth(now.getMonth() - 3)).toISOString()
-  if (range === '1Y') return new Date(now.setFullYear(now.getFullYear() - 1)).toISOString()
-  return new Date(now.setDate(now.getDate() - 30)).toISOString()
+  if (range === '1D') {
+    const yesterday = new Date(now)
+    yesterday.setDate(now.getDate() - 2) // Yahoo chart needs a broader window for intraday sometimes
+    return yesterday.toISOString()
+  }
+  if (range === '1W') return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).toISOString()
+  if (range === '1M') return new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()).toISOString()
+  if (range === '3M') return new Date(now.getFullYear(), now.getMonth() - 3, now.getDate()).toISOString()
+  if (range === '1Y') return new Date(now.getFullYear() - 1, now.getMonth(), now.getDate()).toISOString()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30).toISOString()
 }
+
