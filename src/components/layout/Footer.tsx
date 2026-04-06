@@ -16,7 +16,7 @@ export default function Footer() {
                 <span className="font-sans font-extrabold text-lg tracking-tight">Finplain</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed">
-                Market intelligence simplified. Real-time data powered by Alpha Vantage, Yahoo Finance, Finnhub & TradingView.
+                Market intelligence simplified. Real-time data powered by Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView.
               </p>
             </div>
 

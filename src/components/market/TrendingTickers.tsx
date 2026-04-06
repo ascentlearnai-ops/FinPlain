@@ -7,7 +7,7 @@ const TRENDING = [
   { ticker: 'NVDA', label: 'Nvidia' }, { ticker: 'AMZN', label: 'Amazon' },
   { ticker: 'MSFT', label: 'Microsoft' }, { ticker: 'META', label: 'Meta' },
   { ticker: 'GOOGL', label: 'Alphabet' }, { ticker: 'AMD', label: 'AMD' },
-  { ticker: 'SPY', label: 'S&P 500 ETF' }, { ticker: 'QQQ', label: 'Nasdaq ETF' },
+  { ticker: 'SPY', label: 'S&amp;P 500 ETF' }, { ticker: 'QQQ', label: 'Nasdaq ETF' },
 ]
 
 export default function TrendingTickers() {

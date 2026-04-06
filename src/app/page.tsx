@@ -26,7 +26,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-              Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub & TradingView — 
+              Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView — 
               paired with AI-powered analysis to decode every market move.
             </p>
 

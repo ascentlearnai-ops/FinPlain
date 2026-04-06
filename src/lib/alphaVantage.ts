@@ -3,7 +3,7 @@
 const BASE = 'https://www.alphavantage.co/query'
 const KEY = process.env.ALPHA_VANTAGE_KEY
 const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
-import { MOCK_AAPL_QUOTE, MOCK_AAPL_OVERVIEW, MOCK_GAINERS, MOCK_LOSERS, MOCK_MARKET_SUMMARY } from './mockData'
+import { MOCK_AAPL_QUOTE, MOCK_AAPL_OVERVIEW, MOCK_GAINERS, MOCK_LOSERS } from './mockData'
 // In-memory server cache (resets on cold start, good enough for MVP)
 type CacheEntry = { data: unknown; ts: number }
 const cache = new Map<string, CacheEntry>()
