@@ -17,7 +17,7 @@ export async function GET() {
       })
     )
 
-    let finalData = results.map((res, i) => {
+    let finalData = results.map((res) => {
       if (res.status === 'fulfilled') return res.value
       return null
     })
