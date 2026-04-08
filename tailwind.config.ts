@@ -1,53 +1,63 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
-        base: '#0b0e11',
-        card: '#161a1e',
-        elevated: '#1b2028',
-        surface: '#1e2329',
-        subtle: '#2b3139',
-        accent: '#f0b90b',
-        'accent-light': '#f7d060',
-        'accent-bg': 'rgba(240, 185, 11, 0.12)',
-        primary: '#eaecef',
-        secondary: '#848e9c',
-        muted: '#5e6673',
-        up: '#0ecb81',
-        'up-bg': 'rgba(14, 203, 129, 0.1)',
-        down: '#f6465d',
-        'down-bg': 'rgba(246, 70, 93, 0.1)',
-        dark: '#070a0d',
-        'dark-card': '#0d1117',
-        border: 'rgba(255,255,255,0.06)',
+        // Deep Obsidian Base
+        background: '#040507',
+        surface: '#0d1017',
+        card: '#151921',
+        
+        // TradingView Neon Palette
+        primary: '#ffffff',
+        secondary: '#94a3b8',
+        muted: '#475569',
+        
+        // Neon Accents
+        accent: '#d946ef', // Pinkish-Purple
+        neonBlue: '#3b82f6',
+        neonPurple: '#8b5cf6',
+        neonPink: '#ec4899',
+
+        // Trading Signals
+        up: '#00ffaa',    // Neon Green
+        down: '#ff3366',  // Vivid Pinkish-Red
+        
+        dark: '#030406',
+        gold: '#f0b90b',
       },
-      fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'tradingview-glow': 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
       },
       boxShadow: {
-        card: '0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03)',
-        'card-hover': '0 8px 24px rgba(0,0,0,0.5)',
-        glow: '0 4px 14px rgba(240, 185, 11, 0.15)',
-        'glow-lg': '0 8px 30px rgba(240, 185, 11, 0.12)',
-        blue: '0 4px 14px rgba(33, 150, 243, 0.25)',
+        'neon-pink': '0 0 20px rgba(217, 70, 239, 0.2)',
+        'neon-blue': '0 0 20px rgba(59, 130, 246, 0.2)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.8)',
       },
-      borderRadius: { '2xl': '16px', '3xl': '20px', '4xl': '24px' },
       animation: {
-        'fade-up': 'fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        shimmer: 'shimmer 2s infinite',
-        'pulse-dot': 'pulse-dot 2s infinite',
+        'pulse-glow': 'pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
-        fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
-        'pulse-dot': { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.4' } },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '1', filter: 'brightness(1)' },
+          '50%': { opacity: '0.8', filter: 'brightness(1.5)' },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

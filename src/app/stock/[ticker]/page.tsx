@@ -71,9 +71,13 @@ export default async function StockPage({ params }: Props) {
   const recTrends = recTrendsResult.status === 'fulfilled' ? recTrendsResult.value : []
 
   return (
-    <>
+    <div className="relative overflow-hidden min-h-screen">
+      <div className="hero-glow !opacity-10" />
+      <div className="side-glow-blue !opacity-5" />
+      <div className="side-glow-pink !opacity-5" />
+      
       {/* Stock Header */}
-      <div className="border-b border-white/[0.04] py-6" style={{ background: 'linear-gradient(180deg, #111418 0%, #0b0e11 100%)' }}>
+      <div className="border-b border-white/[0.04] py-12 relative z-10">
         <div className="container-full">
           <div className="container-inner">
             <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-accent mb-5 transition-colors">
@@ -110,6 +114,6 @@ export default async function StockPage({ params }: Props) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
