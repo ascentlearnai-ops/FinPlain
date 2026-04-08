@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getGlobalQuote, getCompanyOverview } from '@/lib/alphaVantage'
-import { getRecommendationTrends, getEarnings } from '@/lib/finnhub'
+import { getRecommendationTrends } from '@/lib/finnhub'
 import { getYahooChart, getYahooQuote } from '@/lib/yahooFinance'
 import { getEodhdChart, getEodhdQuote } from '@/lib/eodhd'
 import { getSerpApiStockData } from '@/lib/serpapi'
