@@ -12,7 +12,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
 import { getGlobalQuote, getCompanyOverview, getTimeSeries } from '@/lib/alphaVantage'
-import { getRecommendationTrends, getEarnings } from '@/lib/finnhub'
+import { getRecommendationTrends } from '@/lib/finnhub'
 
 interface Props { params: Promise<{ ticker: string }> | { ticker: string } }
 
@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props) {
   return { title: `${p.ticker.toUpperCase()} | Finplain` }
 }
 
+import { getSerpApiStockData } from '@/lib/serpapi'
 import { getYahooQuote, getYahooOverview, getYahooChart } from '@/lib/yahooFinance'
 
 export default async function StockPage({ params }: Props) {
@@ -29,19 +30,20 @@ export default async function StockPage({ params }: Props) {
   
   let stockData: any = null
   try {
-    // Attempt fetch from Yahoo Finance first as requested
+    // Attempt fetch from SerpApi first as requested by user
+    const serpQuote = await getSerpApiStockData(ticker)
+    
     const [yahooQuote, yahooOverview, yahooChart] = await Promise.all([
       getYahooQuote(ticker),
       getYahooOverview(ticker),
       getYahooChart(ticker, '1M'),
     ])
 
-    // If Yahoo fails, try Alpha Vantage as a fallback
-    const finalQuote = yahooQuote || await getGlobalQuote(ticker).catch(() => null)
+    // Final resolution: SerpApi > Yahoo > AV
+    const finalQuote = serpQuote || yahooQuote || await getGlobalQuote(ticker).catch(() => null)
     const finalOverview = yahooOverview || await getCompanyOverview(ticker).catch(() => null)
     const finalChart = (yahooChart && yahooChart.length > 0) ? yahooChart : await getTimeSeries(ticker, '1M').catch(() => [])
     
-    // Auxiliary data from Finnhub (safe to fail)
     const recTrends = await getRecommendationTrends(ticker).catch(() => [])
 
     if (finalQuote && finalQuote.price) {

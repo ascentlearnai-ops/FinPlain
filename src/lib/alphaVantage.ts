@@ -1,7 +1,7 @@
 // src/lib/alphaVantage.ts
 
 const BASE = 'https://www.alphavantage.co/query'
-const KEY = process.env.ALPHA_VANTAGE_KEY
+// Removed top-level KEY
 const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
 import { MOCK_AAPL_QUOTE, MOCK_AAPL_OVERVIEW, MOCK_GAINERS, MOCK_LOSERS } from './mockData'
 // In-memory server cache (resets on cold start, good enough for MVP)
@@ -17,6 +17,7 @@ async function fetchAV(params: Record<string, string>, ttl = TTL): Promise<unkno
   if (cached && Date.now() - cached.ts < ttl) return cached.data
 
   const url = new URL(BASE)
+  const KEY = process.env.ALPHA_VANTAGE_KEY
   Object.entries({ ...params, apikey: KEY! }).forEach(([k, v]) =>
     url.searchParams.set(k, v)
   )

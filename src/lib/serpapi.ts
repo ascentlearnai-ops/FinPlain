@@ -1,6 +1,7 @@
-const KEY = process.env.SERPAPI_KEY
+// Removed top-level KEY
 
 export async function getSerpApiMarketData() {
+  const KEY = process.env.SERPAPI_KEY;
   if (!KEY) {
     console.warn("SERPAPI_KEY is not defined.");
     return null;
@@ -51,5 +52,62 @@ export function formatSerpApiIndices(data: any) {
       change: nas.price_movement?.value || 0,
       isUp: nas.price_movement?.movement === 'Up'
     } : null
+  }
+}
+
+export async function getSerpApiStockData(ticker: string) {
+  const KEY = process.env.SERPAPI_KEY;
+  if (!KEY) return null
+  
+  try {
+    const url = `https://serpapi.com/search.json?engine=google_finance&q=${ticker}&api_key=${KEY}`
+    const res = await fetch(url, { next: { revalidate: 300 } })
+    const data = await res.json()
+    
+    if (data.summary) {
+      const s = data.summary
+      return {
+        ticker: s.stock || ticker,
+        price: s.price,
+        change: s.price_movement?.value || 0,
+        changePercent: s.price_movement?.percentage || 0,
+        volume: null,
+        prevClose: null,
+        open: null,
+        high: null,
+        low: null,
+      }
+    }
+    return null
+  } catch (err) {
+    console.error(`SERPAPI_STOCK_ERROR (${ticker}):`, err)
+    return null
+  }
+}
+
+export async function getSerpApiMovers() {
+  const KEY = process.env.SERPAPI_KEY;
+  if (!KEY) return null
+  try {
+    const url = `https://serpapi.com/search.json?engine=google_finance_markets&trend=indexes&api_key=${KEY}`
+    const res = await fetch(url, { next: { revalidate: 300 } })
+    const data = await res.json()
+    
+    const us = data.markets?.us || []
+    return {
+      gainers: us.filter((x: any) => x.price_movement?.movement === 'Up').slice(0, 5).map((x: any) => ({
+        ticker: x.stock,
+        price: x.price,
+        changePercent: x.price_movement?.percentage || 0
+      })),
+      losers: us.filter((x: any) => x.price_movement?.movement === 'Down').slice(0, 5).map((x: any) => ({
+        ticker: x.stock,
+        price: x.price,
+        changePercent: x.price_movement?.percentage || 0
+      })),
+    }
+  } catch (err) {
+    console.error("SERPAPI_MOVERS_ERROR:", err)
+    return null
   }
 }

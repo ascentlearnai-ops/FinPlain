@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import SearchBar from '@/components/ui/SearchBar'
@@ -36,8 +36,12 @@ export default function Navbar() {
             
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/10 transition-transform group-hover:scale-110">
-                <Image src="/logo.png" alt="Finplain" width={40} height={40} className="w-full h-full object-cover" />
+              <div className="w-10 h-10 rounded-xl bg-accent-bg flex items-center justify-center shadow-sm border border-blue-100 transition-transform group-hover:scale-110">
+                <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-accent">
+                  <path d="M3 3V21H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M7 14L11 10L15 14L21 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M21 8H16M21 8V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
               <span className="font-sans font-extrabold text-xl text-primary tracking-tighter group-hover:text-accent transition-colors">
                 Finplain

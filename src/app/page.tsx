@@ -5,7 +5,7 @@ import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
 import { Activity, BarChart3, Brain, Globe } from 'lucide-react'
-import { getGlobalQuote } from '@/lib/alphaVantage'
+
 
 const INDICES_DEFS = [
   { ticker: 'SPY', name: 'S&P 500', plainLabel: 'Tracks the top 500 US companies' },
