@@ -7,9 +7,13 @@ import RelatedNews from '@/components/stock/RelatedNews'
 import AnalystConsensus from '@/components/stock/AnalystConsensus'
 import WatchlistButton from '@/components/watchlist/WatchlistButton'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { getEodhdQuote, getEodhdChart } from '@/lib/eodhd'
+import { getSerpApiStockData } from '@/lib/serpapi'
+import { getYahooQuote, getYahooChart, getYahooOverview } from '@/lib/yahooFinance'
+import { getCompanyOverview, getGlobalQuote } from '@/lib/alphaVantage'
+import { getRecommendationTrends } from '@/lib/finnhub'
 
 interface Props { params: { ticker: string } }
 
@@ -19,27 +23,64 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function StockPage({ params }: Props) {
   const ticker = params.ticker.toUpperCase()
-  let stockData: any = null
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/stock?ticker=${ticker}&range=1M`, { next: { revalidate: 60 } })
-    stockData = await res.json()
-    if (stockData.error === 'RATE_LIMITED') stockData = null
-  } catch {}
 
-  if (!stockData?.quote) return notFound()
-  const { quote, overview, chartData, recTrends } = stockData
+  // Fetch all data sources in parallel — direct lib calls, no HTTP roundtrip
+  const [eodQuote, eodChart, serpQuote, yahooQuote, avOverview, yahooOverview, yahooChartResult, recTrendsResult] = await Promise.allSettled([
+    getEodhdQuote(ticker),
+    getEodhdChart(ticker, '1M'),
+    getSerpApiStockData(ticker).catch(() => null),
+    getYahooQuote(ticker).catch(() => null),
+    getCompanyOverview(ticker).catch(() => null),
+    getYahooOverview(ticker).catch(() => null),
+    getYahooChart(ticker, '1M'),
+    getRecommendationTrends(ticker),
+    // getEarnings(ticker), — removed as unused
+  ])
+
+  const eodQ = eodQuote.status === 'fulfilled' ? eodQuote.value : null
+  const serpQ = serpQuote.status === 'fulfilled' ? serpQuote.value : null
+  const yahooQ = yahooQuote.status === 'fulfilled' ? yahooQuote.value : null
+  const avQ = await getGlobalQuote(ticker).catch(() => null)
+
+  // Multi-source quote fallback
+  const quote = eodQ || serpQ || yahooQ || avQ
+  if (!quote) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-card p-10 text-center max-w-md">
+          <p className="text-3xl font-bold mb-3 text-primary">Stock Not Found</p>
+          <p className="text-secondary mb-6">We couldn&apos;t load data for <span className="font-mono text-accent">{ticker}</span>. The symbol may be invalid or all data providers are temporarily unavailable.</p>
+          <Link href="/" className="btn-primary inline-flex items-center gap-2">
+            <ArrowLeft size={16} /> Back to Dashboard
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Multi-source chart fallback
+  const eodC = eodChart.status === 'fulfilled' ? eodChart.value : null
+  const yahooC = yahooChartResult.status === 'fulfilled' ? yahooChartResult.value : null
+  const chartData = (eodC && eodC.length > 0) ? eodC : (yahooC && yahooC.length > 0) ? yahooC : []
+
+  // Multi-source overview fallback
+  const avOv = avOverview.status === 'fulfilled' ? avOverview.value : null
+  const yahooOv = yahooOverview.status === 'fulfilled' ? yahooOverview.value : null
+  const overview: any = avOv || yahooOv || { ticker, companyName: ticker, description: '', sector: 'Equity', industry: 'Market', marketCap: 0, peRatio: null, eps: null, week52High: 0, week52Low: 0, avgVolume: 0, dividendYield: null }
+
+  const recTrends = recTrendsResult.status === 'fulfilled' ? recTrendsResult.value : []
 
   return (
     <>
-      {/* Navbar spacer already handled by layout — just a subtle hero */}
-      <div className="bg-white border-b border-gray-100 py-6">
+      {/* Stock Header */}
+      <div className="border-b border-white/[0.04] py-6" style={{ background: 'linear-gradient(180deg, #111418 0%, #0b0e11 100%)' }}>
         <div className="container-full">
           <div className="container-inner">
-            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent mb-5 transition-colors">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-accent mb-5 transition-colors">
               <ArrowLeft size={14} /> Dashboard
             </Link>
             <div className="flex items-start justify-between gap-4 flex-wrap">
-              <StockHeader quote={quote} overview={overview} />
+              <StockHeader quote={quote as any} overview={overview as any} />
               <WatchlistButton ticker={ticker} />
             </div>
           </div>
@@ -47,7 +88,7 @@ export default async function StockPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="section-soft py-10">
+      <div className="section-soft py-8">
         <div className="container-full">
           <div className="container-inner space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -59,7 +100,7 @@ export default async function StockPage({ params }: Props) {
                  <AnalystConsensus trends={recTrends} />
               </div>
             </div>
-            <StockStats overview={overview} />
+            <StockStats overview={overview as any} />
             <div>
               <p className="text-label mb-4">Related News</p>
               <Suspense fallback={<SkeletonCard />}>

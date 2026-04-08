@@ -1,4 +1,3 @@
-// src/components/stock/AnalystConsensus.tsx
 import { BarChart3, TrendingUp, Users } from 'lucide-react'
 
 interface RecTrend {
@@ -17,30 +16,28 @@ interface Props {
 export default function AnalystConsensus({ trends }: Props) {
   if (!trends || trends.length === 0) return null
 
-  // Use the latest trend
   const latest = trends[0]
   const total = latest.strongBuy + latest.buy + latest.hold + latest.sell + latest.strongSell
   
   const getPercent = (val: number) => total > 0 ? (val / total) * 100 : 0
 
   const items = [
-    { label: 'Strong Buy', value: latest.strongBuy, color: 'bg-green-600', width: getPercent(latest.strongBuy) },
-    { label: 'Buy', value: latest.buy, color: 'bg-green-400', width: getPercent(latest.buy) },
-    { label: 'Hold', value: latest.hold, color: 'bg-gray-300', width: getPercent(latest.hold) },
-    { label: 'Sell', value: latest.sell, color: 'bg-red-400', width: getPercent(latest.sell) },
-    { label: 'Strong Sell', value: latest.strongSell, color: 'bg-red-600', width: getPercent(latest.strongSell) },
+    { label: 'Strong Buy', value: latest.strongBuy, color: 'bg-up', width: getPercent(latest.strongBuy) },
+    { label: 'Buy', value: latest.buy, color: 'bg-up/60', width: getPercent(latest.buy) },
+    { label: 'Hold', value: latest.hold, color: 'bg-white/20', width: getPercent(latest.hold) },
+    { label: 'Sell', value: latest.sell, color: 'bg-down/60', width: getPercent(latest.sell) },
+    { label: 'Strong Sell', value: latest.strongSell, color: 'bg-down', width: getPercent(latest.strongSell) },
   ]
 
-  // Sentiment score (0-100)
   const sentiment = total > 0 ? ((latest.strongBuy * 100 + latest.buy * 75 + latest.hold * 50 + latest.sell * 25 + latest.strongSell * 0) / total) : 50
-  const sentimentColor = sentiment >= 66 ? 'text-green-600' : sentiment >= 33 ? 'text-amber-500' : 'text-red-500'
+  const sentimentColor = sentiment >= 66 ? 'text-up' : sentiment >= 33 ? 'text-accent' : 'text-down'
   const sentimentText = sentiment >= 80 ? 'Strongly Bullish' : sentiment >= 60 ? 'Bullish' : sentiment >= 40 ? 'Neutral' : sentiment >= 20 ? 'Bearish' : 'Strongly Bearish'
 
   return (
-    <div className="glass-card p-6">
+    <div className="glass-card p-6 relative z-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-accent-bg border border-blue-100 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-accent/10 border border-accent/20 rounded-xl flex items-center justify-center">
             <Users size={18} className="text-accent" />
           </div>
           <div>
@@ -55,14 +52,12 @@ export default function AnalystConsensus({ trends }: Props) {
       </div>
 
       <div className="space-y-4">
-        {/* The Bar Stack */}
-        <div className="h-4 w-full bg-gray-100 rounded-full overflow-hidden flex shadow-inner">
+        <div className="h-4 w-full bg-white/[0.04] rounded-full overflow-hidden flex">
           {items.map((item, i) => item.width > 0 && (
             <div key={i} className={`h-full transition-all duration-1000 ease-out ${item.color}`} style={{ width: `${item.width}%` }} title={`${item.label}: ${item.value}`} />
           ))}
         </div>
 
-        {/* Legend / Breakdown */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
           {items.map((item, i) => (
             <div key={i} className="flex flex-col gap-1">
@@ -76,13 +71,13 @@ export default function AnalystConsensus({ trends }: Props) {
         </div>
       </div>
 
-      <div className="mt-8 pt-5 border-t border-gray-50 flex items-center justify-between text-xs">
+      <div className="mt-8 pt-5 border-t border-white/[0.04] flex items-center justify-between text-xs">
         <div className="flex items-center gap-2 text-muted">
           <BarChart3 size={14} />
           <span>Institutional consensus from Finnhub</span>
         </div>
         <div className="flex items-center gap-2 text-muted">
-          <TrendingUp size={14} className={sentiment >= 50 ? 'text-green-500' : 'text-red-500'} />
+          <TrendingUp size={14} className={sentiment >= 50 ? 'text-up' : 'text-down'} />
           <span>Last {trends.length} months summarized</span>
         </div>
       </div>

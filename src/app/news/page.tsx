@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import CategoryFilter from '@/components/news/CategoryFilter'
 import NewsCard from '@/components/news/NewsCard'
 import { SkeletonNewsCard } from '@/components/ui/SkeletonCard'
+import { Newspaper } from 'lucide-react'
 
 export default function NewsPage() {
   const [articles, setArticles] = useState<any[]>([])
@@ -33,7 +34,10 @@ export default function NewsPage() {
               {[1,2,3,4,5,6].map(i => <SkeletonNewsCard key={i} />)}
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-20"><p className="text-muted">No articles found for {category}.</p></div>
+            <div className="text-center py-20">
+              <Newspaper size={48} className="mx-auto text-muted mb-4" />
+              <p className="text-secondary">No articles found for {category}.</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-16">
               {filtered.map((a: any) => <NewsCard key={a.id} article={a} />)}

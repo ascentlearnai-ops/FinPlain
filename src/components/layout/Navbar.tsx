@@ -1,9 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-
 import { usePathname } from 'next/navigation'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Activity } from 'lucide-react'
 import SearchBar from '@/components/ui/SearchBar'
 
 const navLinks = [
@@ -28,7 +27,7 @@ export default function Navbar() {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-xl border-b border-black/[0.04] shadow-sm'
+          ? 'bg-[#0b0e11]/90 backdrop-blur-xl border-b border-white/[0.06] shadow-md'
           : 'bg-transparent'
       }`}>
         <div className="container-full">
@@ -36,26 +35,22 @@ export default function Navbar() {
             
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-accent-bg flex items-center justify-center shadow-sm border border-blue-100 transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-accent">
-                  <path d="M3 3V21H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M7 14L11 10L15 14L21 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M21 8H16M21 8V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20 transition-all group-hover:bg-accent/20 group-hover:border-accent/30">
+                <Activity size={18} className="text-accent" />
               </div>
-              <span className="font-sans font-extrabold text-xl text-primary tracking-tighter group-hover:text-accent transition-colors">
+              <span className="font-sans font-extrabold text-lg text-primary tracking-tighter group-hover:text-accent transition-colors">
                 Finplain
               </span>
             </Link>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden md:flex items-center gap-0.5">
               {navLinks.map(link => (
                 <Link key={link.href} href={link.href}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     pathname === link.href
-                      ? 'text-accent bg-accent-bg'
-                      : 'text-secondary hover:text-primary hover:bg-gray-50'
+                      ? 'text-accent bg-accent/10'
+                      : 'text-secondary hover:text-primary hover:bg-white/[0.04]'
                   }`}>
                   {link.label}
                 </Link>
@@ -75,12 +70,12 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="md:hidden bg-white border-b border-black/[0.04] px-5 py-4 space-y-1">
+          <div className="md:hidden bg-[#111418] border-b border-white/[0.06] px-5 py-4 space-y-1">
             <div className="mb-3"><SearchBar fullWidth /></div>
             {navLinks.map(link => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
                 className={`block px-4 py-3 rounded-xl text-sm font-medium ${
-                  pathname === link.href ? 'text-accent bg-accent-bg' : 'text-secondary'
+                  pathname === link.href ? 'text-accent bg-accent/10' : 'text-secondary'
                 }`}>
                 {link.label}
               </Link>

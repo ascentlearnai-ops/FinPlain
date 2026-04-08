@@ -4,8 +4,8 @@ import DailyAISummary from '@/components/market/DailyAISummary'
 import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
-import HomeWatchlist from '@/components/watchlist/HomeWatchlist'
-import { Activity, BarChart3, Brain, Globe } from 'lucide-react'
+import { Activity, BarChart3, Brain, Zap } from 'lucide-react'
+import { getMarketSummary } from '@/lib/market'
 
 export const metadata = { title: 'Finplain — Market Intelligence, Simplified' }
 
@@ -16,8 +16,8 @@ export default function HomePage() {
       <section className="hero-gradient pt-20 pb-28">
         <div className="container-full">
           <div className="container-inner text-center">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-blue-100 rounded-full px-4 py-1.5 mb-8 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full px-4 py-1.5 mb-8">
+              <span className="w-2 h-2 bg-up rounded-full animate-pulse-dot" />
               <span className="text-sm font-medium text-secondary">Markets are open &bull; Live data</span>
             </div>
 
@@ -27,8 +27,8 @@ export default function HomePage() {
             </h1>
 
             <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-              Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub & TradingView — 
-              paired with AI-powered analysis to decode every market move.
+              Real-time stock data powered by multiple providers — 
+              paired with AI analysis to decode every market move in plain English.
             </p>
 
             <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -50,12 +50,12 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { icon: Activity, label: 'Real-Time Quotes', desc: 'Live market data feeds' },
-                { icon: BarChart3, label: 'Pro Charts', desc: 'TradingView candlestick' },
+                { icon: BarChart3, label: 'Pro Charts', desc: 'Interactive candlestick' },
                 { icon: Brain, label: 'AI Analysis', desc: 'Powered by Gemini' },
-                { icon: Globe, label: 'Multi-Source', desc: '4 data providers' },
+                { icon: Zap, label: 'Multi-Source', desc: '4+ data providers' },
               ].map((f, i) => (
-                <div key={i} className="glass-card p-5 text-center">
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-accent-bg flex items-center justify-center">
+                <div key={i} className="glass-card p-5 text-center relative z-10">
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-accent/10 flex items-center justify-center border border-accent/20">
                     <f.icon size={18} className="text-accent" />
                   </div>
                   <p className="font-semibold text-sm text-primary mb-1">{f.label}</p>
@@ -79,9 +79,6 @@ export default function HomePage() {
                 <MarketSummaryRow />
               </Suspense>
             </div>
-
-            {/* Watchlist */}
-            <HomeWatchlist />
 
             {/* AI Summary */}
             <div className="mb-12">
@@ -107,14 +104,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === CTA SECTION (dark) === */}
+      {/* === CTA SECTION === */}
       <section className="section-dark py-24">
         <div className="container-full">
           <div className="container-inner text-center">
-            <h2 className="text-headline text-white mb-4">
+            <h2 className="text-headline text-primary mb-4">
               Intelligence that helps during the trade, not after.
             </h2>
-            <p className="text-base text-blue-200 max-w-lg mx-auto mb-8">
+            <p className="text-base text-secondary max-w-lg mx-auto mb-8">
               Add tickers to your watchlist, track real-time price action, and get AI-powered market briefs — all in one place.
             </p>
             <a href="/watchlist" className="btn-primary text-sm inline-flex items-center gap-2">
@@ -128,12 +125,7 @@ export default function HomePage() {
 }
 
 async function MarketSummaryRow() {
-  let indices = []
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/market-summary`, { next: { revalidate: 300 } })
-    const data = await res.json()
-    indices = data.indices || []
-  } catch {}
+  const indices = await getMarketSummary()
 
   if (indices.length === 0) return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
 

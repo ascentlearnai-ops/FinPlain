@@ -19,25 +19,25 @@ export default function GainersLosers() {
 
   if (loading || !movers) return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {[0,1].map(i => <div key={i} className="glass-card h-64 animate-pulse" />)}
+      {[0,1].map(i => <div key={i} className="glass-card h-64 skeleton-shimmer" />)}
     </div>
   )
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="glass-card overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-gray-50">
-          <TrendingUp size={15} className="text-green-600" />
-          <p className="font-semibold text-xs tracking-widest uppercase text-green-600">Top Gainers</p>
+      <div className="glass-card overflow-hidden relative z-10">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.04]">
+          <TrendingUp size={15} className="text-up" />
+          <p className="font-semibold text-xs tracking-widest uppercase text-up">Top Gainers</p>
         </div>
         <div className="p-2">
           {movers.gainers.slice(0, 5).map(s => <StockCard key={s.ticker} {...s} />)}
         </div>
       </div>
-      <div className="glass-card overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-gray-50">
-          <TrendingDown size={15} className="text-red-600" />
-          <p className="font-semibold text-xs tracking-widest uppercase text-red-600">Top Losers</p>
+      <div className="glass-card overflow-hidden relative z-10">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.04]">
+          <TrendingDown size={15} className="text-down" />
+          <p className="font-semibold text-xs tracking-widest uppercase text-down">Top Losers</p>
         </div>
         <div className="p-2">
           {movers.losers.slice(0, 5).map(s => <StockCard key={s.ticker} {...s} />)}

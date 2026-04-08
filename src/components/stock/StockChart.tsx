@@ -21,32 +21,31 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
   const [error, setError] = useState<string | null>(null)
   const [ohlcv, setOhlcv] = useState<{ o: number; h: number; l: number; c: number; v: number } | null>(null)
 
-  // Initialize and clean up chart
   useEffect(() => {
     if (!chartContainerRef.current) return
 
     const chart = createChart(chartContainerRef.current, {
       layout: {
-        background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: '#64748b',
+        background: { type: ColorType.Solid, color: '#161a1e' },
+        textColor: '#5e6673',
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: 'rgba(15, 23, 42, 0.04)' },
-        horzLines: { color: 'rgba(15, 23, 42, 0.04)' },
+        vertLines: { color: 'rgba(255,255,255,0.03)' },
+        horzLines: { color: 'rgba(255,255,255,0.03)' },
       },
       crosshair: {
         mode: CrosshairMode.Normal,
-        vertLine: { width: 1, color: 'rgba(59, 130, 246, 0.2)', style: 3, labelBackgroundColor: '#1e293b' },
-        horzLine: { width: 1, color: 'rgba(59, 130, 246, 0.2)', style: 3, labelBackgroundColor: '#1e293b' },
+        vertLine: { width: 1, color: 'rgba(240,185,11,0.3)', style: 3, labelBackgroundColor: '#1e2329' },
+        horzLine: { width: 1, color: 'rgba(240,185,11,0.3)', style: 3, labelBackgroundColor: '#1e2329' },
       },
       rightPriceScale: {
-        borderColor: 'rgba(15, 23, 42, 0.06)',
+        borderColor: 'rgba(255,255,255,0.04)',
         scaleMargins: { top: 0.1, bottom: 0.3 },
       },
       timeScale: {
-        borderColor: 'rgba(15, 23, 42, 0.06)',
+        borderColor: 'rgba(255,255,255,0.04)',
         timeVisible: true,
         secondsVisible: false,
         rightOffset: 5,
@@ -74,11 +73,9 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     }
   }, [])
 
-  // Update chart data and series type
   useEffect(() => {
     if (!chartRef.current || data.length === 0) return
 
-    // Clear existing series if they exist
     if (mainSeriesRef.current) {
       chartRef.current.removeSeries(mainSeriesRef.current)
       mainSeriesRef.current = null
@@ -89,8 +86,8 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     }
 
     const isUp = data[data.length - 1].close >= data[0].close
-    const colorUp = '#16a34a'
-    const colorDown = '#dc2626'
+    const colorUp = '#0ecb81'
+    const colorDown = '#f6465d'
     const colorTheme = isUp ? colorUp : colorDown
 
     if (chartType === 'candlestick') {
@@ -103,11 +100,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
         wickDownColor: `${colorDown}80`,
       })
       mainSeriesRef.current.setData(data.map(d => ({ 
-        time: d.time, 
-        open: d.open, 
-        high: d.high, 
-        low: d.low, 
-        close: d.close 
+        time: d.time, open: d.open, high: d.high, low: d.low, close: d.close 
       })))
     } else {
       mainSeriesRef.current = chartRef.current.addSeries(LineSeries, {
@@ -116,17 +109,15 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
         crosshairMarkerVisible: true,
         crosshairMarkerRadius: 4,
         crosshairMarkerBorderColor: colorTheme,
-        crosshairMarkerBackgroundColor: '#ffffff',
+        crosshairMarkerBackgroundColor: '#161a1e',
         lastValueVisible: true,
         priceLineVisible: false,
       })
       mainSeriesRef.current.setData(data.map(d => ({ 
-        time: d.time, 
-        value: d.close 
+        time: d.time, value: d.close 
       })))
     }
 
-    // Add Volume
     volumeSeriesRef.current = chartRef.current.addSeries(HistogramSeries, {
       priceFormat: { type: 'volume' },
       priceScaleId: 'volume',
@@ -140,7 +131,6 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       color: d.close >= d.open ? `${colorUp}15` : `${colorDown}15`,
     })))
 
-    // Interaction
     chartRef.current.subscribeCrosshairMove((param: any) => {
       if (!param.time || !param.seriesData || !mainSeriesRef.current) {
         setOhlcv(null)
@@ -176,7 +166,6 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       if (result.chartData && result.chartData.length > 0) {
         setData(result.chartData)
       } else {
-        // Don't clear data if we get an empty result, but show a warning
         console.warn(`No data for range ${r}`)
         setError(`No chart data available for ${r}`)
       }
@@ -191,24 +180,24 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
   const fmt = (v: number) => v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(1)+'K' : String(v)
 
   return (
-    <div className="glass-card overflow-hidden shadow-lg border-opacity-50">
+    <div className="glass-card overflow-hidden relative z-10">
       {/* OHLCV header */}
-      <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100 bg-gray-50/30">
+      <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-white/[0.04] bg-white/[0.01]">
         <div className="flex items-center gap-4 text-[11px] font-mono overflow-x-auto whitespace-nowrap">
           {ohlcv ? (
             <>
-              <span className="text-slate-400">O <span className="text-slate-900 font-bold">{ohlcv.o.toFixed(2)}</span></span>
-              <span className="text-slate-400">H <span className="text-green-600 font-bold">{ohlcv.h.toFixed(2)}</span></span>
-              <span className="text-slate-400">L <span className="text-red-600 font-bold">{ohlcv.l.toFixed(2)}</span></span>
-              <span className="text-slate-400">C <span className="text-slate-900 font-bold">{ohlcv.c.toFixed(2)}</span></span>
-              <span className="text-slate-400">Vol <span className="text-slate-900 font-bold">{fmt(ohlcv.v)}</span></span>
+              <span className="text-muted">O <span className="text-primary font-bold">{ohlcv.o.toFixed(2)}</span></span>
+              <span className="text-muted">H <span className="text-up font-bold">{ohlcv.h.toFixed(2)}</span></span>
+              <span className="text-muted">L <span className="text-down font-bold">{ohlcv.l.toFixed(2)}</span></span>
+              <span className="text-muted">C <span className="text-primary font-bold">{ohlcv.c.toFixed(2)}</span></span>
+              <span className="text-muted">Vol <span className="text-primary font-bold">{fmt(ohlcv.v)}</span></span>
             </>
-          ) : <span className="text-slate-400">Hover chart for details</span>}
+          ) : <span className="text-muted">Hover chart for details</span>}
         </div>
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5 ml-4 shrink-0 shadow-inner">
+        <div className="flex gap-1 bg-white/[0.03] rounded-lg p-0.5 ml-4 shrink-0">
           {(['candlestick', 'line'] as ChartType[]).map(t => (
             <button key={t} onClick={() => setChartType(t)}
-              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${chartType === t ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${chartType === t ? 'bg-accent/20 text-accent' : 'text-muted hover:text-secondary'}`}>
               {t === 'candlestick' ? 'Candle' : 'Line'}
             </button>
           ))}
@@ -216,26 +205,26 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       </div>
 
       {/* Range tabs */}
-      <div className="flex items-center gap-1 px-5 py-2.5 border-b border-gray-100">
+      <div className="flex items-center gap-1 px-5 py-2.5 border-b border-white/[0.04]">
         {RANGES.map(r => (
           <button key={r} onClick={() => changeRange(r)}
-            className={`px-3 py-1 rounded-lg font-mono font-bold text-xs transition-all ${range === r ? 'bg-blue-600 text-white shadow-blue' : 'text-slate-400 hover:text-slate-900 hover:bg-gray-100'}`}>
+            className={`px-3 py-1 rounded-lg font-mono font-bold text-xs transition-all ${range === r ? 'bg-accent text-dark' : 'text-muted hover:text-primary hover:bg-white/[0.04]'}`}>
             {r}
           </button>
         ))}
-        {loading && <div className="ml-3 w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />}
-        <span className="ml-auto font-mono text-[9px] text-slate-300 uppercase tracking-widest">{ticker} · REAL-TIME</span>
+        {loading && <div className="ml-3 w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin" />}
+        <span className="ml-auto font-mono text-[9px] text-muted uppercase tracking-widest">{ticker} · REAL-TIME</span>
       </div>
 
       {/* Chart */}
-      <div className="relative bg-white min-h-[420px]">
+      <div className="relative min-h-[420px]" style={{ background: '#161a1e' }}>
         {error && (
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center mb-3">
-              <AlertTriangle className="text-amber-500" size={20} />
+            <div className="w-10 h-10 bg-down/10 rounded-full flex items-center justify-center mb-3">
+              <AlertTriangle className="text-down" size={20} />
             </div>
-            <p className="text-sm font-semibold text-slate-900 mb-1">{error}</p>
-            <button onClick={() => changeRange(range)} className="text-xs text-blue-600 font-bold hover:underline flex items-center gap-1">
+            <p className="text-sm font-semibold text-primary mb-1">{error}</p>
+            <button onClick={() => changeRange(range)} className="text-xs text-accent font-bold hover:underline flex items-center gap-1">
               <RefreshCw size={10} /> Retry
             </button>
           </div>
@@ -243,7 +232,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
         
         <div ref={chartContainerRef} className={error ? 'opacity-20 transition-opacity' : 'transition-opacity'} />
         
-        {loading && <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] z-10 transition-all" />}
+        {loading && <div className="absolute inset-0 bg-[#161a1e]/60 backdrop-blur-[1px] z-10 transition-all" />}
       </div>
     </div>
   )

@@ -33,27 +33,27 @@ export default function SearchBar({ fullWidth }: Props) {
         <input ref={inputRef} type="text" placeholder="Search ticker..."
           value={query} onChange={e => setQuery(e.target.value)}
           onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 200)}
-          className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-sm text-primary placeholder:text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/10 transition-all font-mono" />
+          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl pl-9 pr-8 py-2 text-sm text-primary placeholder:text-muted focus:outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/10 transition-all font-mono" />
         {query && <button onClick={() => setQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"><X size={13} /></button>}
       </div>
 
       {focused && (query || recents.length > 0) && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[#1e2329] border border-white/[0.08] rounded-2xl shadow-xl overflow-hidden z-50">
           {loading && <div className="p-3 text-center"><div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" /></div>}
           {!loading && results.length > 0 && results.map((r: any) => (
-            <button key={r.ticker} onClick={() => navigate(r.ticker)} className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-50 last:border-0">
+            <button key={r.ticker} onClick={() => navigate(r.ticker)} className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/[0.04] transition-colors text-left border-b border-white/[0.04] last:border-0">
               <div>
                 <span className="font-mono font-bold text-sm text-primary">{r.ticker}</span>
-                <span className="text-xs text-muted ml-2">{r.name}</span>
+                <span className="text-xs text-secondary ml-2">{r.name}</span>
               </div>
               <ArrowRight size={12} className="text-muted" />
             </button>
           ))}
           {!loading && !query && recents.length > 0 && (
             <>
-              <p className="px-4 py-2 text-[10px] uppercase tracking-wider text-muted font-semibold border-b border-gray-50">Recent</p>
+              <p className="px-4 py-2 text-[10px] uppercase tracking-wider text-muted font-semibold border-b border-white/[0.04]">Recent</p>
               {recents.map((t: string) => (
-                <button key={t} onClick={() => navigate(t)} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors text-left">
+                <button key={t} onClick={() => navigate(t)} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-white/[0.04] transition-colors text-left">
                   <span className="font-mono text-sm text-secondary">{t}</span>
                   <ArrowRight size={12} className="text-muted" />
                 </button>

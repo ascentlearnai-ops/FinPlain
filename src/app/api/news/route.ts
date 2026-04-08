@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
             title: r.title,
             publisher: r.source_id,
             link: r.link,
+            imageUrl: r.image_url,
             providerPublishTime: new Date(r.pubDate).getTime() / 1000,
             relatedTickers: ticker ? [ticker] : []
           }))
@@ -64,7 +65,8 @@ export async function GET(req: NextRequest) {
           publishedAt: new Date(article.providerPublishTime * 1000).toISOString(),
           relatedTickers: article.relatedTickers || [],
           simpleSummary,
-          category: categorize(article.title),
+          category: categorize(article.headline || article.title),
+          imageUrl: article.imageUrl || (article.thumbnail?.resolutions?.[0]?.url) || null
         }
       })
     )

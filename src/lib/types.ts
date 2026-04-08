@@ -53,6 +53,7 @@ export interface NewsArticle {
   relatedTickers: string[]
   simpleSummary: string     // Gemini-generated 1-sentence plain summary
   category: 'tech' | 'energy' | 'finance' | 'economy' | 'general'
+  imageUrl?: string
 }
 
 export interface GlossaryTerm {
