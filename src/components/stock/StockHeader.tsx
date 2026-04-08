@@ -4,7 +4,6 @@ import type { StockQuote, StockOverview } from '@/lib/types'
 interface Props { quote: StockQuote; overview: StockOverview }
 
 export default function StockHeader({ quote, overview }: Props) {
-  const isUp = quote.changePercent >= 0
   return (
     <div>
       <div className="flex items-center gap-3 mb-2 flex-wrap">

@@ -1,4 +1,4 @@
-import { BarChart3, Newspaper, LineChart } from 'lucide-react'
+import { Newspaper, LineChart } from 'lucide-react'
 
 export function SkeletonCard({ className = '' }: { className?: string }) {
   return (

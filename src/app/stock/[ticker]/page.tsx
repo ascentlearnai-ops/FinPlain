@@ -9,7 +9,7 @@ import WatchlistButton from '@/components/watchlist/WatchlistButton'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, BarChart3 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 interface Props { params: { ticker: string } }
 

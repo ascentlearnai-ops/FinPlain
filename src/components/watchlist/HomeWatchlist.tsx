@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Star, ArrowRight, TrendingUp, TrendingDown } from 'lucide-react'
+import { ArrowRight, TrendingUp, TrendingDown } from 'lucide-react'
 import { getWatchlist } from '@/lib/localStorage'
 import { formatPrice, formatPercent } from '@/lib/formatters'
 
