@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Sparkles, Brain } from 'lucide-react'
+import { Brain } from 'lucide-react'
 
 interface Props { ticker: string; companyName: string; changePercent: number }
 
