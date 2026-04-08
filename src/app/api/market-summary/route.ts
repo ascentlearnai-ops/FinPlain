@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getGlobalQuote } from '@/lib/alphaVantage'
 import { getSerpApiMarketData, formatSerpApiIndices } from '@/lib/serpapi'
+import { getEodhdQuote } from '@/lib/eodhd'
 
 const INDICES = [
   { ticker: 'SPY', name: 'S&P 500', plainLabel: 'Tracks the top 500 US companies' },
@@ -12,6 +13,8 @@ export async function GET() {
   try {
     const results = await Promise.allSettled(
       INDICES.map(async idx => {
+        const eod = await getEodhdQuote(idx.ticker)
+        if (eod) return { ...idx, ...eod }
         const quote = await getGlobalQuote(idx.ticker)
         return { ...idx, ...quote }
       })

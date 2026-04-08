@@ -137,6 +137,7 @@ export default function HomePage() {
 
 import { getSerpApiMarketData, formatSerpApiIndices } from '@/lib/serpapi'
 import { getYahooQuote } from '@/lib/yahooFinance'
+import { getEodhdQuote } from '@/lib/eodhd'
 
 async function MarketSummaryRow() {
   let indices: any[] = []
@@ -156,12 +157,14 @@ async function MarketSummaryRow() {
     console.error("SERPAPI_ERROR_IN_HOME:", err)
   }
 
-  // Fallback or fill in missing data with Yahoo Finance
+  // Fallback or fill in missing data with EODHD and Yahoo Finance
   if (indices.length === 0 || indices.some(idx => !idx.price)) {
     try {
       const fallbackIndices = await Promise.all(
         INDICES_DEFS.map(async idx => {
           try {
+            const eod = await getEodhdQuote(idx.ticker)
+            if (eod) return { ...idx, ...eod }
             const quote = await getYahooQuote(idx.ticker)
             return { ...idx, ...quote }
           } catch {
@@ -171,7 +174,7 @@ async function MarketSummaryRow() {
       )
       indices = fallbackIndices
     } catch (err) {
-      console.error("YAHOO_FALLBACK_ERROR:", err);
+      console.error("FALLBACK_ERROR:", err);
     }
   }
 

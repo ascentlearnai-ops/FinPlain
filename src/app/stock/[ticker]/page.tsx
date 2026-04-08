@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: Props) {
 
 import { getSerpApiStockData } from '@/lib/serpapi'
 import { getYahooQuote, getYahooOverview, getYahooChart } from '@/lib/yahooFinance'
+import { getEodhdQuote, getEodhdChart } from '@/lib/eodhd'
 
 export default async function StockPage({ params }: Props) {
   const p = await params
@@ -30,19 +31,19 @@ export default async function StockPage({ params }: Props) {
   
   let stockData: any = null
   try {
-    // Attempt fetch from SerpApi first as requested by user
-    const serpQuote = await getSerpApiStockData(ticker)
-    
-    const [yahooQuote, yahooOverview, yahooChart] = await Promise.all([
-      getYahooQuote(ticker),
-      getYahooOverview(ticker),
-      getYahooChart(ticker, '1M'),
+    const [eodQuote, eodChart, serpQuote, yahooQuote, yahooOverview, yahooChart] = await Promise.all([
+      getEodhdQuote(ticker),
+      getEodhdChart(ticker, '1M'),
+      getSerpApiStockData(ticker).catch(() => null),
+      getYahooQuote(ticker).catch(() => null),
+      getYahooOverview(ticker).catch(() => null),
+      getYahooChart(ticker, '1M').catch(() => []),
     ])
 
-    // Final resolution: SerpApi > Yahoo > AV
-    const finalQuote = serpQuote || yahooQuote || await getGlobalQuote(ticker).catch(() => null)
+    // Final resolution
+    const finalQuote = eodQuote || serpQuote || yahooQuote || await getGlobalQuote(ticker).catch(() => null)
     const finalOverview = yahooOverview || await getCompanyOverview(ticker).catch(() => null)
-    const finalChart = (yahooChart && yahooChart.length > 0) ? yahooChart : await getTimeSeries(ticker, '1M').catch(() => [])
+    const finalChart = (eodChart && eodChart.length > 0) ? eodChart : (yahooChart && yahooChart.length > 0) ? yahooChart : await getTimeSeries(ticker, '1M').catch(() => [])
     
     const recTrends = await getRecommendationTrends(ticker).catch(() => [])
 
