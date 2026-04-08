@@ -26,7 +26,7 @@ export default function RelatedNews({ ticker }: { ticker: string }) {
   }
 
   if (news.length === 0) {
-    return <div className="text-muted font-jakarta text-sm">No recent news found for {ticker}.</div>
+    return <div className="text-secondary font-sans text-base">No recent news found for {ticker}.</div>
   }
 
   return (

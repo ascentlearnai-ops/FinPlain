@@ -17,20 +17,20 @@ export default function AIExplainer({ ticker, companyName, changePercent }: Prop
   }, [ticker, companyName, changePercent])
 
   return (
-    <div className="dark-card p-6 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/[0.08] rounded-full blur-3xl" />
+    <div className="dark-card p-6 relative overflow-hidden border border-accent/20">
+      <div className="absolute top-0 right-0 w-40 h-40 bg-accent/10 rounded-full blur-3xl" />
       <div className="relative z-10 flex gap-4">
-        <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-          <Sparkles size={18} className="text-blue-400" />
+        <div className="w-10 h-10 bg-accent-bg rounded-xl flex items-center justify-center flex-shrink-0 shadow-glow">
+          <Sparkles size={18} className="text-accent" />
         </div>
         <div>
-          <p className="font-semibold text-xs text-blue-400 mb-2 uppercase tracking-widest">AI Analysis</p>
+          <p className="font-semibold text-xs text-accent mb-2 uppercase tracking-widest">AI Analysis</p>
           {loading ? (
             <div className="space-y-2.5 animate-pulse">
-              <div className="h-4 bg-white/[0.06] rounded w-full" />
-              <div className="h-4 bg-white/[0.06] rounded w-5/6" />
+              <div className="h-4 bg-white/10 rounded w-full" />
+              <div className="h-4 bg-white/10 rounded w-5/6" />
             </div>
-          ) : <p className="text-sm text-blue-50 leading-relaxed font-sans">{explanation}</p>}
+          ) : <p className="text-base text-primary/90 leading-relaxed font-sans">{explanation}</p>}
         </div>
       </div>
     </div>

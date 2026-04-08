@@ -65,7 +65,7 @@ export default async function StockPage({ params }: Props) {
   return (
     <>
       {/* Navbar spacer already handled by layout — just a subtle hero */}
-      <div className="bg-white border-b border-gray-100 py-6">
+      <div className="bg-base border-b border-white/5 py-6">
         <div className="container-full">
           <div className="container-inner">
             <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent mb-5 transition-colors">
@@ -80,7 +80,7 @@ export default async function StockPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="section-soft py-10">
+      <div className="bg-base py-10">
         <div className="container-full">
           <div className="container-inner space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

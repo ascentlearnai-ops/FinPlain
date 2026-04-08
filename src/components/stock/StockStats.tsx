@@ -20,17 +20,17 @@ export default function StockStats({ overview }: Props) {
   return (
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <p className="font-semibold text-xs tracking-widest uppercase text-muted">Fundamental Data</p>
-        <span className="text-xs text-muted">{overview.sector} / {overview.industry}</span>
+        <p className="font-semibold text-xs tracking-widest uppercase text-accent">Fundamental Data</p>
+        <span className="text-xs text-secondary bg-subtle px-3 py-1 rounded-full uppercase tracking-wider">{overview.sector} / {overview.industry}</span>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {stats.map(stat => (
-          <div key={stat.label} className="bg-gray-50 rounded-xl p-4 hover:bg-blue-50/50 transition-colors group border border-transparent hover:border-blue-100">
+          <div key={stat.label} className="bg-subtle rounded-xl p-4 hover:bg-accent-bg transition-colors group border border-transparent hover:border-accent">
             <div className="flex items-center gap-1.5 mb-2">
-              <p className="text-xs text-muted">{stat.label}</p>
+              <p className="text-xs text-secondary font-medium tracking-wide uppercase">{stat.label}</p>
               <GlossaryTooltip term={stat.term} definition={stat.definition} example={stat.example} />
             </div>
-            <p className="text-primary text-sm leading-none">{stat.value}</p>
+            <p className="text-primary font-mono text-lg font-semibold leading-none">{stat.value}</p>
           </div>
         ))}
       </div>

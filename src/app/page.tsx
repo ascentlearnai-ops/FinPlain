@@ -22,8 +22,8 @@ export default function HomePage() {
       <section className="hero-gradient pt-20 pb-28">
         <div className="container-full">
           <div className="container-inner text-center">
-            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-blue-100 rounded-full px-4 py-1.5 mb-8 shadow-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 bg-subtle/50 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-8 shadow-sm">
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
               <span className="text-sm font-medium text-secondary">Markets are open &bull; Live data</span>
             </div>
 
@@ -50,7 +50,7 @@ export default function HomePage() {
       </section>
 
       {/* === FEATURE PILLS === */}
-      <section className="section-light -mt-14 relative z-10">
+      <section className="bg-base -mt-14 relative z-10">
         <div className="container-full">
           <div className="container-inner">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -74,7 +74,7 @@ export default function HomePage() {
       </section>
 
       {/* === DASHBOARD === */}
-      <section id="dashboard" className="section-light py-20">
+      <section id="dashboard" className="bg-base py-20">
         <div className="container-full">
           <div className="container-inner">
             {/* Market Overview */}
@@ -111,9 +111,9 @@ export default function HomePage() {
       </section>
 
       {/* === CTA SECTION (Clean) === */}
-      <section className="bg-blue-50/50 py-24 mb-20 rounded-[40px] mx-4 md:mx-10 border border-blue-100/50 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/20 rounded-full blur-[100px] -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100/20 rounded-full blur-[100px] -ml-48 -mb-48" />
+      <section className="bg-elevated py-24 mb-20 rounded-[40px] mx-4 md:mx-10 border border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] -mr-48 -mt-48" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] -ml-48 -mb-48" />
         
         <div className="container-full relative z-10">
           <div className="container-inner text-center">
@@ -124,7 +124,7 @@ export default function HomePage() {
               Add tickers to your watchlist, track real-time price action, and get AI-powered market briefs — all in one place.
             </p>
             <div className="flex items-center justify-center gap-4">
-              <a href="/watchlist" className="btn-primary px-10 py-5 text-base shadow-xl shadow-blue-500/20">
+              <a href="/watchlist" className="btn-primary px-10 py-5 text-base shadow-glow shadow-accent/10">
                 Start Tracking Now
               </a>
             </div>

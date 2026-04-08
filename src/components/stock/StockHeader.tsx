@@ -7,8 +7,8 @@ export default function StockHeader({ quote, overview }: Props) {
   return (
     <div>
       <div className="flex items-center gap-3 mb-2 flex-wrap">
-        <div className="w-12 h-12 bg-accent-bg border border-blue-100 rounded-2xl flex items-center justify-center">
-          <span className="font-mono font-bold text-secondary">{quote.ticker.slice(0, 2)}</span>
+        <div className="w-12 h-12 bg-accent-bg border border-accent/20 rounded-2xl flex items-center justify-center">
+          <span className="font-mono font-bold text-accent">{quote.ticker.slice(0, 2)}</span>
         </div>
         <div>
           <h1 className="font-extrabold text-2xl md:text-3xl text-primary tracking-tight">{overview.companyName}</h1>

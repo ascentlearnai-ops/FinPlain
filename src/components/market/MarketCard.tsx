@@ -9,8 +9,8 @@ export default function MarketCard({ name, ticker, price, change, changePercent,
     <Link href={`/stock/${ticker}`} className="glass-card p-6 block group text-decoration-none">
       <div className="flex items-start justify-between mb-5">
         <div>
-          <p className="font-semibold text-xs tracking-widest uppercase text-muted">{name}</p>
-          <p className="text-xs text-muted mt-1">{plainLabel}</p>
+          <p className="font-semibold text-xs tracking-widest uppercase text-accent">{name}</p>
+          <p className="text-xs text-secondary mt-1">{plainLabel}</p>
         </div>
         <span className={`font-mono font-semibold text-xs px-2.5 py-1.5 rounded-lg ${getChangeBg(change)} ${getChangeColor(change)}`}>
           {getChangeArrow(change)} {formatPercent(changePercent)}
@@ -18,8 +18,8 @@ export default function MarketCard({ name, ticker, price, change, changePercent,
       </div>
       <p className="font-mono font-bold text-primary text-3xl mb-1">{formatPrice(price)}</p>
       <p className={`font-mono text-sm ${getChangeColor(change)}`}>{getChangeArrow(change)} {formatChange(change)} today</p>
-      <div className="mt-5 h-1 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all ${isUp ? 'bg-green-500' : 'bg-red-500'}`}
+      <div className="mt-5 h-1 bg-white/10 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full transition-all ${isUp ? 'bg-up' : 'bg-down'}`}
           style={{ width: `${Math.min(Math.abs(changePercent || 0) * 20, 100)}%` }} />
       </div>
     </Link>
