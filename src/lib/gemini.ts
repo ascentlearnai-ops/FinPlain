@@ -1,6 +1,6 @@
 // src/lib/gemini.ts
 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`
+const OPENROUTER_URL = `https://openrouter.ai/api/v1/chat/completions`
 const KEY = process.env.GEMINI_API_KEY
 
 const SYSTEM_INSTRUCTION = `You are a senior equity research analyst writing concise market commentary.
@@ -19,22 +19,28 @@ export async function askGemini(prompt: string): Promise<string> {
     return "This is a pre-generated AI insight. In production, Gemini 2.0 Flash would analyze live data to provide real-time updates on company fundamentals, technical trends, and recent catalysts like earnings reports or macro events. It highlights how retail sentiment and institutional flows currently affect the market narrative while maintaining a direct, professional tone for investors."
   }
 
-  const res = await fetch(`${GEMINI_URL}?key=${KEY}`, {
+  const res = await fetch(OPENROUTER_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': `Bearer ${KEY}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://finplain.dev',
+      'X-Title': 'Finplain',
+    },
     body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      generationConfig: {
-        temperature: 0.5,
-        maxOutputTokens: 400,
-      },
+      model: 'stepfun/step-3.5-flash',
+      messages: [
+        { role: 'system', content: SYSTEM_INSTRUCTION },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.5,
+      max_tokens: 400,
     }),
   })
 
-  if (!res.ok) throw new Error('Gemini API error')
+  if (!res.ok) throw new Error('OpenRouter API error')
   const data = await res.json()
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Analysis unavailable at this time.'
+  return data?.choices?.[0]?.message?.content ?? 'Analysis unavailable at this time.'
 }
 
 // Specific prompt builders
