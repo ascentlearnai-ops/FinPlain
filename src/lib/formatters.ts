@@ -1,40 +1,38 @@
-// src/lib/formatters.ts
-export function formatPrice(n?: number | null): string {
-  if (n === undefined || n === null || Number.isNaN(n)) return 'N/A'
+// src/lib/formatters.ts — All number/string formatting
+
+export function formatPrice(n: number): string {
   return new Intl.NumberFormat('en-US', {
-    style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(n)
 }
 
-export function formatChange(n?: number | null): string {
-  if (n === undefined || n === null || Number.isNaN(n)) return '0.00'
+export function formatChange(n: number): string {
   const sign = n >= 0 ? '+' : ''
   return `${sign}${n.toFixed(2)}`
 }
 
-export function formatPercent(n?: number | null): string {
-  if (n === undefined || n === null || Number.isNaN(n)) return '0.00%'
+export function formatPercent(n: number): string {
   const sign = n >= 0 ? '+' : ''
   return `${sign}${n.toFixed(2)}%`
 }
 
-export function formatMarketCap(n?: number | null): string {
-  if (n === undefined || n === null || Number.isNaN(n) || n === 0) return 'N/A'
+export function formatMarketCap(n: number): string {
   if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(2)}T`
   if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`
   return `$${n.toLocaleString()}`
 }
 
-export function formatVolume(n?: number | null): string {
-  if (n === undefined || n === null || Number.isNaN(n)) return 'N/A'
+export function formatVolume(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`
-  return n.toLocaleString()
+  return n.toString()
 }
 
-export function formatRelativeTime(isoString?: string | null): string {
-  if (!isoString) return 'Just now'
+export function formatRelativeTime(isoString: string): string {
   const diff = Date.now() - new Date(isoString).getTime()
   const minutes = Math.floor(diff / 60000)
   if (minutes < 60) return `${minutes}m ago`
@@ -44,17 +42,14 @@ export function formatRelativeTime(isoString?: string | null): string {
   return `${days}d ago`
 }
 
-export function getChangeColor(change?: number | null): string {
-  if (change === undefined || change === null || Number.isNaN(change)) return 'text-muted'
-  return change >= 0 ? 'text-up' : 'text-down'
+export function getChangeColor(change: number): string {
+  return change >= 0 ? 'text-green-600' : 'text-red-600'
 }
 
-export function getChangeBg(change?: number | null): string {
-  if (change === undefined || change === null || Number.isNaN(change)) return 'bg-subtle'
-  return change >= 0 ? 'bg-accent-bg' : 'bg-red-500/10'
+export function getChangeBg(change: number): string {
+  return change >= 0 ? 'bg-green-50' : 'bg-red-50'
 }
 
-export function getChangeArrow(change?: number | null): string {
-  if (change === undefined || change === null || Number.isNaN(change) || change === 0) return ''
-  return change > 0 ? '▲' : '▼'
+export function getChangeArrow(change: number): string {
+  return change >= 0 ? '▲' : '▼'
 }

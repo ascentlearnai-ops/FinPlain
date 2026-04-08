@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getGlobalQuote, getCompanyOverview } from '@/lib/alphaVantage'
-import { getRecommendationTrends } from '@/lib/finnhub'
+import { getRecommendationTrends, getEarnings } from '@/lib/finnhub'
 import { getYahooChart, getYahooQuote } from '@/lib/yahooFinance'
 import { getEodhdChart, getEodhdQuote } from '@/lib/eodhd'
 import { getSerpApiStockData } from '@/lib/serpapi'
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   if (!ticker) return NextResponse.json({ error: 'ticker required' }, { status: 400 })
 
   try {
-    const [eodQuote, eodChart, serpQuote, yahooQuote, overviewResult, yahooChartResult, recTrendsResult] = await Promise.allSettled([
+    const [eodQuote, eodChart, serpQuote, yahooQuote, overviewResult, yahooChartResult, recTrendsResult, earningsResult] = await Promise.allSettled([
       getEodhdQuote(ticker),
       getEodhdChart(ticker, range),
       getSerpApiStockData(ticker).catch(() => null),
@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
       getCompanyOverview(ticker),
       getYahooChart(ticker, range),
       getRecommendationTrends(ticker),
+      getEarnings(ticker),
     ])
 
     const eodQ = eodQuote.status === 'fulfilled' ? eodQuote.value : null
@@ -37,7 +38,7 @@ export async function GET(req: NextRequest) {
     
     const overview = overviewResult.status === 'fulfilled' ? overviewResult.value : { ticker, companyName: ticker, sector: 'Equity', industry: 'Market' }
     const recTrends = recTrendsResult.status === 'fulfilled' ? recTrendsResult.value : []
-    const earnings: any[] = []
+    const earnings = earningsResult.status === 'fulfilled' ? earningsResult.value : []
 
     if (!quote) {
       // If we don't even have a quote, we can't show much

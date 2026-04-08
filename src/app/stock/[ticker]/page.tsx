@@ -9,63 +9,30 @@ import WatchlistButton from '@/components/watchlist/WatchlistButton'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, BarChart3 } from 'lucide-react'
 
-import { getGlobalQuote, getCompanyOverview, getTimeSeries } from '@/lib/alphaVantage'
-import { getRecommendationTrends } from '@/lib/finnhub'
-
-interface Props { params: Promise<{ ticker: string }> | { ticker: string } }
+interface Props { params: { ticker: string } }
 
 export async function generateMetadata({ params }: Props) {
-  const p = await params
-  return { title: `${p.ticker.toUpperCase()} | Finplain` }
+  return { title: `${params.ticker.toUpperCase()} | Finplain` }
 }
 
-import { getSerpApiStockData } from '@/lib/serpapi'
-import { getYahooQuote, getYahooOverview, getYahooChart } from '@/lib/yahooFinance'
-import { getEodhdQuote, getEodhdChart } from '@/lib/eodhd'
-
 export default async function StockPage({ params }: Props) {
-  const p = await params
-  const ticker = p.ticker.toUpperCase()
-  
+  const ticker = params.ticker.toUpperCase()
   let stockData: any = null
   try {
-    const [eodQuote, eodChart, serpQuote, yahooQuote, yahooOverview, yahooChart] = await Promise.all([
-      getEodhdQuote(ticker),
-      getEodhdChart(ticker, '1M'),
-      getSerpApiStockData(ticker).catch(() => null),
-      getYahooQuote(ticker).catch(() => null),
-      getYahooOverview(ticker).catch(() => null),
-      getYahooChart(ticker, '1M').catch(() => []),
-    ])
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/stock?ticker=${ticker}&range=1M`, { next: { revalidate: 60 } })
+    stockData = await res.json()
+    if (stockData.error === 'RATE_LIMITED') stockData = null
+  } catch {}
 
-    // Final resolution
-    const finalQuote = eodQuote || serpQuote || yahooQuote || await getGlobalQuote(ticker).catch(() => null)
-    const finalOverview = yahooOverview || await getCompanyOverview(ticker).catch(() => null)
-    const finalChart = (eodChart && eodChart.length > 0) ? eodChart : (yahooChart && yahooChart.length > 0) ? yahooChart : await getTimeSeries(ticker, '1M').catch(() => [])
-    
-    const recTrends = await getRecommendationTrends(ticker).catch(() => [])
-
-    if (finalQuote && finalQuote.price) {
-      stockData = { 
-        quote: finalQuote, 
-        overview: finalOverview || { ticker, companyName: ticker, sector: 'Equity', industry: 'Market' }, 
-        chartData: finalChart, 
-        recTrends 
-      }
-    }
-  } catch (err: any) {
-    console.error("STOCK_PAGE_LOAD_ERROR:", err.message);
-  }
-
-  if (!stockData?.quote || !stockData?.quote.price) return notFound()
+  if (!stockData?.quote) return notFound()
   const { quote, overview, chartData, recTrends } = stockData
 
   return (
     <>
       {/* Navbar spacer already handled by layout — just a subtle hero */}
-      <div className="bg-base border-b border-white/5 py-6">
+      <div className="bg-white border-b border-gray-100 py-6">
         <div className="container-full">
           <div className="container-inner">
             <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-accent mb-5 transition-colors">
@@ -80,7 +47,7 @@ export default async function StockPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="bg-base py-10">
+      <div className="section-soft py-10">
         <div className="container-full">
           <div className="container-inner space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

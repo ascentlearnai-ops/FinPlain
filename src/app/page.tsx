@@ -4,14 +4,8 @@ import DailyAISummary from '@/components/market/DailyAISummary'
 import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
+import HomeWatchlist from '@/components/watchlist/HomeWatchlist'
 import { Activity, BarChart3, Brain, Globe } from 'lucide-react'
-
-
-const INDICES_DEFS = [
-  { ticker: 'SPY', name: 'S&P 500', plainLabel: 'Tracks the top 500 US companies' },
-  { ticker: 'QQQ', name: 'Nasdaq', plainLabel: 'Tracks the top tech companies' },
-  { ticker: 'DIA', name: 'Dow Jones', plainLabel: 'Tracks 30 of the biggest US companies' },
-]
 
 export const metadata = { title: 'Finplain — Market Intelligence, Simplified' }
 
@@ -22,8 +16,8 @@ export default function HomePage() {
       <section className="hero-gradient pt-20 pb-28">
         <div className="container-full">
           <div className="container-inner text-center">
-            <div className="inline-flex items-center gap-2 bg-subtle/50 backdrop-blur-sm border border-white/10 rounded-full px-4 py-1.5 mb-8 shadow-sm">
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-blue-100 rounded-full px-4 py-1.5 mb-8 shadow-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span className="text-sm font-medium text-secondary">Markets are open &bull; Live data</span>
             </div>
 
@@ -32,8 +26,8 @@ export default function HomePage() {
               <span className="gradient-text">simplified.</span>
             </h1>
 
-            <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed font-sans">
-              Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub &amp; TradingView — 
+            <p className="text-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
+              Real-time stock data from Alpha Vantage, Yahoo Finance, Finnhub & TradingView — 
               paired with AI-powered analysis to decode every market move.
             </p>
 
@@ -50,7 +44,7 @@ export default function HomePage() {
       </section>
 
       {/* === FEATURE PILLS === */}
-      <section className="bg-base -mt-14 relative z-10">
+      <section className="section-light -mt-14 relative z-10">
         <div className="container-full">
           <div className="container-inner">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -74,7 +68,7 @@ export default function HomePage() {
       </section>
 
       {/* === DASHBOARD === */}
-      <section id="dashboard" className="bg-base py-20">
+      <section id="dashboard" className="section-light py-20">
         <div className="container-full">
           <div className="container-inner">
             {/* Market Overview */}
@@ -85,6 +79,9 @@ export default function HomePage() {
                 <MarketSummaryRow />
               </Suspense>
             </div>
+
+            {/* Watchlist */}
+            <HomeWatchlist />
 
             {/* AI Summary */}
             <div className="mb-12">
@@ -110,24 +107,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === CTA SECTION (Clean) === */}
-      <section className="bg-elevated py-24 mb-20 rounded-[40px] mx-4 md:mx-10 border border-white/5 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-[100px] -ml-48 -mb-48" />
-        
-        <div className="container-full relative z-10">
+      {/* === CTA SECTION (dark) === */}
+      <section className="section-dark py-24">
+        <div className="container-full">
           <div className="container-inner text-center">
-            <h2 className="text-headline text-primary mb-6 max-w-2xl mx-auto">
+            <h2 className="text-headline text-white mb-4">
               Intelligence that helps during the trade, not after.
             </h2>
-            <p className="text-lg text-secondary max-w-xl mx-auto mb-10 leading-relaxed">
+            <p className="text-base text-blue-200 max-w-lg mx-auto mb-8">
               Add tickers to your watchlist, track real-time price action, and get AI-powered market briefs — all in one place.
             </p>
-            <div className="flex items-center justify-center gap-4">
-              <a href="/watchlist" className="btn-primary px-10 py-5 text-base shadow-glow shadow-accent/10">
-                Start Tracking Now
-              </a>
-            </div>
+            <a href="/watchlist" className="btn-primary text-sm inline-flex items-center gap-2">
+              Start Tracking
+            </a>
           </div>
         </div>
       </section>
@@ -135,52 +127,15 @@ export default function HomePage() {
   )
 }
 
-import { getSerpApiMarketData, formatSerpApiIndices } from '@/lib/serpapi'
-import { getYahooQuote } from '@/lib/yahooFinance'
-import { getEodhdQuote } from '@/lib/eodhd'
-
 async function MarketSummaryRow() {
-  let indices: any[] = []
-  
+  let indices = []
   try {
-    // Try SerpApi first as requested by user
-    const serpData = await getSerpApiMarketData()
-    const formatted = formatSerpApiIndices(serpData)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/market-summary`, { next: { revalidate: 300 } })
+    const data = await res.json()
+    indices = data.indices || []
+  } catch {}
 
-    if (formatted) {
-      indices = INDICES_DEFS.map(idx => {
-        const data = (formatted as any)[idx.ticker]
-        return { ...idx, ...data }
-      })
-    }
-  } catch (err) {
-    console.error("SERPAPI_ERROR_IN_HOME:", err)
-  }
-
-  // Fallback or fill in missing data with EODHD and Yahoo Finance
-  if (indices.length === 0 || indices.some(idx => !idx.price)) {
-    try {
-      const fallbackIndices = await Promise.all(
-        INDICES_DEFS.map(async idx => {
-          try {
-            const eod = await getEodhdQuote(idx.ticker)
-            if (eod) return { ...idx, ...eod }
-            const quote = await getYahooQuote(idx.ticker)
-            return { ...idx, ...quote }
-          } catch {
-            return idx
-          }
-        })
-      )
-      indices = fallbackIndices
-    } catch (err) {
-      console.error("FALLBACK_ERROR:", err);
-    }
-  }
-
-  if (indices.length === 0 || indices.every(idx => !idx.price)) {
-    return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
-  }
+  if (indices.length === 0) return <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{[0,1,2].map(i => <SkeletonCard key={i} />)}</div>
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
