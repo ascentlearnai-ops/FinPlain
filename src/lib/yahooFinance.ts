@@ -55,7 +55,7 @@ export async function getYahooOverview(ticker: string) {
 export async function getYahooChart(ticker: string, range: ChartRange): Promise<ChartDataPoint[]> {
   try {
     const period1 = getPeriod1(range)
-    const interval = range === '1D' ? '1m' : '1d'
+    const interval = range === '1D' ? '5m' : '1d'
 
     // Use any as a workaround for current library type definition issues in this environment
     const result: any = await yahooFinance.chart(ticker, {
