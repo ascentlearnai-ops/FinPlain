@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createChart, ColorType, CrosshairMode, LineSeries, CandlestickSeries, HistogramSeries, IChartApi, ISeriesApi } from 'lightweight-charts'
 import type { ChartRange, ChartType, ChartDataPoint } from '@/lib/types'
-import { RefreshCw, AlertTriangle } from 'lucide-react'
+import { RefreshCw, AlertTriangle, Maximize2 } from 'lucide-react'
 
 const RANGES: ChartRange[] = ['1D', '1W', '1M', '3M', '1Y']
 
@@ -24,51 +24,53 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
   useEffect(() => {
     if (!chartContainerRef.current) return
 
+    const handleResize = () => {
+      if (chartContainerRef.current && chartRef.current) {
+        chartRef.current.applyOptions({ 
+          width: chartContainerRef.current.clientWidth,
+          height: window.innerWidth < 768 ? 300 : 450
+        })
+      }
+    }
+
     const chart = createChart(chartContainerRef.current, {
       layout: {
-        background: { type: ColorType.Solid, color: '#161a1e' },
-        textColor: '#5e6673',
+        background: { type: ColorType.Solid, color: 'transparent' },
+        textColor: '#64748b',
         fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 11,
+        fontSize: 10,
       },
       grid: {
-        vertLines: { color: 'rgba(255,255,255,0.03)' },
-        horzLines: { color: 'rgba(255,255,255,0.03)' },
+        vertLines: { color: 'rgba(255,255,255,0.02)' },
+        horzLines: { color: 'rgba(255,255,255,0.02)' },
       },
       crosshair: {
         mode: CrosshairMode.Normal,
-        vertLine: { width: 1, color: 'rgba(240,185,11,0.3)', style: 3, labelBackgroundColor: '#1e2329' },
-        horzLine: { width: 1, color: 'rgba(240,185,11,0.3)', style: 3, labelBackgroundColor: '#1e2329' },
+        vertLine: { width: 1, color: 'rgba(217,70,239,0.3)', style: 3, labelBackgroundColor: '#151921' },
+        horzLine: { width: 1, color: 'rgba(217,70,239,0.3)', style: 3, labelBackgroundColor: '#151921' },
       },
       rightPriceScale: {
-        borderColor: 'rgba(255,255,255,0.04)',
-        scaleMargins: { top: 0.1, bottom: 0.3 },
+        borderColor: 'rgba(255,255,255,0.05)',
+        scaleMargins: { top: 0.1, bottom: 0.2 },
+        alignLabels: true,
       },
       timeScale: {
-        borderColor: 'rgba(255,255,255,0.04)',
+        borderColor: 'rgba(255,255,255,0.05)',
         timeVisible: true,
-        secondsVisible: false,
-        rightOffset: 5,
-        barSpacing: 8,
         fixRightEdge: true,
+        barSpacing: 10,
       },
       handleScroll: { vertTouchDrag: false },
       width: chartContainerRef.current.clientWidth,
-      height: 420,
+      height: window.innerWidth < 768 ? 300 : 450,
     })
 
     chartRef.current = chart
-
-    const ro = new ResizeObserver(() => {
-      if (chartContainerRef.current && chartRef.current) {
-        chartRef.current.applyOptions({ width: chartContainerRef.current.clientWidth })
-      }
-    })
-    ro.observe(chartContainerRef.current)
+    window.addEventListener('resize', handleResize)
 
     return () => {
       chart.remove()
-      ro.disconnect()
+      window.removeEventListener('resize', handleResize)
       chartRef.current = null
     }
   }, [])
@@ -85,19 +87,18 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       volumeSeriesRef.current = null
     }
 
+    const colorUp = '#00ffaa'
+    const colorDown = '#ff3366'
     const isUp = data[data.length - 1].close >= data[0].close
-    const colorUp = '#0ecb81'
-    const colorDown = '#f6465d'
     const colorTheme = isUp ? colorUp : colorDown
 
     if (chartType === 'candlestick') {
       mainSeriesRef.current = chartRef.current.addSeries(CandlestickSeries, {
         upColor: colorUp,
         downColor: colorDown,
-        borderUpColor: colorUp,
-        borderDownColor: colorDown,
-        wickUpColor: `${colorUp}80`,
-        wickDownColor: `${colorDown}80`,
+        borderVisible: false,
+        wickUpColor: colorUp,
+        wickDownColor: colorDown,
       })
       mainSeriesRef.current.setData(data.map(d => ({ 
         time: d.time, open: d.open, high: d.high, low: d.low, close: d.close 
@@ -105,13 +106,11 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     } else {
       mainSeriesRef.current = chartRef.current.addSeries(LineSeries, {
         color: colorTheme,
-        lineWidth: 2,
+        lineWidth: 3,
         crosshairMarkerVisible: true,
-        crosshairMarkerRadius: 4,
-        crosshairMarkerBorderColor: colorTheme,
-        crosshairMarkerBackgroundColor: '#161a1e',
-        lastValueVisible: true,
-        priceLineVisible: false,
+        crosshairMarkerRadius: 5,
+        crosshairMarkerBorderColor: '#ffffff',
+        crosshairMarkerBackgroundColor: colorTheme,
       })
       mainSeriesRef.current.setData(data.map(d => ({ 
         time: d.time, value: d.close 
@@ -128,13 +127,12 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     volumeSeriesRef.current.setData(data.map(d => ({
       time: d.time,
       value: d.volume,
-      color: d.close >= d.open ? `${colorUp}15` : `${colorDown}15`,
+      color: d.close >= d.open ? 'rgba(0, 255, 170, 0.1)' : 'rgba(255, 51, 102, 0.1)',
     })))
 
     chartRef.current.subscribeCrosshairMove((param: any) => {
       if (!param.time || !param.seriesData || !mainSeriesRef.current) {
-        setOhlcv(null)
-        return
+        setOhlcv(null); return
       }
       const cd = param.seriesData.get(mainSeriesRef.current)
       const vd = param.seriesData.get(volumeSeriesRef.current)
@@ -154,86 +152,96 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
 
   const changeRange = async (r: ChartRange) => {
     if (r === range) return
-    setRange(r)
-    setLoading(true)
-    setError(null)
-    
+    setRange(r); setLoading(true); setError(null)
     try {
       const res = await fetch(`/api/stock?ticker=${ticker}&range=${r}`)
-      if (!res.ok) throw new Error('Failed to fetch chart data')
-      
       const result = await res.json()
-      if (result.chartData && result.chartData.length > 0) {
-        setData(result.chartData)
-      } else {
-        console.warn(`No data for range ${r}`)
-        setError(`No chart data available for ${r}`)
-      }
-    } catch (err) {
-      console.error('Chart Toggle Error:', err)
-      setError('Could not update chart. Try again.')
-    } finally {
-      setLoading(false)
-    }
+      if (result.chartData?.length > 0) setData(result.chartData)
+      else setError(`Historical data unavailable for ${r}`)
+    } catch { setError('Network failure. Check connection.') }
+    finally { setLoading(false) }
   }
 
-  const fmt = (v: number) => v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(1)+'K' : String(v)
+  const fmt = (v: number) => v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(1)+'K'
 
   return (
-    <div className="glass-card overflow-hidden relative z-10">
-      {/* OHLCV header */}
-      <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-white/[0.04] bg-white/[0.01]">
-        <div className="flex items-center gap-4 text-[11px] font-mono overflow-x-auto whitespace-nowrap">
+    <div className="glass-card overflow-hidden group/chart relative z-10 border-white/[0.03]">
+      {/* Header Controls */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between px-6 py-4 border-b border-white/[0.04]">
+        <div className="flex items-center gap-4 mb-3 md:mb-0 overflow-x-auto no-scrollbar">
           {ohlcv ? (
-            <>
-              <span className="text-muted">O <span className="text-primary font-bold">{ohlcv.o.toFixed(2)}</span></span>
-              <span className="text-muted">H <span className="text-up font-bold">{ohlcv.h.toFixed(2)}</span></span>
-              <span className="text-muted">L <span className="text-down font-bold">{ohlcv.l.toFixed(2)}</span></span>
-              <span className="text-muted">C <span className="text-primary font-bold">{ohlcv.c.toFixed(2)}</span></span>
-              <span className="text-muted">Vol <span className="text-primary font-bold">{fmt(ohlcv.v)}</span></span>
-            </>
-          ) : <span className="text-muted">Hover chart for details</span>}
+            <div className="flex items-center gap-4 font-mono text-[10px] sm:text-[11px] font-bold tracking-tight">
+              <span className="text-muted">O <span className="text-primary">{ohlcv.o.toFixed(2)}</span></span>
+              <span className="text-muted">H <span className="text-up">{ohlcv.h.toFixed(2)}</span></span>
+              <span className="text-muted">L <span className="text-down">{ohlcv.l.toFixed(2)}</span></span>
+              <span className="text-muted">C <span className="text-primary">{ohlcv.c.toFixed(2)}</span></span>
+              <span className="hidden sm:inline text-muted">VOL <span className="text-accent">{fmt(ohlcv.v)}</span></span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-muted text-[10px] font-bold uppercase tracking-widest">
+              <Activity size={12} className="text-accent animate-pulse" /> Interactive Charts
+            </div>
+          )}
         </div>
-        <div className="flex gap-1 bg-white/[0.03] rounded-lg p-0.5 ml-4 shrink-0">
-          {(['candlestick', 'line'] as ChartType[]).map(t => (
-            <button key={t} onClick={() => setChartType(t)}
-              className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${chartType === t ? 'bg-accent/20 text-accent' : 'text-muted hover:text-secondary'}`}>
-              {t === 'candlestick' ? 'Candle' : 'Line'}
-            </button>
-          ))}
+        
+        <div className="flex items-center gap-2 self-end md:self-auto">
+          <div className="flex gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/5">
+            {(['candlestick', 'line'] as ChartType[]).map(t => (
+              <button key={t} onClick={() => setChartType(t)}
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${chartType === t ? 'bg-accent/20 text-accent' : 'text-muted hover:text-white'}`}>
+                {t === 'candlestick' ? 'Candles' : 'Line'}
+              </button>
+            ))}
+          </div>
+          <button className="p-2 rounded-xl bg-white/[0.04] text-muted hover:text-white border border-white/5 hidden sm:block">
+            <Maximize2 size={14} />
+          </button>
         </div>
       </div>
 
-      {/* Range tabs */}
-      <div className="flex items-center gap-1 px-5 py-2.5 border-b border-white/[0.04]">
+      {/* Range Switcher */}
+      <div className="flex items-center gap-1.5 px-6 py-3 bg-white/[0.01] border-b border-white/[0.04] overflow-x-auto no-scrollbar">
         {RANGES.map(r => (
           <button key={r} onClick={() => changeRange(r)}
-            className={`px-3 py-1 rounded-lg font-mono font-bold text-xs transition-all ${range === r ? 'bg-accent text-dark' : 'text-muted hover:text-primary hover:bg-white/[0.04]'}`}>
+            className={`px-3 py-1.5 rounded-lg font-mono font-black text-xs transition-all ${range === r ? 'bg-accent text-background shadow-neon-pink' : 'text-muted hover:text-white hover:bg-white/5'}`}>
             {r}
           </button>
         ))}
-        {loading && <div className="ml-3 w-3 h-3 border-2 border-accent border-t-transparent rounded-full animate-spin" />}
-        <span className="ml-auto font-mono text-[9px] text-muted uppercase tracking-widest">{ticker} · REAL-TIME</span>
+        {loading && <RefreshCw size={12} className="text-accent animate-spin ml-2" />}
+        <div className="ml-auto hidden md:flex items-center gap-2">
+           <span className="w-1.5 h-1.5 rounded-full bg-up animate-pulse" />
+           <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Live Feed &bull; {ticker}</span>
+        </div>
       </div>
 
-      {/* Chart */}
-      <div className="relative min-h-[420px]" style={{ background: '#161a1e' }}>
+      {/* Chart Canvas */}
+      <div className="relative" style={{ minHeight: '300px' }}>
         {error && (
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-10 h-10 bg-down/10 rounded-full flex items-center justify-center mb-3">
-              <AlertTriangle className="text-down" size={20} />
-            </div>
-            <p className="text-sm font-semibold text-primary mb-1">{error}</p>
-            <button onClick={() => changeRange(range)} className="text-xs text-accent font-bold hover:underline flex items-center gap-1">
-              <RefreshCw size={10} /> Retry
-            </button>
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 bg-background/80 backdrop-blur-sm text-center">
+             <AlertTriangle className="text-down mb-4" size={32} />
+             <p className="font-bold text-primary mb-2">{error}</p>
+             <button onClick={() => changeRange(range)} className="btn-secondary text-xs flex items-center gap-2">
+               <RefreshCw size={12} /> Force Reload
+             </button>
           </div>
         )}
-        
-        <div ref={chartContainerRef} className={error ? 'opacity-20 transition-opacity' : 'transition-opacity'} />
-        
-        {loading && <div className="absolute inset-0 bg-[#161a1e]/60 backdrop-blur-[1px] z-10 transition-all" />}
+        <div ref={chartContainerRef} className={loading ? 'opacity-30' : 'transition-opacity duration-500'} />
+        <div className="absolute bottom-6 right-6 pointer-events-none opacity-10">
+           <p className="font-['Outfit'] font-black text-4xl text-white tracking-tighter">FINPLAIN</p>
+        </div>
       </div>
     </div>
+  )
+}
+
+function Activity({ size, className }: { size?: number; className?: string }) {
+  return (
+    <svg 
+      width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" 
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
+      className={className}
+    >
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+    </svg>
   )
 }
