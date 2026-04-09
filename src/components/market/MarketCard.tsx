@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { formatPrice, formatChange, formatPercent, getChangeArrow } from '@/lib/formatters'
-import { ArrowUpRight, TrendingUp, TrendingDown } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 interface Props { name: string; ticker: string; price: number; change: number; changePercent: number; plainLabel: string }
 

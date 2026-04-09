@@ -4,7 +4,7 @@ import DailyAISummary from '@/components/market/DailyAISummary'
 import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
-import { BarChart3, Brain, Zap, ArrowRight, ShieldCheck, Globe } from 'lucide-react'
+import { Brain, Zap, ArrowRight, ShieldCheck, Globe } from 'lucide-react'
 import { getMarketSummary } from '@/lib/market'
 
 export const metadata = { title: 'Finplain — Trading Intelligence' }
