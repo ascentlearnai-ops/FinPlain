@@ -62,6 +62,8 @@ export interface GlossaryTerm {
   category: 'stocks' | 'markets' | 'numbers' | 'basics'
   definition: string        // Plain English, 1 sentence max
   example: string           // "Think of it like..."
+  detailedExample?: string  // Longer deep dive for the modal
+  imageUrl?: string         // Diagram or chart image
   emoji: string
 }
 
