@@ -18,17 +18,17 @@ export default function HomePage() {
         <div className="container-full">
           <div className="container-inner">
             <div className="mx-auto max-w-4xl text-center">
-              <div className="mb-7 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] px-3 py-2">
-                  <span className="w-2 h-2 bg-white rounded-full" />
-                <span className="text-[11px] font-bold uppercase text-secondary">Research-native market literacy</span>
+              <div className="mb-7 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.03] px-3 py-2">
+                <span className="w-2 h-2 bg-white rounded-full" />
+                <span className="text-[11px] font-bold uppercase text-secondary">Pre-market research, simplified</span>
               </div>
 
               <h1 className="landing-title text-primary">
-                The market research desk built for students.
+                A serious market terminal for learning how money moves.
               </h1>
 
               <p className="mx-auto mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
-                macroliberium turns prices, earnings, filings, and financial headlines into a calm workflow that feels premium enough for research and clear enough for your first watchlist.
+                macroliberium brings live prices, earnings calls, SEC filings, news, notes, and plain-English context into one focused workspace for the next generation of investors.
               </p>
 
               <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
@@ -46,12 +46,18 @@ export default function HomePage() {
               <IntroVideo />
             </div>
 
+            <div className="landing-proof-strip" aria-label="Product capabilities">
+              {['Yahoo Finance', 'SEC EDGAR', 'FMP', 'Finnhub', 'NewsAPI', 'Alpha Vantage'].map(source => (
+                <span key={source}>{source}</span>
+              ))}
+            </div>
+
             <div className="landing-feature-grid">
               {[
-                [Sparkles, 'AI summaries', 'Plain-English context for fast market reads.'],
-                [FileText, 'Filings timeline', 'SEC reports, earnings, and events organized by company.'],
-                [NotebookPen, 'Saved notes', 'Keep research thoughts next to the ticker.'],
-                [Bell, 'Alerts', 'Track keywords and catalysts that matter.'],
+                [Sparkles, 'Source synthesis', 'Headlines and filings turned into concise research notes.'],
+                [FileText, 'Company timeline', 'Earnings, filings, and catalyst events organized by ticker.'],
+                [NotebookPen, 'Research notebook', 'Save thesis notes directly beside the company you follow.'],
+                [Bell, 'Catalyst alerts', 'Track keywords, guidance changes, and major market events.'],
               ].map(([Icon, title, body]) => {
                 const FeatureIcon = Icon as typeof Sparkles
                 return (
@@ -99,7 +105,7 @@ export default function HomePage() {
                     <p className="text-label mb-3">Why it matters</p>
                     <h3 className="text-2xl font-bold mb-4">A calmer way to follow markets.</h3>
                     <p className="text-secondary text-sm leading-relaxed">
-                      macroliberium keeps the interface sparse so the important thing stays visible: what moved, why people care, and what the words mean.
+                      macroliberium keeps the interface sparse so the important things stay visible: what moved, which source confirms it, and what the language means.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-8">
