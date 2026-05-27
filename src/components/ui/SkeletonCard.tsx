@@ -48,8 +48,8 @@ export function SkeletonNewsCard() {
         <div className="h-5 bg-white/[0.08] rounded-full w-full" />
         <div className="h-5 bg-white/[0.08] rounded-full w-3/4" />
       </div>
-      <div className="relative z-10 h-24 bg-accent/[0.03] rounded-2xl border border-accent/10 flex items-center justify-center">
-        <Newspaper size={24} className="text-accent/20" />
+      <div className="relative z-10 h-24 bg-white/[0.03] rounded-lg border border-white/[0.08] flex items-center justify-center">
+        <Newspaper size={24} className="text-white/20" />
       </div>
       <div className="relative z-10 flex gap-2">
         <div className="h-6 bg-white/[0.06] rounded-lg w-16" />

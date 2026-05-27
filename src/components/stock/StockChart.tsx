@@ -36,7 +36,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: '#64748b',
+        textColor: '#737373',
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: 10,
       },
@@ -46,8 +46,8 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       },
       crosshair: {
         mode: CrosshairMode.Normal,
-        vertLine: { width: 1, color: 'rgba(217,70,239,0.3)', style: 3, labelBackgroundColor: '#151921' },
-        horzLine: { width: 1, color: 'rgba(217,70,239,0.3)', style: 3, labelBackgroundColor: '#151921' },
+        vertLine: { width: 1, color: 'rgba(255,255,255,0.25)', style: 3, labelBackgroundColor: '#171717' },
+        horzLine: { width: 1, color: 'rgba(255,255,255,0.25)', style: 3, labelBackgroundColor: '#171717' },
       },
       rightPriceScale: {
         borderColor: 'rgba(255,255,255,0.05)',
@@ -87,8 +87,8 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       volumeSeriesRef.current = null
     }
 
-    const colorUp = '#00ffaa'
-    const colorDown = '#ff3366'
+    const colorUp = '#f5f5f5'
+    const colorDown = '#737373'
     const isUp = data[data.length - 1].close >= data[0].close
     const colorTheme = isUp ? colorUp : colorDown
 
@@ -127,7 +127,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
     volumeSeriesRef.current.setData(data.map(d => ({
       time: d.time,
       value: d.volume,
-      color: d.close >= d.open ? 'rgba(0, 255, 170, 0.1)' : 'rgba(255, 51, 102, 0.1)',
+      color: d.close >= d.open ? 'rgba(245, 245, 245, 0.16)' : 'rgba(115, 115, 115, 0.16)',
     })))
 
     chartRef.current.subscribeCrosshairMove((param: any) => {
@@ -172,14 +172,14 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
           {ohlcv ? (
             <div className="flex items-center gap-4 font-mono text-[10px] sm:text-[11px] font-bold tracking-tight">
               <span className="text-muted">O <span className="text-primary">{ohlcv.o.toFixed(2)}</span></span>
-              <span className="text-muted">H <span className="text-up">{ohlcv.h.toFixed(2)}</span></span>
-              <span className="text-muted">L <span className="text-down">{ohlcv.l.toFixed(2)}</span></span>
+              <span className="text-muted">H <span className="text-primary">{ohlcv.h.toFixed(2)}</span></span>
+              <span className="text-muted">L <span className="text-secondary">{ohlcv.l.toFixed(2)}</span></span>
               <span className="text-muted">C <span className="text-primary">{ohlcv.c.toFixed(2)}</span></span>
-              <span className="hidden sm:inline text-muted">VOL <span className="text-accent">{fmt(ohlcv.v)}</span></span>
+              <span className="hidden sm:inline text-muted">VOL <span className="text-primary">{fmt(ohlcv.v)}</span></span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-muted text-[10px] font-bold uppercase tracking-widest">
-              <Activity size={12} className="text-accent animate-pulse" /> Interactive Charts
+            <div className="flex items-center gap-2 text-muted text-[10px] font-bold uppercase">
+              <Activity size={12} className="text-primary animate-pulse" /> Interactive chart
             </div>
           )}
         </div>
@@ -188,7 +188,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
           <div className="flex gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/5">
             {(['candlestick', 'line'] as ChartType[]).map(t => (
               <button key={t} onClick={() => setChartType(t)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${chartType === t ? 'bg-accent/20 text-accent' : 'text-muted hover:text-white'}`}>
+                className={`px-3 py-1.5 rounded-md text-[10px] font-bold uppercase transition-colors ${chartType === t ? 'bg-white text-black' : 'text-muted hover:text-white'}`}>
                 {t === 'candlestick' ? 'Candles' : 'Line'}
               </button>
             ))}
@@ -203,14 +203,14 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       <div className="flex items-center gap-1.5 px-6 py-3 bg-white/[0.01] border-b border-white/[0.04] overflow-x-auto no-scrollbar">
         {RANGES.map(r => (
           <button key={r} onClick={() => changeRange(r)}
-            className={`px-3 py-1.5 rounded-lg font-mono font-black text-xs transition-all ${range === r ? 'bg-accent text-background shadow-neon-pink' : 'text-muted hover:text-white hover:bg-white/5'}`}>
+            className={`px-3 py-1.5 rounded-md font-mono font-black text-xs transition-colors ${range === r ? 'bg-white text-black' : 'text-muted hover:text-white hover:bg-white/5'}`}>
             {r}
           </button>
         ))}
-        {loading && <RefreshCw size={12} className="text-accent animate-spin ml-2" />}
+        {loading && <RefreshCw size={12} className="text-primary animate-spin ml-2" />}
         <div className="ml-auto hidden md:flex items-center gap-2">
-           <span className="w-1.5 h-1.5 rounded-full bg-up animate-pulse" />
-           <span className="text-[10px] font-bold text-muted uppercase tracking-widest">Live Feed &bull; {ticker}</span>
+           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+           <span className="text-[10px] font-bold text-muted uppercase">Live feed / {ticker}</span>
         </div>
       </div>
 
@@ -218,7 +218,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
       <div className="relative" style={{ minHeight: '300px' }}>
         {error && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 bg-background/80 backdrop-blur-sm text-center">
-             <AlertTriangle className="text-down mb-4" size={32} />
+             <AlertTriangle className="text-secondary mb-4" size={32} />
              <p className="font-bold text-primary mb-2">{error}</p>
              <button onClick={() => changeRange(range)} className="btn-secondary text-xs flex items-center gap-2">
                <RefreshCw size={12} /> Force Reload
@@ -227,7 +227,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
         )}
         <div ref={chartContainerRef} className={loading ? 'opacity-30' : 'transition-opacity duration-500'} />
         <div className="absolute bottom-6 right-6 pointer-events-none opacity-10">
-           <p className="font-['Outfit'] font-black text-4xl text-white tracking-tighter">FINPLAIN</p>
+           <p className="font-['Outfit'] font-black text-4xl text-white">MACROLIBERIUM</p>
         </div>
       </div>
     </div>

@@ -20,28 +20,28 @@ export default function WatchlistRow({ ticker, onRemove }: Props) {
 
   if (loading) return (
     <div className="glass-card p-4 animate-pulse flex items-center gap-4">
-      <div className="w-10 h-10 bg-gray-100 rounded-xl" />
-      <div className="flex-1 space-y-2"><div className="h-4 bg-gray-100 rounded w-1/4" /><div className="h-3 bg-gray-50 rounded w-1/3" /></div>
-      <div className="h-6 bg-gray-100 rounded w-20" />
+      <div className="w-10 h-10 bg-white/[0.08] rounded-md" />
+      <div className="flex-1 space-y-2"><div className="h-4 bg-white/[0.08] rounded w-1/4" /><div className="h-3 bg-white/[0.05] rounded w-1/3" /></div>
+      <div className="h-6 bg-white/[0.08] rounded w-20" />
     </div>
   )
 
   return (
     <Link href={`/stock/${ticker}`} className="glass-card p-4 flex items-center gap-4 group">
-      <div className="w-10 h-10 bg-accent-bg border border-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-        <span className="font-mono font-bold text-xs text-accent">{ticker.slice(0, 2)}</span>
+      <div className="w-10 h-10 bg-white text-black rounded-md flex items-center justify-center flex-shrink-0">
+        <span className="font-mono font-bold text-xs">{ticker.slice(0, 2)}</span>
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-mono font-semibold text-sm text-primary">{ticker}</p>
-        <p className="text-xs text-muted truncate">{data?.overview?.companyName || '—'}</p>
+        <p className="text-xs text-muted truncate">{data?.overview?.companyName || '-'}</p>
       </div>
       {data?.quote && (
         <div className="text-right">
           <p className="font-mono font-semibold text-sm text-primary">{formatPrice(data.quote.price)}</p>
-          <p className={`font-mono text-xs ${isUp ? 'text-green-600' : 'text-red-600'}`}>{isUp ? '+' : ''}{formatPercent(data.quote.changePercent)}</p>
+          <p className={`font-mono text-xs ${isUp ? 'text-primary' : 'text-muted'}`}>{formatPercent(data.quote.changePercent)}</p>
         </div>
       )}
-      <button onClick={handleRemove} className="p-2 text-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+      <button onClick={handleRemove} className="p-2 text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all" aria-label={`Remove ${ticker}`}>
         <Trash2 size={15} />
       </button>
     </Link>

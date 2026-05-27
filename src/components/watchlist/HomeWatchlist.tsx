@@ -18,9 +18,8 @@ export default function HomeWatchlist() {
       return
     }
 
-    // Fetch data for the first 3 items in watchlist
     Promise.all(
-      list.slice(0, 3).map(ticker => 
+      list.slice(0, 3).map(ticker =>
         fetch(`/api/stock?ticker=${ticker}&range=1D`)
           .then(r => r.json())
           .then(d => ({ ticker, d }))
@@ -41,23 +40,23 @@ export default function HomeWatchlist() {
     <div className="mb-12">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-label mb-2">My Portfolio</p>
-          <h2 className="text-headline text-primary">Your Watchlist</h2>
+          <p className="text-label mb-2">Saved tickers</p>
+          <h2 className="text-headline text-primary">Your watchlist</h2>
         </div>
-        <Link href="/watchlist" className="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 transition-colors group">
-          View All <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+        <Link href="/watchlist" className="text-sm font-bold text-primary hover:text-secondary flex items-center gap-1.5 transition-colors group">
+          View all <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {loading ? (
           [0, 1, 2].map(i => (
             <div key={i} className="glass-card p-5 animate-pulse flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-100 rounded-lg" />
-                <div className="h-4 bg-slate-100 rounded w-16" />
+                <div className="w-8 h-8 bg-white/[0.08] rounded-md" />
+                <div className="h-4 bg-white/[0.08] rounded w-16" />
               </div>
-              <div className="h-6 bg-slate-100 rounded w-24" />
+              <div className="h-6 bg-white/[0.08] rounded w-24" />
             </div>
           ))
         ) : (
@@ -66,20 +65,20 @@ export default function HomeWatchlist() {
             if (!stock) return null
             const isUp = stock.quote.changePercent >= 0
             return (
-              <Link key={ticker} href={`/stock/${ticker}`} className="glass-card p-5 hover:border-blue-200 transition-all group">
+              <Link key={ticker} href={`/stock/${ticker}`} className="glass-card p-5 transition-colors group">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-accent-bg border border-blue-50 rounded-xl flex items-center justify-center font-mono font-bold text-xs text-blue-600">
+                    <div className="w-9 h-9 bg-white text-black rounded-md flex items-center justify-center font-mono font-bold text-xs">
                       {ticker.slice(0, 2)}
                     </div>
-                    <span className="font-mono font-bold text-sm text-primary group-hover:text-blue-600 transition-colors">{ticker}</span>
+                    <span className="font-mono font-bold text-sm text-primary">{ticker}</span>
                   </div>
-                  {isUp ? <TrendingUp size={16} className="text-green-500" /> : <TrendingDown size={16} className="text-red-500" />}
+                  {isUp ? <TrendingUp size={16} className="text-primary" /> : <TrendingDown size={16} className="text-muted" />}
                 </div>
                 <div className="flex items-end justify-between">
                   <p className="font-mono font-bold text-xl text-primary">{formatPrice(stock.quote.price)}</p>
-                  <p className={`font-mono text-xs font-bold ${isUp ? 'text-green-600' : 'text-red-600'}`}>
-                    {isUp ? '+' : ''}{formatPercent(stock.quote.changePercent)}
+                  <p className={`font-mono text-xs font-bold ${isUp ? 'text-primary' : 'text-muted'}`}>
+                    {formatPercent(stock.quote.changePercent)}
                   </p>
                 </div>
               </Link>

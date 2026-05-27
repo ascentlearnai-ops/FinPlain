@@ -18,7 +18,7 @@ export default function StockLoading() {
         {/* Main Column */}
         <div className="lg:col-span-8 space-y-6">
           {/* AI Explainer Skeleton */}
-          <div className="glass-card p-6 h-40 animate-pulse bg-blue-50/50" />
+          <div className="glass-card p-6 h-40 animate-pulse bg-white/[0.04]" />
           {/* Chart Skeleton */}
           <SkeletonChart />
         </div>

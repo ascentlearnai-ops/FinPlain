@@ -51,7 +51,7 @@ export interface NewsArticle {
   url: string
   publishedAt: string       // ISO string
   relatedTickers: string[]
-  simpleSummary: string     // Gemini-generated 1-sentence plain summary
+  simpleSummary: string     // AI-generated 1-sentence plain summary
   category: 'tech' | 'energy' | 'finance' | 'economy' | 'general'
   imageUrl?: string
 }

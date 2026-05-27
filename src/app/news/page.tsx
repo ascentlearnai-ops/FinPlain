@@ -18,11 +18,11 @@ export default function NewsPage() {
 
   return (
     <>
-      <div className="hero-gradient py-16">
+      <div className="py-14 border-b border-white/[0.08]">
         <div className="container-full"><div className="container-inner">
-          <p className="text-label text-accent mb-3">Market Wire</p>
-          <h1 className="text-headline text-primary mb-3">Latest <span className="gradient-text">Headlines</span></h1>
-          <p className="text-body max-w-lg">Breaking market news with AI-powered plain-English analysis and context.</p>
+          <p className="text-label mb-3">Market news</p>
+          <h1 className="text-headline text-primary mb-3">Headlines without the fog</h1>
+          <p className="text-body max-w-lg">Current market stories with short plain-English context for students and first-time investors.</p>
         </div></div>
       </div>
 
@@ -30,7 +30,7 @@ export default function NewsPage() {
         <div className="container-full"><div className="container-inner">
           <CategoryFilter activeCategory={category} onChange={setCategory} />
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[1,2,3,4,5,6].map(i => <SkeletonNewsCard key={i} />)}
             </div>
           ) : filtered.length === 0 ? (
@@ -39,7 +39,7 @@ export default function NewsPage() {
               <p className="text-secondary">No articles found for {category}.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-16">
               {filtered.map((a: any) => <NewsCard key={a.id} article={a} />)}
             </div>
           )}

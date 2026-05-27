@@ -1,4 +1,4 @@
-// src/lib/formatters.ts — All number/string formatting
+// Shared display helpers.
 
 export function formatPrice(n?: number | null): string {
   if (n === undefined || n === null || isNaN(n)) return '$0.00'
@@ -40,7 +40,7 @@ export function formatVolume(n?: number | null): string {
 export function formatRelativeTime(isoString?: string | null): string {
   if (!isoString) return 'Just now'
   const diff = Date.now() - new Date(isoString).getTime()
-  const minutes = Math.floor(diff / 60000)
+  const minutes = Math.max(0, Math.floor(diff / 60000))
   if (minutes < 60) return `${minutes}m ago`
   const hours = Math.floor(minutes / 60)
   if (hours < 24) return `${hours}h ago`
@@ -55,10 +55,10 @@ export function getChangeColor(change?: number | null): string {
 
 export function getChangeBg(change?: number | null): string {
   if (change === undefined || change === null) return 'bg-white/[0.04]'
-  return change >= 0 ? 'bg-up/10' : 'bg-down/10'
+  return change >= 0 ? 'bg-white/[0.08]' : 'bg-white/[0.03]'
 }
 
 export function getChangeArrow(change?: number | null): string {
   if (change === undefined || change === null) return ''
-  return change >= 0 ? '▲' : '▼'
+  return change >= 0 ? '^' : 'v'
 }

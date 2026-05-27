@@ -16,7 +16,7 @@ const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
 export async function askGemini(prompt: string): Promise<string> {
   if (USE_MOCK || !KEY) {
     // Return mock data for development
-    return "This is a pre-generated AI insight. In production, Gemini 2.0 Flash would analyze live data to provide real-time updates on company fundamentals, technical trends, and recent catalysts like earnings reports or macro events. It highlights how retail sentiment and institutional flows currently affect the market narrative while maintaining a direct, professional tone for investors."
+    return "This is a sample learning summary. In production, the AI model reviews live market context, company fundamentals, and recent headlines, then explains the signal in clear language for students without giving investment advice."
   }
 
   const res = await fetch(OPENROUTER_URL, {
@@ -24,8 +24,8 @@ export async function askGemini(prompt: string): Promise<string> {
     headers: {
       'Authorization': `Bearer ${KEY}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://finplain.dev',
-      'X-Title': 'Finplain',
+      'HTTP-Referer': 'https://macroliberium.dev',
+      'X-Title': 'macroliberium',
     },
     body: JSON.stringify({
       model: 'stepfun/step-3.5-flash',

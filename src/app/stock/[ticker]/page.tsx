@@ -18,7 +18,7 @@ import { getRecommendationTrends } from '@/lib/finnhub'
 interface Props { params: { ticker: string } }
 
 export async function generateMetadata({ params }: Props) {
-  return { title: `${params.ticker.toUpperCase()} | Finplain` }
+  return { title: `${params.ticker.toUpperCase()} | macroliberium` }
 }
 
 export default async function StockPage({ params }: Props) {
@@ -48,8 +48,8 @@ export default async function StockPage({ params }: Props) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="glass-card p-10 text-center max-w-md">
-          <p className="text-3xl font-bold mb-3 text-primary">Stock Not Found</p>
-          <p className="text-secondary mb-6">We couldn&apos;t load data for <span className="font-mono text-accent">{ticker}</span>. The symbol may be invalid or all data providers are temporarily unavailable.</p>
+          <p className="text-3xl font-bold mb-3 text-primary">Stock not found</p>
+          <p className="text-secondary mb-6">We couldn&apos;t load data for <span className="font-mono text-primary">{ticker}</span>. The symbol may be invalid or all data providers are temporarily unavailable.</p>
           <Link href="/" className="btn-primary inline-flex items-center gap-2">
             <ArrowLeft size={16} /> Back to Dashboard
           </Link>
@@ -72,16 +72,12 @@ export default async function StockPage({ params }: Props) {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
-      <div className="hero-glow !opacity-10" />
-      <div className="side-glow-blue !opacity-5" />
-      <div className="side-glow-pink !opacity-5" />
-      
       {/* Stock Header */}
-      <div className="border-b border-white/[0.04] py-12 relative z-10">
+      <div className="border-b border-white/[0.08] py-12 relative z-10">
         <div className="container-full">
           <div className="container-inner">
-            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-accent mb-5 transition-colors">
-              <ArrowLeft size={14} /> Dashboard
+            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary mb-5 transition-colors">
+              <ArrowLeft size={14} /> Overview
             </Link>
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <StockHeader quote={quote as any} overview={overview as any} />

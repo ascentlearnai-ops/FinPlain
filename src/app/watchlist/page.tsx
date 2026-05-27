@@ -14,25 +14,25 @@ export default function WatchlistPage() {
 
   return (
     <>
-      <div className="hero-gradient py-16">
+      <div className="py-14 border-b border-white/[0.08]">
         <div className="container-full"><div className="container-inner">
-          <p className="text-label text-accent mb-3">Portfolio</p>
-          <h1 className="text-headline text-primary mb-3"><span className="gradient-text">Watchlist</span></h1>
-          <p className="text-body">{tickers.length > 0 ? `${tickers.length} ticker${tickers.length !== 1 ? 's' : ''} tracked.` : 'Add tickers to track them here.'}</p>
+          <p className="text-label mb-3">Watchlist</p>
+          <h1 className="text-headline text-primary mb-3">Your market notebook</h1>
+          <p className="text-body">{tickers.length > 0 ? `${tickers.length} ticker${tickers.length !== 1 ? 's' : ''} tracked.` : 'Add stocks and ETFs you want to understand better.'}</p>
         </div></div>
       </div>
 
       <div className="section-soft py-10">
         <div className="container-full"><div className="container-inner pb-16">
           {tickers.length === 0 ? (
-            <div className="glass-card p-14 text-center max-w-md mx-auto">
-              <div className="w-14 h-14 bg-accent-bg border border-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Star size={22} className="text-accent" />
+            <div className="glass-card p-12 text-center max-w-md mx-auto">
+              <div className="w-14 h-14 bg-white text-black rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Star size={22} />
               </div>
-              <h2 className="font-bold text-xl text-primary mb-2">No tracked positions</h2>
-              <p className="text-sm text-muted mb-6">Search for a ticker and add it to your watchlist to begin tracking.</p>
-              <Link href="/" className="btn-primary inline-flex items-center gap-2 text-sm px-5 py-2.5">
-                <Search size={14} /> Find Tickers
+              <h2 className="font-bold text-xl text-primary mb-2">Nothing saved yet</h2>
+              <p className="text-sm text-muted mb-6">Search for a ticker, open the stock page, and add it here.</p>
+              <Link href="/" className="btn-primary inline-flex items-center gap-2">
+                <Search size={14} /> Find tickers
               </Link>
             </div>
           ) : (

@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import yahooFinance from 'yahoo-finance2'
 import { simplifyNewsHeadline } from '@/lib/gemini'
 
-// Provided Keys
-const NEWSAPI_KEY = '4e4494f49d204aa393ba995cc8fb6a93'
-const THENEWSAPI_KEY = 'L2M8fMNTQYXZxJbodVE3LmYiJ4aeuq2h4JYK9Fu3'
+const NEWSAPI_KEY = process.env.NEWSAPI_KEY || ''
+const THENEWSAPI_KEY = process.env.THENEWSAPI_KEY || ''
 
 // Server-side cache
 let newsCache: { data: any; ts: number } | null = null
@@ -22,7 +21,7 @@ export async function GET(req: NextRequest) {
     let rawArticles: any[] = []
     
     // 1. Fetch from NewsAPI (General or Ticker)
-    try {
+    if (NEWSAPI_KEY) try {
       const q = ticker ? ticker : 'stock market'
       const pageSize = ticker ? 5 : 60
       const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&pageSize=${pageSize}&sortBy=publishedAt&apiKey=${NEWSAPI_KEY}&language=en`
@@ -42,7 +41,7 @@ export async function GET(req: NextRequest) {
     } catch (e) { console.error('NewsAPI Error', e) }
 
     // 2. Fetch from TheNewsAPI (Fallback or Supplement)
-    if (rawArticles.length < 50) {
+    if (THENEWSAPI_KEY && rawArticles.length < 50) {
       try {
         const q = ticker ? ticker : 'finance'
         const limit = ticker ? 3 : 25
@@ -70,12 +69,12 @@ export async function GET(req: NextRequest) {
       rawArticles = result.news || []
     }
 
-    // Process and simplify (limit Gemini usage to top 15 for homepage, 5 for stock)
+    // Process and simplify (limit AI usage to top 15 for homepage, 5 for stock)
     const limit = ticker ? 5 : 20
     const processed = await Promise.all(
       rawArticles.slice(0, 50).map(async (article: any, index: number) => {
         let simpleSummary = ''
-        // Only run Gemini for the first few to save quota
+        // Only run AI summaries for the first few to save quota
         if (index < limit) {
           try {
             simpleSummary = await simplifyNewsHeadline(article.title || article.headline)

@@ -1,8 +1,8 @@
 // src/lib/localStorage.ts
 
-const WATCHLIST_KEY = 'finplain_watchlist'
-const RECENTS_KEY = 'finplain_recents'
-const AI_CACHE_KEY = 'finplain_ai_cache'
+const WATCHLIST_KEY = 'macroliberium_watchlist'
+const RECENTS_KEY = 'macroliberium_recents'
+const AI_CACHE_KEY = 'macroliberium_ai_cache'
 
 // WATCHLIST
 export function getWatchlist(): string[] {

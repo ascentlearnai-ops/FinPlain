@@ -9,38 +9,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Deep Obsidian Base
-        background: '#040507',
-        surface: '#0d1017',
-        card: '#151921',
+        // Monochrome Base
+        background: '#050505',
+        surface: '#0f0f0f',
+        card: '#171717',
         
         // TradingView Neon Palette
         primary: '#ffffff',
-        secondary: '#94a3b8',
-        muted: '#475569',
+        secondary: '#a3a3a3',
+        muted: '#737373',
         
-        // Neon Accents
-        accent: '#d946ef', // Pinkish-Purple
-        neonBlue: '#3b82f6',
-        neonPurple: '#8b5cf6',
-        neonPink: '#ec4899',
+        // Monochrome Accents
+        accent: '#f5f5f5',
+        neonBlue: '#d4d4d4',
+        neonPurple: '#a3a3a3',
+        neonPink: '#737373',
 
         // Trading Signals
-        up: '#00ffaa',    // Neon Green
-        down: '#ff3366',  // Vivid Pinkish-Red
+        up: '#f5f5f5',
+        down: '#737373',
         
         dark: '#030406',
-        gold: '#f0b90b',
+        gold: '#e5e5e5',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'tradingview-glow': 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%)',
+        'tradingview-glow': 'linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%)',
       },
       boxShadow: {
-        'neon-pink': '0 0 20px rgba(217, 70, 239, 0.2)',
-        'neon-blue': '0 0 20px rgba(59, 130, 246, 0.2)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.8)',
+        'neon-pink': 'none',
+        'neon-blue': 'none',
+        'glass': 'none',
       },
       animation: {
         'pulse-glow': 'pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
