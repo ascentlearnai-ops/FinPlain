@@ -4,6 +4,7 @@ import { getRecommendationTrends, getEarnings } from '@/lib/finnhub'
 import { getYahooChart, getYahooQuote } from '@/lib/yahooFinance'
 import { getEodhdChart, getEodhdQuote } from '@/lib/eodhd'
 import { getSerpApiStockData } from '@/lib/serpapi'
+import { getCompanyFilings } from '@/lib/sec'
 
 export async function GET(req: NextRequest) {
   const ticker = req.nextUrl.searchParams.get('ticker')?.toUpperCase()
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
   if (!ticker) return NextResponse.json({ error: 'ticker required' }, { status: 400 })
 
   try {
-    const [eodQuote, eodChart, serpQuote, yahooQuote, overviewResult, yahooChartResult, recTrendsResult, earningsResult] = await Promise.allSettled([
+    const [eodQuote, eodChart, serpQuote, yahooQuote, overviewResult, yahooChartResult, recTrendsResult, earningsResult, filingsResult] = await Promise.allSettled([
       getEodhdQuote(ticker),
       getEodhdChart(ticker, range),
       getSerpApiStockData(ticker).catch(() => null),
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
       getYahooChart(ticker, range),
       getRecommendationTrends(ticker),
       getEarnings(ticker),
+      getCompanyFilings(ticker),
     ])
 
     const eodQ = eodQuote.status === 'fulfilled' ? eodQuote.value : null
@@ -39,13 +41,14 @@ export async function GET(req: NextRequest) {
     const overview = overviewResult.status === 'fulfilled' ? overviewResult.value : { ticker, companyName: ticker, sector: 'Equity', industry: 'Market' }
     const recTrends = recTrendsResult.status === 'fulfilled' ? recTrendsResult.value : []
     const earnings = earningsResult.status === 'fulfilled' ? earningsResult.value : []
+    const filings = filingsResult.status === 'fulfilled' ? filingsResult.value : []
 
     if (!quote) {
       // If we don't even have a quote, we can't show much
       return NextResponse.json({ error: 'Quote unavailable' }, { status: 404 })
     }
 
-    return NextResponse.json({ quote, overview, chartData, recTrends, earnings })
+    return NextResponse.json({ quote, overview, chartData, recTrends, earnings, filings })
   } catch (err: any) {
     console.error("STOCK_API_ERROR_CRITICAL:", err.message || err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })

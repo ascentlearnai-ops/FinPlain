@@ -3,6 +3,8 @@
 const WATCHLIST_KEY = 'macroliberium_watchlist'
 const RECENTS_KEY = 'macroliberium_recents'
 const AI_CACHE_KEY = 'macroliberium_ai_cache'
+const NOTES_KEY = 'macroliberium_research_notes'
+const ALERTS_KEY = 'macroliberium_keyword_alerts'
 
 // WATCHLIST
 export function getWatchlist(): string[] {
@@ -57,4 +59,38 @@ export function setCachedAISummary(summary: string): void {
     date: new Date().toDateString(),
     summary,
   }))
+}
+
+export function getResearchNote(ticker: string): string {
+  if (typeof window === 'undefined') return ''
+  try {
+    const notes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}')
+    return notes[ticker.toUpperCase()] || ''
+  } catch { return '' }
+}
+
+export function setResearchNote(ticker: string, note: string): void {
+  if (typeof window === 'undefined') return
+  try {
+    const notes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}')
+    notes[ticker.toUpperCase()] = note
+    localStorage.setItem(NOTES_KEY, JSON.stringify(notes))
+  } catch {}
+}
+
+export function getKeywordAlerts(ticker: string): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const alerts = JSON.parse(localStorage.getItem(ALERTS_KEY) || '{}')
+    return alerts[ticker.toUpperCase()] || []
+  } catch { return [] }
+}
+
+export function setKeywordAlerts(ticker: string, alerts: string[]): void {
+  if (typeof window === 'undefined') return
+  try {
+    const allAlerts = JSON.parse(localStorage.getItem(ALERTS_KEY) || '{}')
+    allAlerts[ticker.toUpperCase()] = alerts
+    localStorage.setItem(ALERTS_KEY, JSON.stringify(allAlerts))
+  } catch {}
 }

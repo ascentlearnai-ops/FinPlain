@@ -72,5 +72,23 @@ export interface WatchlistItem {
   addedAt: string           // ISO string
 }
 
+export interface CompanyFiling {
+  form: string
+  filedAt: string
+  reportDate?: string
+  accessionNumber: string
+  documentUrl: string
+  description: string
+}
+
+export interface ResearchEvent {
+  id: string
+  title: string
+  date: string
+  type: 'earnings' | 'filing' | 'news' | 'education'
+  summary: string
+  url?: string
+}
+
 export type ChartRange = '1D' | '1W' | '1M' | '3M' | '1Y'
 export type ChartType = 'line' | 'candlestick'
