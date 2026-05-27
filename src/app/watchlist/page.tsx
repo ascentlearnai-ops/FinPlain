@@ -16,9 +16,9 @@ export default function WatchlistPage() {
     <>
       <div className="py-14 border-b border-white/[0.08]">
         <div className="container-full"><div className="container-inner">
-          <p className="text-label mb-3">Watchlist</p>
-          <h1 className="text-headline text-primary mb-3">Your market notebook</h1>
-          <p className="text-body">{tickers.length > 0 ? `${tickers.length} ticker${tickers.length !== 1 ? 's' : ''} tracked.` : 'Add stocks and ETFs you want to understand better.'}</p>
+          <p className="text-label mb-3">Student watchlist</p>
+          <h1 className="text-headline text-primary mb-3">Track stocks like Yahoo Finance, learn them like a class</h1>
+          <p className="text-body">{tickers.length > 0 ? `${tickers.length} ticker${tickers.length !== 1 ? 's' : ''} tracked with context.` : 'Add stocks and ETFs you want to understand better, then connect them to news, filings, and plain-English notes.'}</p>
         </div></div>
       </div>
 
@@ -30,7 +30,7 @@ export default function WatchlistPage() {
                 <Star size={22} />
               </div>
               <h2 className="font-bold text-xl text-primary mb-2">Nothing saved yet</h2>
-              <p className="text-sm text-muted mb-6">Search for a ticker, open the stock page, and add it here.</p>
+              <p className="text-sm text-muted mb-6">Search for a ticker, open the stock page, and build your personal market study list.</p>
               <Link href="/" className="btn-primary inline-flex items-center gap-2">
                 <Search size={14} /> Find tickers
               </Link>

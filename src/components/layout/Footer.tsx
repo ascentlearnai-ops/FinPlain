@@ -15,7 +15,7 @@ export default function Footer() {
                 <span className="font-sans font-extrabold text-xl text-primary">macroliberium</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed">
-                A simple market terminal for teenagers: live prices, readable headlines, watchlists, and plain-English finance education.
+                Yahoo Finance for teenagers: live prices, readable headlines, watchlists, filings, and plain-English finance education in one calm workspace.
               </p>
             </div>
 

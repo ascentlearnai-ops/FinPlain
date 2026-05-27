@@ -30,13 +30,13 @@ export default function LearnPage() {
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-4 py-2 mb-6">
                 <Layers size={14} className="text-primary" />
-                <span className="text-[10px] font-bold text-secondary uppercase">Finance glossary</span>
+                <span className="text-[10px] font-bold text-secondary uppercase">Finance glossary for students</span>
               </div>
               <h1 className="text-display text-primary mb-6">
-                Learn the language of money.
+                Learn the language behind every market headline.
               </h1>
               <p className="text-xl text-secondary mb-10 leading-relaxed font-medium">
-                Simple definitions for the market words teenagers see in headlines, charts, and earnings stories.
+                The words you see on Yahoo Finance, earnings calls, charts, and SEC filings, explained without assuming you already work on Wall Street.
               </p>
 
               <div className="relative group max-w-xl">

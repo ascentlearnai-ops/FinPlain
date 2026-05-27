@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@remotion/player": "^4.0.468",
     "finnhub-ts": "^1.0.7",
     "lightweight-charts": "^5.1.0",
     "lucide-react": "^1.7.0",
@@ -17,7 +16,6 @@
     "next-auth": "^4.24.14",
     "react": "^18",
     "react-dom": "^18",
-    "remotion": "^4.0.468",
     "yahoo-finance2": "^3.14.0"
   },
   "devDependencies": {

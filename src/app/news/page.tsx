@@ -20,9 +20,9 @@ export default function NewsPage() {
     <>
       <div className="py-14 border-b border-white/[0.08]">
         <div className="container-full"><div className="container-inner">
-          <p className="text-label mb-3">Market news</p>
-          <h1 className="text-headline text-primary mb-3">Headlines without the fog</h1>
-          <p className="text-body max-w-lg">Current market stories with short plain-English context for students and first-time investors.</p>
+          <p className="text-label mb-3">News desk</p>
+          <h1 className="text-headline text-primary mb-3">Yahoo Finance-style headlines, rewritten for students</h1>
+          <p className="text-body max-w-lg">Current market stories with short context that explains what happened, why it matters, and which words to learn.</p>
         </div></div>
       </div>
 

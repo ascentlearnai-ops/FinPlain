@@ -20,20 +20,20 @@ export default function HomePage() {
             <div className="mx-auto max-w-4xl text-center">
               <div className="mb-7 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.03] px-3 py-2">
                 <span className="w-2 h-2 bg-white rounded-full" />
-                <span className="text-[11px] font-bold uppercase text-secondary">Pre-market research, simplified</span>
+                <span className="text-[11px] font-bold uppercase text-secondary">Yahoo Finance for teenagers, rebuilt for learning</span>
               </div>
 
               <h1 className="landing-title text-primary">
-                A serious market terminal for learning how money moves.
+                Understand the market before it starts speaking Wall Street.
               </h1>
 
               <p className="mx-auto mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
-                macroliberium brings live prices, earnings calls, SEC filings, news, notes, and plain-English context into one focused workspace for the next generation of investors.
+                macroliberium gives students the useful parts of Yahoo Finance, prices, news, charts, filings, and watchlists, then explains what everything means in clear language.
               </p>
 
               <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                 <a href="#dashboard" className="btn-primary inline-flex items-center justify-center gap-2 group">
-                  Open live overview <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  Open the market desk <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </a>
                 <a href="/learn" className="btn-secondary inline-flex items-center justify-center gap-2">
                   <BookOpen size={18} /> Start learning
@@ -54,10 +54,10 @@ export default function HomePage() {
 
             <div className="landing-feature-grid">
               {[
-                [Sparkles, 'Source synthesis', 'Headlines and filings turned into concise research notes.'],
-                [FileText, 'Company timeline', 'Earnings, filings, and catalyst events organized by ticker.'],
-                [NotebookPen, 'Research notebook', 'Save thesis notes directly beside the company you follow.'],
-                [Bell, 'Catalyst alerts', 'Track keywords, guidance changes, and major market events.'],
+                [Sparkles, 'Headlines made readable', 'Market news rewritten so students can understand the actual takeaway.'],
+                [FileText, 'Company research timeline', 'Earnings, filings, and important events organized by ticker.'],
+                [NotebookPen, 'Your research notebook', 'Save thoughts beside charts, articles, and companies you follow.'],
+                [Bell, 'Catalyst alerts', 'Watch keywords, guidance changes, and events that move prices.'],
               ].map(([Icon, title, body]) => {
                 const FeatureIcon = Icon as typeof Sparkles
                 return (
@@ -103,13 +103,13 @@ export default function HomePage() {
                 <div className="glass-card p-7 h-full flex flex-col justify-between">
                   <div>
                     <p className="text-label mb-3">Why it matters</p>
-                    <h3 className="text-2xl font-bold mb-4">A calmer way to follow markets.</h3>
+                    <h3 className="text-2xl font-bold mb-4">The useful parts of finance media, without the noise.</h3>
                     <p className="text-secondary text-sm leading-relaxed">
-                      macroliberium keeps the interface sparse so the important things stay visible: what moved, which source confirms it, and what the language means.
+                      Think Yahoo Finance for teenagers: real market data, real sources, and explanations that help you learn instead of making you feel behind.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-8">
-                    {['No hype', 'Plain English', 'Live context'].map(tag => (
+                    {['Real data', 'Plain English', 'Built to learn'].map(tag => (
                       <span key={tag} className="text-[10px] font-bold px-3 py-1 bg-white/[0.04] rounded-md text-secondary uppercase border border-white/[0.08]">{tag}</span>
                     ))}
                   </div>
@@ -144,12 +144,12 @@ export default function HomePage() {
         <div className="container-full">
           <div className="container-inner">
             <div className="max-w-3xl">
-              <p className="text-label mb-4">For students</p>
+              <p className="text-label mb-4">Yahoo Finance for teenagers</p>
               <h2 className="text-4xl md:text-5xl font-black mb-6">
-                Build a watchlist, then learn what you are watching.
+                Build a watchlist, then learn what every move actually means.
               </h2>
               <p className="text-lg text-secondary max-w-xl mb-8">
-                Save tickers, check related headlines, and use the glossary when market language gets weird.
+                Save tickers, read related headlines, check filings, and use the glossary when market language gets weird.
               </p>
               <a href="/watchlist" className="btn-primary inline-flex">
                 Launch watchlist
