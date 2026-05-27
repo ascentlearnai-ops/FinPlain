@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import yahooFinance from 'yahoo-finance2'
+import YahooFinance from 'yahoo-finance2'
 import { simplifyNewsHeadline } from '@/lib/gemini'
 import { getFmpStockNews } from '@/lib/fmp'
 
+const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] })
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY || ''
 const THENEWSAPI_KEY = process.env.THENEWSAPI_KEY || ''
 

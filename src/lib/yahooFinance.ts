@@ -1,5 +1,7 @@
-import yahooFinance from 'yahoo-finance2'
+import YahooFinance from 'yahoo-finance2'
 import type { ChartDataPoint, ChartRange } from './types'
+
+const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] })
 
 export async function getYahooQuote(ticker: string) {
   try {
@@ -96,4 +98,3 @@ function getPeriod1(range: ChartRange): string {
   if (range === '1Y') return new Date(now.getFullYear() - 1, now.getMonth(), now.getDate()).toISOString()
   return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30).toISOString()
 }
-
