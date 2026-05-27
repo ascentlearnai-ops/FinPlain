@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import yahooFinance from 'yahoo-finance2'
 import { simplifyNewsHeadline } from '@/lib/gemini'
+import { getFmpStockNews } from '@/lib/fmp'
 
 const NEWSAPI_KEY = process.env.NEWSAPI_KEY || ''
 const THENEWSAPI_KEY = process.env.THENEWSAPI_KEY || ''
@@ -62,7 +63,13 @@ export async function GET(req: NextRequest) {
       } catch (e) { console.error('TheNewsAPI Error', e) }
     }
 
-    // 3. Fallback to Yahoo Finance if still empty
+    // 3. Fetch from Financial Modeling Prep if configured.
+    if (rawArticles.length < 20) {
+      const fmpArticles = await getFmpStockNews(ticker || undefined)
+      rawArticles.push(...fmpArticles)
+    }
+
+    // 4. Fallback to Yahoo Finance if still empty
     if (rawArticles.length === 0) {
       const query = ticker || 'market news'
       const result: any = await yahooFinance.search(query, { newsCount: 20, quotesCount: 0 })
