@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Activity, Globe, BookOpen, Heart, LayoutDashboard } from 'lucide-react'
 import SearchBar from '@/components/ui/SearchBar'
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton'
 
 const navLinks = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
@@ -60,7 +61,8 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-4 relative z-50">
-              <div className="hidden md:block"><SearchBar /></div>
+              <div className="hidden xl:block"><SearchBar /></div>
+              <GoogleLoginButton compact />
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-primary hover:bg-white/[0.08] transition-colors"
@@ -77,6 +79,7 @@ export default function Navbar() {
         }`}>
           <div className="container-full py-8 space-y-8">
             <SearchBar fullWidth />
+            <GoogleLoginButton />
             <div className="grid grid-cols-1 gap-3">
               {navLinks.map(link => {
                 const Icon = link.icon

@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Activity } from 'lucide-react'
+import AuthProvider from '@/components/auth/AuthProvider'
 
 export const metadata: Metadata = {
   title: 'macroliberium - Markets, Explained',
@@ -22,9 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="splash-text">macroliberium</div>
         </div>
 
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   )

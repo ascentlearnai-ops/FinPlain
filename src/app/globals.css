@@ -22,7 +22,7 @@ body {
 
 @layer components {
   .container-full {
-    @apply max-w-[1440px] mx-auto px-5 lg:px-10;
+    @apply max-w-[1440px] mx-auto px-4 sm:px-5 lg:px-10;
   }
 
   .container-inner {
@@ -55,11 +55,11 @@ body {
   }
 
   .text-display {
-    @apply font-['Outfit'] font-extrabold text-5xl md:text-7xl leading-[1.02];
+    @apply font-['Outfit'] font-extrabold text-4xl sm:text-5xl md:text-7xl leading-[1.02];
   }
 
   .text-headline {
-    @apply font-['Outfit'] font-bold text-3xl md:text-4xl;
+    @apply font-['Outfit'] font-bold text-2xl sm:text-3xl md:text-4xl;
   }
 
   .gradient-text {
@@ -81,6 +81,252 @@ body {
 
   .btn-secondary {
     @apply px-5 py-3 rounded-lg bg-transparent border border-white/[0.16] text-white font-bold text-sm transition-colors hover:bg-white/[0.08] hover:border-white/[0.28];
+  }
+
+  .landing-hero {
+    @apply relative pt-16 pb-10 sm:pt-20 sm:pb-14;
+  }
+
+  .landing-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 72%);
+  }
+
+  .landing-title {
+    @apply mx-auto max-w-5xl font-['Outfit'] text-[clamp(2.45rem,8vw,6.8rem)] font-extrabold leading-[0.95];
+  }
+
+  .landing-product-stage {
+    @apply relative mx-auto mt-10 w-full max-w-6xl overflow-hidden rounded-lg border border-white/[0.1] bg-[#090909];
+    aspect-ratio: 1200 / 760;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  }
+
+  .landing-product-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .landing-feature-grid {
+    @apply mx-auto mt-5 grid w-full max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .landing-feature {
+    @apply flex min-h-24 items-start gap-3 rounded-lg border border-white/[0.08] bg-white/[0.025] p-4;
+  }
+
+  .landing-feature svg {
+    @apply mt-0.5 shrink-0 text-primary;
+  }
+
+  .landing-feature p {
+    @apply text-sm font-black text-primary;
+  }
+
+  .landing-feature span {
+    @apply mt-1 block text-xs leading-relaxed text-muted;
+  }
+
+  .intro-video-frame {
+    @apply h-full w-full overflow-hidden bg-[#050505];
+  }
+
+  .intro-video-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255,255,255,0.13), transparent 34%),
+      linear-gradient(180deg, #111 0%, #050505 68%);
+  }
+
+  .intro-video-topbar {
+    position: absolute;
+    left: 5.2%;
+    right: 5.2%;
+    top: 5.5%;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.045);
+    padding: 0 18px;
+  }
+
+  .intro-window-dots {
+    display: flex;
+    gap: 7px;
+  }
+
+  .intro-window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.32);
+  }
+
+  .intro-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(420px, 50%);
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.34);
+    color: rgba(255,255,255,0.56);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 12px;
+  }
+
+  .intro-live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 18px rgba(255,255,255,0.7);
+  }
+
+  .intro-hero-card {
+    position: absolute;
+    left: 7%;
+    top: 18%;
+    width: 42%;
+    min-height: 330px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025));
+    padding: 42px;
+  }
+
+  .intro-mark {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #fff;
+    color: #050505;
+    margin-bottom: 38px;
+  }
+
+  .intro-kicker {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.52);
+    margin-bottom: 12px;
+  }
+
+  .intro-hero-card h3 {
+    font-family: Outfit, Inter, sans-serif;
+    font-size: 50px;
+    line-height: 0.96;
+    font-weight: 900;
+    max-width: 360px;
+    margin-bottom: 18px;
+  }
+
+  .intro-hero-card p:last-child {
+    max-width: 370px;
+    color: rgba(255,255,255,0.62);
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 600;
+  }
+
+  .intro-grid {
+    position: absolute;
+    right: 7%;
+    top: 22%;
+    width: 40%;
+    display: grid;
+    gap: 14px;
+  }
+
+  .intro-row {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.055);
+    padding: 0 18px;
+  }
+
+  .intro-row-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  .intro-row strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+
+  .intro-row span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.54);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .intro-row em {
+    margin-left: auto;
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .intro-learning-card {
+    position: absolute;
+    left: 7%;
+    right: 7%;
+    bottom: 8%;
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.42);
+    color: rgba(255,255,255,0.74);
+    padding: 0 22px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .intro-scan {
+    position: absolute;
+    top: 13%;
+    bottom: 0;
+    width: 90px;
+    opacity: 0.16;
+    transform: skewX(-12deg);
+    background: linear-gradient(90deg, transparent, #fff, transparent);
   }
 
   .hero-glow,

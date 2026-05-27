@@ -4,69 +4,76 @@ import DailyAISummary from '@/components/market/DailyAISummary'
 import TrendingTickers from '@/components/market/TrendingTickers'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import GainersLosers from '@/components/market/GainersLosers'
-import { ArrowRight, BookOpen, Globe, ShieldCheck } from 'lucide-react'
+import IntroVideo from '@/components/landing/IntroVideo'
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton'
+import { ArrowRight, Bell, BookOpen, FileText, Globe, NotebookPen, ShieldCheck, Sparkles } from 'lucide-react'
 import { getMarketSummary } from '@/lib/market'
 
 export const metadata = { title: 'macroliberium - Markets, Explained' }
 
 export default function HomePage() {
   return (
-    <div className="relative overflow-hidden min-h-screen">
-      <section className="pt-20 pb-12 border-b border-white/[0.08]">
+    <div className="relative min-h-screen overflow-hidden">
+      <section className="landing-hero border-b border-white/[0.08]">
         <div className="container-full">
           <div className="container-inner">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-              <div className="lg:col-span-8">
-                <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-3 py-2 mb-8">
+            <div className="mx-auto max-w-4xl text-center">
+              <div className="mb-7 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] px-3 py-2">
                   <span className="w-2 h-2 bg-white rounded-full" />
-                  <span className="text-[11px] font-bold text-secondary uppercase">Live market literacy</span>
-                </div>
-
-                <h1 className="text-display text-primary mb-7 max-w-4xl">
-                  Yahoo Finance energy, built for teenagers.
-                </h1>
-
-                <p className="text-xl text-secondary max-w-2xl mb-9 leading-relaxed font-medium">
-                  Track stocks, read market headlines, and learn the language of money without the noise. Minimal data, simple explanations, useful context.
-                </p>
-
-                <div className="flex items-center gap-4 flex-wrap">
-                  <a href="#dashboard" className="btn-primary flex items-center gap-2 group">
-                    Open overview <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-                  </a>
-                  <a href="/learn" className="btn-secondary flex items-center gap-2">
-                    <BookOpen size={18} /> Start learning
-                  </a>
-                </div>
+                <span className="text-[11px] font-bold uppercase text-secondary">Research-native market literacy</span>
               </div>
 
-              <div className="lg:col-span-4">
-                <div className="glass-card p-6">
-                  <p className="text-label mb-4">Today at a glance</p>
-                  <div className="space-y-4">
-                    {[
-                      ['Markets', 'Prices and movers in one view'],
-                      ['News', 'Headlines translated into plain English'],
-                      ['Learn', 'Finance terms without Wall Street fog'],
-                    ].map(([title, body]) => (
-                      <div key={title} className="border-t border-white/[0.08] pt-4">
-                        <p className="font-bold text-primary">{title}</p>
-                        <p className="text-sm text-secondary mt-1">{body}</p>
-                      </div>
-                    ))}
+              <h1 className="landing-title text-primary">
+                The market research desk built for students.
+              </h1>
+
+              <p className="mx-auto mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
+                macroliberium turns prices, earnings, filings, and financial headlines into a calm workflow that feels premium enough for research and clear enough for your first watchlist.
+              </p>
+
+              <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+                <a href="#dashboard" className="btn-primary inline-flex items-center justify-center gap-2 group">
+                  Open live overview <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href="/learn" className="btn-secondary inline-flex items-center justify-center gap-2">
+                  <BookOpen size={18} /> Start learning
+                </a>
+                <GoogleLoginButton />
+              </div>
+            </div>
+
+            <div className="landing-product-stage">
+              <IntroVideo />
+            </div>
+
+            <div className="landing-feature-grid">
+              {[
+                [Sparkles, 'AI summaries', 'Plain-English context for fast market reads.'],
+                [FileText, 'Filings timeline', 'SEC reports, earnings, and events organized by company.'],
+                [NotebookPen, 'Saved notes', 'Keep research thoughts next to the ticker.'],
+                [Bell, 'Alerts', 'Track keywords and catalysts that matter.'],
+              ].map(([Icon, title, body]) => {
+                const FeatureIcon = Icon as typeof Sparkles
+                return (
+                  <div key={title as string} className="landing-feature">
+                    <FeatureIcon size={17} />
+                    <div>
+                      <p>{title as string}</p>
+                      <span>{body as string}</span>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      <section id="dashboard" className="py-14">
+      <section id="dashboard" className="py-12 sm:py-14">
         <div className="container-full">
           <div className="container-inner">
-            <div className="mb-16">
-              <div className="flex items-end justify-between mb-8 gap-6">
+            <div className="mb-12 sm:mb-16">
+              <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-label mb-2">Market pulse</p>
                   <h2 className="text-headline">Major indices</h2>
@@ -82,7 +89,7 @@ export default function HomePage() {
               </Suspense>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-16">
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 mb-12 sm:mb-16">
               <div className="lg:col-span-8">
                 <DailyAISummary />
               </div>
@@ -104,8 +111,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mb-16">
-              <div className="flex items-center justify-between mb-8 gap-6">
+            <div className="mb-12 sm:mb-16">
+              <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-label mb-2">Market movers</p>
                   <h2 className="text-headline">What is moving today</h2>
