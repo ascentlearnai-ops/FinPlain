@@ -146,6 +146,107 @@ body {
     @apply mt-1 block text-xs leading-relaxed text-muted;
   }
 
+  .pro-page-hero {
+    @apply relative border-b border-white/[0.08] py-12 sm:py-16;
+    background:
+      linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .pro-hero-grid {
+    @apply grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end;
+  }
+
+  .pro-hero-grid > :first-child {
+    @apply lg:col-span-8;
+  }
+
+  .pro-hero-grid > :last-child {
+    @apply lg:col-span-4;
+  }
+
+  .pro-hero-panel,
+  .learn-terminal,
+  .watchlist-command-panel {
+    @apply rounded-lg border border-white/[0.1] bg-white/[0.035] p-4;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .pro-panel-row,
+  .learn-terminal-row,
+  .watchlist-command-row {
+    @apply flex items-start gap-3 rounded-lg border border-white/[0.07] bg-black/20 p-4;
+  }
+
+  .pro-panel-row + .pro-panel-row,
+  .learn-terminal-row + .learn-terminal-row,
+  .watchlist-command-row + .watchlist-command-row {
+    @apply mt-3;
+  }
+
+  .pro-panel-row svg,
+  .learn-terminal-row svg,
+  .watchlist-command-row svg {
+    @apply mt-0.5 shrink-0 text-primary;
+  }
+
+  .pro-panel-row strong,
+  .learn-terminal-row strong,
+  .watchlist-command-row strong {
+    @apply block text-sm font-black text-primary;
+  }
+
+  .pro-panel-row span,
+  .learn-terminal-row span,
+  .watchlist-command-row span {
+    @apply mt-1 block text-xs font-bold leading-relaxed text-muted;
+  }
+
+  .pro-section-header {
+    @apply mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .pro-status-pill {
+    @apply inline-flex w-fit items-center rounded-lg border border-white/[0.1] bg-white/[0.035] px-3 py-2 font-mono text-[10px] font-bold uppercase text-muted;
+  }
+
+  .empty-state-pro {
+    @apply mx-auto max-w-md rounded-lg border border-dashed border-white/[0.14] bg-white/[0.025] p-12 text-center;
+  }
+
+  .stock-pro-hero {
+    @apply border-b border-white/[0.08] py-10 sm:py-12;
+    background:
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+
+  .stock-source-strip {
+    @apply mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .stock-source-item {
+    @apply flex min-h-20 items-start gap-3 rounded-lg border border-white/[0.08] bg-white/[0.03] p-4;
+  }
+
+  .stock-source-item svg {
+    @apply mt-0.5 shrink-0 text-primary;
+  }
+
+  .stock-source-item strong {
+    @apply block text-sm font-black text-primary;
+  }
+
+  .stock-source-item span {
+    @apply mt-1 block text-xs font-bold leading-relaxed text-muted;
+  }
+
+  .stock-workspace-grid {
+    @apply grid grid-cols-1 gap-6 lg:grid-cols-12;
+  }
+
   .intro-video-frame {
     @apply h-full w-full overflow-hidden bg-[#050505];
   }

@@ -9,7 +9,7 @@ import ResearchWorkspace from '@/components/stock/ResearchWorkspace'
 import WatchlistButton from '@/components/watchlist/WatchlistButton'
 import { SkeletonCard } from '@/components/ui/SkeletonCard'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, BookOpen, FileText, Newspaper, ShieldCheck } from 'lucide-react'
 import { getEodhdQuote, getEodhdChart } from '@/lib/eodhd'
 import { getSerpApiStockData } from '@/lib/serpapi'
 import { getYahooQuote, getYahooChart, getYahooOverview } from '@/lib/yahooFinance'
@@ -80,7 +80,7 @@ export default async function StockPage({ params }: Props) {
   return (
     <div className="relative overflow-hidden min-h-screen">
       {/* Stock Header */}
-      <div className="border-b border-white/[0.08] py-12 relative z-10">
+      <div className="stock-pro-hero relative z-10">
         <div className="container-full">
           <div className="container-inner">
             <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary mb-5 transition-colors">
@@ -90,6 +90,22 @@ export default async function StockPage({ params }: Props) {
               <StockHeader quote={quote as any} overview={overview as any} />
               <WatchlistButton ticker={ticker} />
             </div>
+            <div className="stock-source-strip">
+              {[
+                [ShieldCheck, 'Quote', quote ? 'Live source resolved' : 'Unavailable'],
+                [FileText, 'Filings', `${filings.length} recent reports`],
+                [BookOpen, 'Research', `${researchEvents.length} timeline events`],
+                [Newspaper, 'News', 'Ticker feed ready'],
+              ].map(([Icon, title, body]) => {
+                const SourceIcon = Icon as typeof ShieldCheck
+                return (
+                  <div key={title as string} className="stock-source-item">
+                    <SourceIcon size={15} />
+                    <div><strong>{title as string}</strong><span>{body as string}</span></div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +114,7 @@ export default async function StockPage({ params }: Props) {
       <div className="section-soft py-8">
         <div className="container-full">
           <div className="container-inner space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="stock-workspace-grid">
               <div className="lg:col-span-8 space-y-6">
                 <AIExplainer ticker={ticker} companyName={overview.companyName} changePercent={quote.changePercent} />
                 <StockChart ticker={ticker} initialData={chartData} initialRange="1M" />

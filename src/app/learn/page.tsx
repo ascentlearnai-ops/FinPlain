@@ -2,7 +2,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import GlossaryCard from '@/components/learn/GlossaryCard'
 import { glossaryTerms } from '@/lib/glossary'
-import { Search, X, Layers, Info, ArrowUpRight } from 'lucide-react'
+import { Search, X, Layers, Info, ArrowUpRight, BookOpen, LineChart, Newspaper, GraduationCap } from 'lucide-react'
 import type { GlossaryTerm } from '@/lib/types'
 
 const CATEGORIES = ['all', 'stocks', 'markets', 'numbers', 'basics'] as const
@@ -24,30 +24,48 @@ export default function LearnPage() {
 
   return (
     <div className="relative min-h-screen">
-      <section className="py-14 border-b border-white/[0.08]">
+      <section className="pro-page-hero">
         <div className="container-full">
           <div className="container-inner">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-4 py-2 mb-6">
-                <Layers size={14} className="text-primary" />
-                <span className="text-[10px] font-bold text-secondary uppercase">Finance glossary for students</span>
-              </div>
-              <h1 className="text-display text-primary mb-6">
-                Learn the language behind every market headline.
-              </h1>
-              <p className="text-xl text-secondary mb-10 leading-relaxed font-medium">
-                The words you see on Yahoo Finance, earnings calls, charts, and SEC filings, explained without assuming you already work on Wall Street.
-              </p>
+            <div className="pro-hero-grid">
+              <div className="max-w-3xl">
+                <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-4 py-2 mb-6 bg-white/[0.03]">
+                  <Layers size={14} className="text-primary" />
+                  <span className="text-[10px] font-bold text-secondary uppercase">Finance glossary for students</span>
+                </div>
+                <h1 className="text-display text-primary mb-6">
+                  Learn the language behind every market headline.
+                </h1>
+                <p className="text-xl text-secondary mb-10 leading-relaxed font-medium">
+                  The words you see on Yahoo Finance, earnings calls, charts, and SEC filings, explained without assuming you already work on Wall Street.
+                </p>
 
-              <div className="relative group max-w-xl">
-                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="Search terms like P/E, ETF, inflation..."
-                  value={query}
-                  onChange={e => setQuery(e.target.value)}
-                  className="w-full bg-white/[0.04] border border-white/[0.12] rounded-lg pl-12 pr-6 py-4 text-base text-primary placeholder:text-muted focus:outline-none focus:border-white/30 transition-colors"
-                />
+                <div className="relative group max-w-xl">
+                  <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
+                  <input
+                    type="text"
+                    placeholder="Search terms like P/E, ETF, inflation..."
+                    value={query}
+                    onChange={e => setQuery(e.target.value)}
+                    className="w-full bg-white/[0.04] border border-white/[0.12] rounded-lg pl-12 pr-6 py-4 text-base text-primary placeholder:text-muted focus:outline-none focus:border-white/30 transition-colors"
+                  />
+                </div>
+              </div>
+              <div className="learn-terminal">
+                {[
+                  [Newspaper, 'Headline', 'Fed signals rates may stay higher'],
+                  [LineChart, 'Market word', 'Yield'],
+                  [BookOpen, 'Plain meaning', 'What investors earn for lending money'],
+                  [GraduationCap, 'Student takeaway', 'Higher yields can pressure stock prices'],
+                ].map(([Icon, title, body]) => {
+                  const LearnIcon = Icon as typeof Newspaper
+                  return (
+                    <div key={title as string} className="learn-terminal-row">
+                      <LearnIcon size={16} />
+                      <div><strong>{title as string}</strong><span>{body as string}</span></div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -57,6 +75,13 @@ export default function LearnPage() {
       <section className="py-12">
         <div className="container-full">
           <div className="container-inner">
+            <div className="pro-section-header">
+              <div>
+                <p className="text-label mb-2">Glossary library</p>
+                <h2 className="text-headline">Choose a learning lane</h2>
+              </div>
+              <div className="pro-status-pill">{filtered.length} terms visible</div>
+            </div>
             <div className="flex gap-2 flex-wrap mb-10 overflow-x-auto no-scrollbar pb-2">
               {CATEGORIES.map(cat => (
                 <button
@@ -104,7 +129,7 @@ export default function LearnPage() {
             <div className="sticky top-0 z-20 bg-card/95 backdrop-blur-xl border-b border-white/[0.08] px-8 py-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg bg-white/[0.04] flex items-center justify-center border border-white/[0.12]">
-                  <span className="text-2xl">{selectedTerm.emoji || '?'}</span>
+                  <span className="text-lg font-black">{selectedTerm.term.slice(0, 1)}</span>
                 </div>
                 <div>
                   <h2 className="text-2xl font-['Outfit'] font-black text-primary">{selectedTerm.term}</h2>
