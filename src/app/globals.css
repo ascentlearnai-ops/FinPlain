@@ -747,6 +747,88 @@ body {
     @apply mt-1 block text-xs font-bold leading-relaxed text-muted;
   }
 
+  .study-video-frame {
+    @apply relative min-h-[360px] overflow-hidden bg-[#050505] p-5 sm:p-7;
+  }
+
+  .study-video-grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
+  }
+
+  .study-video-orbit {
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 260px;
+    height: 260px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    animation: study-orbit 14s linear infinite;
+  }
+
+  .study-video-orbit::before,
+  .study-video-orbit::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+  }
+
+  .study-video-orbit::before {
+    inset: 42px;
+  }
+
+  .study-video-orbit::after {
+    inset: 88px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .study-video-panel {
+    @apply relative z-10 max-w-2xl;
+  }
+
+  .study-video-chart {
+    @apply absolute bottom-6 left-5 right-5 z-10 flex h-24 items-end gap-2 sm:left-7 sm:right-auto sm:w-80;
+  }
+
+  .study-video-chart div {
+    @apply flex-1 rounded-t-md bg-white/80;
+    min-height: 18px;
+    animation: study-bars 1.8s ease-in-out infinite alternate;
+  }
+
+  .study-video-card {
+    @apply absolute bottom-6 right-5 z-20 w-[min(18rem,calc(100%-2.5rem))] rounded-lg border border-white/[0.12] bg-black/70 p-4 backdrop-blur-md sm:right-7;
+  }
+
+  .study-video-card span {
+    @apply text-[10px] font-black uppercase text-muted;
+  }
+
+  .study-video-card strong {
+    @apply mt-1 block text-base font-black text-primary;
+  }
+
+  .study-video-card p {
+    @apply mt-2 text-xs leading-relaxed text-secondary;
+  }
+
+  @keyframes study-orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes study-bars {
+    from { transform: scaleY(0.72); opacity: 0.62; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+
   .pro-section-header {
     @apply mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
   }

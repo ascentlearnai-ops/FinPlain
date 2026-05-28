@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import GlossaryCard from '@/components/learn/GlossaryCard'
+import StudyLessonPlayer from '@/components/learn/StudyLessonPlayer'
 import { glossaryTerms } from '@/lib/glossary'
 import { enrichGlossaryTerm, studyModules } from '@/lib/study'
 import {
@@ -86,6 +87,13 @@ export default function LearnPage() {
     const nextCompleted = !completedModules.includes(activeModuleData.id)
     setCompletedModules(setStudyModuleCompleted(activeModuleData.id, nextCompleted))
   }
+
+  const completeActiveModule = useCallback(() => {
+    setCompletedModules(previous => {
+      if (previous.includes(activeModuleData.id)) return previous
+      return setStudyModuleCompleted(activeModuleData.id, true)
+    })
+  }, [activeModuleData.id])
 
   const toggleSavedTerm = (termId: string) => {
     const nextSaved = !savedTerms.includes(termId)
@@ -214,30 +222,35 @@ export default function LearnPage() {
                   </button>
                 </div>
 
-                <div className="mt-7 grid grid-cols-1 gap-4">
+                <div className="mt-7">
+                  <StudyLessonPlayer module={activeModuleData} completed={completedModules.includes(activeModuleData.id)} onComplete={completeActiveModule} />
+                </div>
+
+                <div className="mt-7">
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-label mb-1">Workbook</p>
+                      <h4 className="text-xl font-black text-primary">Lesson recap and practice</h4>
+                    </div>
+                    <div className="hidden sm:block rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-[10px] font-black uppercase text-muted">
+                      Compact notes
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   {activeModuleData.steps.map((step, index) => (
                     <div key={step.title} className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4">
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white text-black font-mono text-xs font-black">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <h4 className="font-black text-primary">{step.title}</h4>
-                          <p className="mt-2 text-sm leading-relaxed text-secondary">{step.body}</p>
-                          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-                            <div className="rounded-md border border-white/[0.08] bg-black/20 p-3">
-                              <p className="text-[10px] font-black uppercase text-muted mb-1">Example</p>
-                              <p className="text-xs leading-relaxed text-secondary">{step.example}</p>
-                            </div>
-                            <div className="rounded-md border border-white/[0.08] bg-black/20 p-3">
-                              <p className="text-[10px] font-black uppercase text-muted mb-1">Takeaway</p>
-                              <p className="text-xs leading-relaxed text-secondary">{step.takeaway}</p>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="mb-3 flex items-center gap-3">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white text-black font-mono text-xs font-black">{index + 1}</div>
+                        <h5 className="font-black text-primary">{step.title}</h5>
+                      </div>
+                      <p className="text-sm leading-relaxed text-secondary">{step.takeaway}</p>
+                      <div className="mt-4 rounded-md border border-white/[0.08] bg-black/20 p-3">
+                        <p className="text-[10px] font-black uppercase text-muted mb-1">Try this</p>
+                        <p className="text-xs leading-relaxed text-secondary">{step.example}</p>
                       </div>
                     </div>
                   ))}
+                  </div>
                 </div>
 
                 <div className="mt-7 grid grid-cols-1 gap-5 xl:grid-cols-2">
