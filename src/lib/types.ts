@@ -111,6 +111,13 @@ export interface StudyLessonStep {
   takeaway: string
 }
 
+export interface StudyVideo {
+  youtubeId: string
+  title: string
+  channel: string
+  sourceUrl: string
+}
+
 export interface StudyModule {
   id: string
   title: string
@@ -118,6 +125,7 @@ export interface StudyModule {
   minutes: number
   description: string
   goal: string
+  video: StudyVideo
   terms: string[]
   steps: StudyLessonStep[]
   quickCheck: StudyQuickCheck

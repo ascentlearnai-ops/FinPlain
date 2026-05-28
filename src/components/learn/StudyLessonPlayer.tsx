@@ -1,193 +1,180 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import type { StudyModule } from '@/lib/types'
-import { BookOpen, CheckCircle2, Clock3, Pause, Play, RotateCcw } from 'lucide-react'
+import { BookOpen, Check, CheckCircle2, Clock3, ExternalLink, ListVideo, PlaySquare } from 'lucide-react'
 
 interface Props {
   module: StudyModule
-  completed: boolean
+  modules: StudyModule[]
+  activeModuleId: string
+  completedModules: string[]
+  onSelectModule: (moduleId: string) => void
   onComplete: () => void
 }
 
-const VIDEO_DURATION_SECONDS = 300
-
-export default function StudyLessonPlayer({ module, completed, onComplete }: Props) {
-  const [playing, setPlaying] = useState(false)
-  const [elapsed, setElapsed] = useState(0)
-
-  const chapters = useMemo(() => buildChapters(module), [module])
-  const activeChapter = chapters.findLast(chapter => elapsed >= chapter.startsAt) || chapters[0]
-  const progress = Math.min(100, (elapsed / VIDEO_DURATION_SECONDS) * 100)
-
-  useEffect(() => {
-    setPlaying(false)
-    setElapsed(0)
-  }, [module.id])
-
-  useEffect(() => {
-    if (!playing) return
-    const id = window.setInterval(() => {
-      setElapsed(previous => {
-        const next = Math.min(VIDEO_DURATION_SECONDS, previous + 1)
-        if (next >= VIDEO_DURATION_SECONDS) setPlaying(false)
-        return next
-      })
-    }, 1000)
-    return () => window.clearInterval(id)
-  }, [playing])
-
-  useEffect(() => {
-    if (elapsed >= VIDEO_DURATION_SECONDS && !completed) {
-      onComplete()
-    }
-  }, [completed, elapsed, onComplete])
+export default function StudyLessonPlayer({
+  module,
+  modules,
+  activeModuleId,
+  completedModules,
+  onSelectModule,
+  onComplete,
+}: Props) {
+  const videoUrl = `https://www.youtube-nocookie.com/embed/${module.video.youtubeId}?rel=0&modestbranding=1`
+  const completed = completedModules.includes(module.id)
 
   return (
-    <section className="rounded-lg border border-white/[0.1] bg-[#070707] overflow-hidden">
+    <section className="overflow-hidden rounded-lg border border-white/[0.1] bg-[#070707]">
       <div className="grid grid-cols-1 xl:grid-cols-12">
         <div className="xl:col-span-8">
-          <div className="study-video-frame">
-            <div className="study-video-grid" />
-            <div className="study-video-orbit" />
-            <div className="study-video-panel">
-              <p className="text-[10px] font-black uppercase text-muted">5 minute lesson</p>
-              <h3 className="mt-2 text-2xl sm:text-4xl font-black text-primary">{module.title}</h3>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-secondary">{activeChapter.videoLine}</p>
-            </div>
-
-            <div className="study-video-chart" aria-hidden="true">
-              {[42, 58, 49, 72, 64, 84, 76].map((height, index) => (
-                <div key={`${module.id}-${index}`} style={{ height: `${height}%`, animationDelay: `${index * 0.12}s` }} />
-              ))}
-            </div>
-
-            <div className="study-video-card">
-              <span>{activeChapter.label}</span>
-              <strong>{activeChapter.title}</strong>
-              <p>{activeChapter.takeaway}</p>
+          <div className="border-b border-white/[0.08] bg-black p-3 sm:p-4">
+            <div className="aspect-video w-full overflow-hidden rounded-md border border-white/[0.1] bg-[#050505]">
+              <iframe
+                className="h-full w-full"
+                src={videoUrl}
+                title={module.video.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
           </div>
 
-          <div className="border-t border-white/[0.08] bg-black/40 p-4">
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setPlaying(value => !value)}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-black"
-                  aria-label={playing ? 'Pause lesson video' : 'Play lesson video'}
-                >
-                  {playing ? <Pause size={18} /> : <Play size={18} />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setElapsed(0); setPlaying(false) }}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.04] text-muted hover:text-primary"
-                  aria-label="Restart lesson video"
-                >
-                  <RotateCcw size={16} />
-                </button>
+          <div className="space-y-5 p-5 sm:p-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="max-w-2xl">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
+                    Video lesson
+                  </span>
+                  <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
+                    {module.minutes} min path
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-primary sm:text-3xl">{module.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-secondary">{module.goal}</p>
+                <p className="mt-3 text-xs leading-relaxed text-muted">
+                  Watch the video first, then use the lesson notes and quiz below to connect the topic back to real stock research.
+                </p>
               </div>
-              <div className="font-mono text-xs font-black text-muted">
-                {formatTime(elapsed)} / 05:00
-              </div>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/[0.08]">
-              <div className="h-full rounded-full bg-white transition-all duration-300" style={{ width: `${progress}%` }} />
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {chapters.map(chapter => (
+
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <a
+                  href={module.video.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2.5 text-xs font-black uppercase text-primary transition-colors hover:bg-white/[0.08]"
+                >
+                  Open video <ExternalLink size={14} />
+                </a>
                 <button
-                  key={chapter.title}
                   type="button"
-                  onClick={() => setElapsed(chapter.startsAt)}
-                  className={`rounded-md border px-3 py-2 text-left transition-colors ${
-                    activeChapter.title === chapter.title
+                  onClick={onComplete}
+                  className={`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-xs font-black uppercase transition-colors ${
+                    completed
                       ? 'border-white bg-white text-black'
-                      : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:text-primary'
+                      : 'border-white/[0.14] bg-white/[0.04] text-primary hover:bg-white/[0.08]'
                   }`}
                 >
-                  <span className={`block font-mono text-[10px] font-black ${activeChapter.title === chapter.title ? 'text-black/60' : 'text-muted'}`}>
-                    {formatTime(chapter.startsAt)}
-                  </span>
-                  <span className="mt-1 block text-xs font-black">{chapter.title}</span>
+                  {completed ? <CheckCircle2 size={15} /> : <Check size={15} />}
+                  {completed ? 'Completed' : 'Mark complete'}
                 </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+              {module.steps.map((step, index) => (
+                <div key={step.title} className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4">
+                  <div className="mb-3 flex items-center gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white font-mono text-xs font-black text-black">
+                      {index + 1}
+                    </span>
+                    <h4 className="text-sm font-black text-primary">{step.title}</h4>
+                  </div>
+                  <p className="text-sm leading-relaxed text-secondary">{step.body}</p>
+                  <p className="mt-3 text-xs leading-relaxed text-muted">Example: {step.example}</p>
+                </div>
               ))}
             </div>
           </div>
         </div>
 
-        <aside className="xl:col-span-4 border-t xl:border-t-0 xl:border-l border-white/[0.08] bg-white/[0.025] p-5">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-label mb-2">Lesson notes</p>
-              <h4 className="text-xl font-black text-primary">Compact course view</h4>
+        <aside className="border-t border-white/[0.08] bg-white/[0.025] xl:col-span-4 xl:border-l xl:border-t-0">
+          <div className="border-b border-white/[0.08] p-5">
+            <div className="mb-2 flex items-center gap-2 text-primary">
+              <ListVideo size={16} />
+              <p className="font-black">Course content</p>
             </div>
-            <div className={`flex h-9 w-9 items-center justify-center rounded-md border ${completed ? 'border-white bg-white text-black' : 'border-white/[0.12] text-muted'}`}>
-              <CheckCircle2 size={17} />
-            </div>
+            <p className="text-xs leading-relaxed text-muted">
+              Pick a lesson, watch the video, then answer the quick check to save what you learned.
+            </p>
           </div>
 
-          <div className="space-y-3">
-            {module.steps.map((step, index) => (
-              <div key={step.title} className="rounded-lg border border-white/[0.08] bg-black/20 p-4">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded bg-white text-xs font-black text-black">{index + 1}</span>
-                  <p className="font-black text-sm text-primary">{step.title}</p>
-                </div>
-                <p className="text-xs leading-relaxed text-secondary">{step.body}</p>
-                <p className="mt-3 text-xs leading-relaxed text-muted">Example: {step.example}</p>
-              </div>
-            ))}
+          <div className="max-h-[34rem] overflow-y-auto p-3">
+            {modules.map((courseModule, index) => {
+              const active = courseModule.id === activeModuleId
+              const done = completedModules.includes(courseModule.id)
+
+              return (
+                <button
+                  key={courseModule.id}
+                  type="button"
+                  onClick={() => onSelectModule(courseModule.id)}
+                  className={`mb-2 w-full rounded-lg border p-4 text-left transition-colors ${
+                    active
+                      ? 'border-white bg-white text-black'
+                      : 'border-white/[0.08] bg-black/20 text-secondary hover:border-white/25 hover:text-primary'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border ${
+                        active
+                          ? 'border-black/15 bg-black text-white'
+                          : done
+                            ? 'border-white bg-white text-black'
+                            : 'border-white/[0.12] bg-white/[0.03] text-muted'
+                      }`}
+                    >
+                      {done ? <Check size={15} /> : <PlaySquare size={15} />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className={`text-[10px] font-black uppercase ${active ? 'text-black/55' : 'text-muted'}`}>
+                        Lesson {index + 1} / {courseModule.level}
+                      </p>
+                      <h4 className={`mt-1 text-sm font-black ${active ? 'text-black' : 'text-primary'}`}>
+                        {courseModule.title}
+                      </h4>
+                      <p className={`mt-1 line-clamp-2 text-xs leading-relaxed ${active ? 'text-black/65' : 'text-muted'}`}>
+                        {courseModule.video.title}
+                      </p>
+                      <div className={`mt-3 flex items-center gap-2 text-[10px] font-black uppercase ${active ? 'text-black/55' : 'text-muted'}`}>
+                        <Clock3 size={12} />
+                        {courseModule.minutes} min
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              )
+            })}
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <LessonMeta icon={Clock3} label="Length" value="5 min" />
-            <LessonMeta icon={BookOpen} label="Level" value={module.level} />
+          <div className="border-t border-white/[0.08] p-5">
+            <div className="mb-3 flex items-center gap-2 text-primary">
+              <BookOpen size={16} />
+              <p className="font-black">What to learn</p>
+            </div>
+            <ul className="space-y-2">
+              {module.steps.map(step => (
+                <li key={step.title} className="rounded-md border border-white/[0.08] bg-black/20 p-3">
+                  <p className="text-xs font-black text-primary">{step.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted">{step.takeaway}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </aside>
       </div>
     </section>
   )
-}
-
-function LessonMeta({ icon: Icon, label, value }: { icon: typeof Clock3; label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-white/[0.08] bg-black/20 p-3">
-      <div className="mb-2 flex items-center gap-2 text-muted">
-        <Icon size={13} />
-        <span className="text-[10px] font-black uppercase">{label}</span>
-      </div>
-      <p className="text-sm font-black text-primary">{value}</p>
-    </div>
-  )
-}
-
-function buildChapters(module: StudyModule) {
-  const chapterTimes = [0, 75, 150, 225]
-  const stepChapters = module.steps.slice(0, 3).map((step, index) => ({
-    startsAt: chapterTimes[index + 1],
-    label: `Lesson ${index + 1}`,
-    title: step.title,
-    videoLine: step.body,
-    takeaway: step.takeaway,
-  }))
-
-  return [
-    {
-      startsAt: 0,
-      label: 'Intro',
-      title: 'What you will learn',
-      videoLine: module.goal,
-      takeaway: module.description,
-    },
-    ...stepChapters,
-  ]
-}
-
-function formatTime(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0')
-  const seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0')
-  return `${minutes}:${seconds}`
 }

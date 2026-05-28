@@ -16,7 +16,6 @@ import {
   ArrowUpRight,
   Bookmark,
   BookOpen,
-  Check,
   CheckCircle2,
   Clock3,
   GraduationCap,
@@ -83,11 +82,6 @@ export default function LearnPage() {
     }
   }, [selectedTerm])
 
-  const toggleModuleComplete = () => {
-    const nextCompleted = !completedModules.includes(activeModuleData.id)
-    setCompletedModules(setStudyModuleCompleted(activeModuleData.id, nextCompleted))
-  }
-
   const completeActiveModule = useCallback(() => {
     setCompletedModules(previous => {
       if (previous.includes(activeModuleData.id)) return previous
@@ -111,14 +105,14 @@ export default function LearnPage() {
                   <Layers size={14} className="text-primary" />
                   <span className="text-[10px] font-bold text-secondary uppercase">Study Academy for student investors</span>
                 </div>
-                <h1 className="text-display text-primary mb-6">
+                <h1 className="text-display text-primary mb-6 max-w-[11ch] sm:max-w-3xl">
                   Study stocks with examples, checks, and plain-English research habits.
                 </h1>
-                <p className="text-xl text-secondary mb-10 leading-relaxed font-medium">
+                <p className="max-w-[28ch] text-xl text-secondary mb-10 leading-relaxed font-medium sm:max-w-3xl">
                   Build the skills behind every company page: read key stats, understand earnings, check SEC filings, question headlines, and turn watchlists into research.
                 </p>
 
-                <div className="relative group max-w-xl">
+                <div className="relative group max-w-[calc(100vw-3rem)] sm:max-w-xl">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
@@ -130,7 +124,7 @@ export default function LearnPage() {
                 </div>
               </div>
 
-              <div className="learn-terminal">
+              <div className="learn-terminal w-full max-w-[calc(100vw-3rem)] sm:max-w-none">
                 {[
                   [LineChart, 'Stock page', 'Start with business, price, and key stats'],
                   [Newspaper, 'News', 'Find the event before forming a view'],
@@ -170,63 +164,18 @@ export default function LearnPage() {
               </a>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-              <div className="lg:col-span-4 space-y-3">
-                {studyModules.map(module => {
-                  const done = completedModules.includes(module.id)
-                  const active = module.id === activeModuleData.id
-                  return (
-                    <button
-                      key={module.id}
-                      type="button"
-                      onClick={() => setActiveModule(module.id)}
-                      className={`w-full text-left rounded-lg border p-4 transition-colors ${
-                        active ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.025] text-secondary hover:text-primary hover:border-white/25'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className={`text-[10px] font-black uppercase ${active ? 'text-black/60' : 'text-muted'}`}>{module.level}</p>
-                          <h3 className={`mt-2 text-lg font-black ${active ? 'text-black' : 'text-primary'}`}>{module.title}</h3>
-                          <p className={`mt-2 text-sm leading-relaxed ${active ? 'text-black/70' : 'text-muted'}`}>{module.description}</p>
-                        </div>
-                        <div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${
-                          done ? 'border-white bg-white text-black' : active ? 'border-black/20 bg-black/5 text-black' : 'border-white/[0.12] text-muted'
-                        }`}>
-                          {done ? <Check size={15} /> : <BookOpen size={14} />}
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
+            <div className="space-y-5">
+              <StudyLessonPlayer
+                module={activeModuleData}
+                modules={studyModules}
+                activeModuleId={activeModuleData.id}
+                completedModules={completedModules}
+                onSelectModule={setActiveModule}
+                onComplete={completeActiveModule}
+              />
 
-              <div className="lg:col-span-8 glass-card p-5 sm:p-7">
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-label mb-2">{activeModuleData.level} / {activeModuleData.minutes} min</p>
-                    <h3 className="text-2xl sm:text-3xl font-black text-primary">{activeModuleData.title}</h3>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-secondary">{activeModuleData.goal}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={toggleModuleComplete}
-                    className={`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-xs font-black uppercase transition-colors ${
-                      completedModules.includes(activeModuleData.id)
-                        ? 'border-white bg-white text-black'
-                        : 'border-white/[0.14] bg-white/[0.04] text-primary hover:bg-white/[0.08]'
-                    }`}
-                  >
-                    <Check size={15} />
-                    {completedModules.includes(activeModuleData.id) ? 'Completed' : 'Mark complete'}
-                  </button>
-                </div>
-
-                <div className="mt-7">
-                  <StudyLessonPlayer module={activeModuleData} completed={completedModules.includes(activeModuleData.id)} onComplete={completeActiveModule} />
-                </div>
-
-                <div className="mt-7">
+              <div className="glass-card p-5 sm:p-7">
+                <div>
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <div>
                       <p className="text-label mb-1">Workbook</p>

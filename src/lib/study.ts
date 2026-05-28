@@ -8,6 +8,12 @@ export const studyModules: StudyModule[] = [
     minutes: 8,
     description: 'Study the order to read a company page so prices, charts, news, and filings feel connected.',
     goal: 'Leave with a simple research routine you can repeat on any ticker.',
+    video: {
+      youtubeId: 'p7HKvqRI_Bo',
+      title: 'How does the stock market work?',
+      channel: 'TED-Ed',
+      sourceUrl: 'https://www.youtube.com/watch?v=p7HKvqRI_Bo',
+    },
     terms: ['stock', 'ticker-symbol', 'market-cap', 'volume'],
     steps: [
       {
@@ -43,6 +49,12 @@ export const studyModules: StudyModule[] = [
     minutes: 10,
     description: 'Decode market cap, P/E, EPS, volume, and yearly ranges without memorizing finance jargon.',
     goal: 'Understand what each number can tell you and what it cannot tell you by itself.',
+    video: {
+      youtubeId: 'cppxO67e6eo',
+      title: 'Introduction to the Price-to-Earnings Ratio',
+      channel: 'Khan Academy',
+      sourceUrl: 'https://www.youtube.com/watch?v=cppxO67e6eo',
+    },
     terms: ['market-cap', 'pe-ratio', 'eps', 'volume'],
     steps: [
       {
@@ -78,6 +90,12 @@ export const studyModules: StudyModule[] = [
     minutes: 9,
     description: 'Understand what earnings reports are and why stocks can move even when a company made money.',
     goal: 'Know how to read EPS, revenue, margins, and guidance like a student researcher.',
+    video: {
+      youtubeId: 'RouNXdkC0do',
+      title: 'Earnings and EPS',
+      channel: 'Khan Academy',
+      sourceUrl: 'https://www.youtube.com/watch?v=RouNXdkC0do',
+    },
     terms: ['eps', 'revenue', 'profit-margin', 'fiscal-year'],
     steps: [
       {
@@ -113,6 +131,12 @@ export const studyModules: StudyModule[] = [
     minutes: 11,
     description: 'Study the common filing types so official company documents feel less confusing.',
     goal: 'Know where to look for annual facts, quarterly updates, major events, and voting details.',
+    video: {
+      youtubeId: 'hi-Ua4JBGmA',
+      title: 'How to Read a 10-K Annual Report',
+      channel: 'YouTube lesson',
+      sourceUrl: 'https://www.youtube.com/watch?v=hi-Ua4JBGmA',
+    },
     terms: ['sec', 'fiscal-year', 'audit', 'insider-trading'],
     steps: [
       {
@@ -148,6 +172,12 @@ export const studyModules: StudyModule[] = [
     minutes: 8,
     description: 'Read headlines without getting pulled into panic, hype, or one-sided stories.',
     goal: 'Turn a headline into a clear question you can verify with data.',
+    video: {
+      youtubeId: 'EAKGuN-d07Q',
+      title: 'Stock Market Terms for Beginners',
+      channel: 'YouTube lesson',
+      sourceUrl: 'https://www.youtube.com/watch?v=EAKGuN-d07Q',
+    },
     terms: ['ticker-symbol', 'sector-rotation', 'volatility', 'revenue'],
     steps: [
       {
@@ -183,6 +213,12 @@ export const studyModules: StudyModule[] = [
     minutes: 7,
     description: 'Use a watchlist as a study queue, not just a list of prices.',
     goal: 'Save companies with a reason, track key words, and update your notes over time.',
+    video: {
+      youtubeId: 'p7HKvqRI_Bo',
+      title: 'How does the stock market work?',
+      channel: 'TED-Ed',
+      sourceUrl: 'https://www.youtube.com/watch?v=p7HKvqRI_Bo',
+    },
     terms: ['ticker-symbol', 'sector-rotation', 'volume', 'support-resistance'],
     steps: [
       {

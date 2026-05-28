@@ -62,10 +62,12 @@ export default function Navbar() {
 
             <div className="flex items-center gap-4 relative z-50">
               <div className="hidden xl:block"><SearchBar /></div>
-              <GoogleLoginButton compact />
+              <div className="hidden sm:block">
+                <GoogleLoginButton compact />
+              </div>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-primary hover:bg-white/[0.08] transition-colors"
+                className="fixed right-4 top-5 w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-primary hover:bg-white/[0.08] transition-colors sm:static"
                 aria-label="Toggle navigation"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
