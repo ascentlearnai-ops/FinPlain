@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Brain, RefreshCw } from 'lucide-react'
+import { BookOpen, RefreshCw } from 'lucide-react'
 import { getCachedAISummary, setCachedAISummary } from '@/lib/localStorage'
 
 export default function DailyAISummary() {
@@ -17,7 +17,7 @@ export default function DailyAISummary() {
     try {
       const res = await fetch('/api/ai-explain', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: 'Write a clear 4-sentence market recap for 8th-grade students. Explain what moved, why it matters, one term they should understand, and what to watch next. Use common words and define any hard word. No investment advice. Max 130 words.' })
+        body: JSON.stringify({ prompt: 'Write a clear 5-sentence market recap for 8th-grade students. Sentence 1 explains what moved. Sentence 2 explains why it matters. Sentence 3 names the strongest stock, sector, or market signal. Sentence 4 defines one useful market word. Sentence 5 gives one research question to watch next. Use common words. No investment advice. Max 160 words.' })
       })
       const data = await res.json()
       if (data.explanation) { setSummary(data.explanation); setCachedAISummary(data.explanation) }
@@ -33,11 +33,11 @@ export default function DailyAISummary() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <div className="w-11 h-11 bg-white text-black rounded-lg flex items-center justify-center">
-            <Brain size={22} />
+            <BookOpen size={22} />
           </div>
           <div>
             <p className="font-['Outfit'] font-black text-lg text-primary">Student market recap</p>
-            <p className="text-xs text-muted font-medium">8th-grade context for learning, not advice</p>
+            <p className="text-xs text-muted font-medium">What moved, why it matters, and what to watch</p>
           </div>
         </div>
         <button onClick={() => fetchSummary(true)} className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-muted hover:text-primary hover:bg-white/[0.08] transition-colors" aria-label="Refresh recap">

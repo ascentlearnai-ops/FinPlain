@@ -23,7 +23,7 @@ export default function Footer() {
               <div>
                 <p className="font-bold text-primary mb-3 uppercase text-xs">Product</p>
                 <div className="space-y-2.5">
-                  {[{ label: 'Overview', href: '/' }, { label: 'News', href: '/news' }, { label: 'Learn', href: '/learn' }, { label: 'Watchlist', href: '/watchlist' }].map(l => (
+                  {[{ label: 'Overview', href: '/' }, { label: 'News', href: '/news' }, { label: 'Study', href: '/learn' }, { label: 'Watchlist', href: '/watchlist' }].map(l => (
                     <Link key={l.href} href={l.href} className="block text-secondary hover:text-primary transition-colors">{l.label}</Link>
                   ))}
                 </div>
@@ -49,7 +49,7 @@ export default function Footer() {
 
           <div className="mt-12 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-xs text-muted">
             <p>Copyright {new Date().getFullYear()} macroliberium. All rights reserved.</p>
-            <p>Learning summaries are for education only.</p>
+            <p>Study summaries are for education only.</p>
           </div>
         </div>
       </div>

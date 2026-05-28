@@ -151,7 +151,13 @@ function buildResearchEvents(ticker: string, earnings: any[], filings: any[]): R
       title: `${ticker} ${beatMiss}`,
       date: earning.period || 'Recent quarter',
       type: 'earnings',
-      summary: `Reported EPS was ${actual}; analyst estimate was ${estimate}. Ask whether growth, margins, or guidance changed.`,
+      summary: `Reported EPS was ${actual}; analyst estimate was ${estimate}. This tells you how actual profit compared with what analysts expected.`,
+      meaning: typeof earning.actual === 'number' && typeof earning.estimate === 'number'
+        ? earning.actual >= earning.estimate
+          ? 'The company met or beat the profit number analysts expected, so the next question is whether growth and guidance also looked strong.'
+          : 'The company missed the profit number analysts expected, so investors may question costs, demand, or future guidance.'
+        : 'The company reported earnings, but analyst comparison data is missing. Use the report to check revenue, EPS, margins, and guidance.',
+      watchNext: 'Compare EPS with revenue growth, profit margin, cash flow, and management guidance for the next quarter.',
     }
   })
 
@@ -161,10 +167,30 @@ function buildResearchEvents(ticker: string, earnings: any[], filings: any[]): R
     date: filing.filedAt || 'Recent filing',
     type: 'filing',
     summary: filing.description,
+    meaning: getFilingMeaning(filing.form),
+    watchNext: getFilingWatchNext(filing.form),
     url: filing.documentUrl,
   }))
 
   return [...earningEvents, ...filingEvents]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 8)
+}
+
+function getFilingMeaning(form: string): string {
+  const normalized = form.toUpperCase()
+  if (normalized.includes('10-K')) return 'This is the annual report. It is the best place to study the full business, major risks, and yearly results.'
+  if (normalized.includes('10-Q')) return 'This is a quarterly report. It updates the latest sales, profit, cash, debt, and risks.'
+  if (normalized.includes('8-K')) return 'This is a current report. It usually means a major event or announcement happened.'
+  if (normalized.includes('DEF') || normalized.includes('14A')) return 'This proxy filing explains voting items, board details, and executive pay.'
+  return 'This is an official SEC filing, so it can help verify company facts behind the headline.'
+}
+
+function getFilingWatchNext(form: string): string {
+  const normalized = form.toUpperCase()
+  if (normalized.includes('10-K')) return 'Scan business overview, risk factors, revenue trends, cash, debt, and management discussion.'
+  if (normalized.includes('10-Q')) return 'Check what changed since last quarter and whether margins, cash, or guidance moved.'
+  if (normalized.includes('8-K')) return 'Identify the event, then ask whether it changes the business outlook or only creates short-term attention.'
+  if (normalized.includes('DEF') || normalized.includes('14A')) return 'Look for leadership changes, voting proposals, and pay incentives that may affect long-term decisions.'
+  return 'Open the filing and write one question to verify against the chart, news, or next earnings report.'
 }

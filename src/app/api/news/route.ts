@@ -87,10 +87,10 @@ export async function GET(req: NextRequest) {
           try {
             simpleSummary = await simplifyNewsHeadline(article.title || article.headline)
           } catch {
-            simpleSummary = 'Comprehensive market coverage of recent events.'
+            simpleSummary = 'This story is tied to a recent market event. Check which company, sector, or economic number changed. Then compare the headline with the chart and any official company update.'
           }
         } else {
-          simpleSummary = 'Market update regarding latest developments.'
+          simpleSummary = 'This is a market update to review. Identify the company, event, and key number first. Use it as a starting point for deeper research, not a final conclusion.'
         }
         
         return {

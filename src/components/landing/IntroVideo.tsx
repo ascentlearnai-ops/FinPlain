@@ -9,7 +9,7 @@ const tickers = ['AAPL', 'NVDA', 'MSFT', 'SPY', 'TSLA', 'META', 'AMZN', 'GOOGL',
 const cards = [
   ['Headline', 'Apple services margin expands after earnings call'],
   ['Translation', 'Apple kept more money from each dollar of service sales. That can matter because profit may grow faster than sales.'],
-  ['Word to learn', 'Margin means the part of sales a company keeps after paying costs.'],
+  ['Word to know', 'Margin means the part of sales a company keeps after paying costs.'],
 ]
 
 export default function IntroVideo() {
@@ -190,7 +190,7 @@ export default function IntroVideo() {
             {[
               [ShieldCheck, 'Sources checked', 'Yahoo, filings, news feeds'],
               [Newspaper, 'Headline simplified', 'What happened, in normal words'],
-              [BookOpen, 'Term explained', 'Learn one idea at a time'],
+              [BookOpen, 'Term explained', 'Study one idea at a time'],
               [FileText, 'Research saved', 'Notes stay with the ticker'],
             ].map(([Icon, title, body]) => {
               const RowIcon = Icon as typeof ShieldCheck

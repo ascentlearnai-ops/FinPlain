@@ -24,7 +24,7 @@ export default function HomePage() {
             <div className="landing-copy">
               <div className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] bg-black/40 px-3 py-2 backdrop-blur-md">
                 <span className="w-2 h-2 bg-white rounded-full" />
-                <span className="text-[11px] font-bold uppercase text-secondary">Yahoo Finance for teenagers, rebuilt for learning</span>
+                <span className="text-[11px] font-bold uppercase text-secondary">Yahoo Finance for teenagers, rebuilt for study</span>
               </div>
 
               <h1 className="landing-title text-primary">
@@ -40,7 +40,7 @@ export default function HomePage() {
                   Open the market desk <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </a>
                 <a href="/learn" className="btn-secondary inline-flex items-center justify-center gap-2">
-                  <BookOpen size={18} /> Start learning
+                  <BookOpen size={18} /> Start studying
                 </a>
                 <GoogleLoginButton />
               </div>
@@ -107,11 +107,11 @@ export default function HomePage() {
                     <p className="text-label mb-3">Why it matters</p>
                     <h3 className="text-2xl font-bold mb-4">The useful parts of finance media, without the noise.</h3>
                     <p className="text-secondary text-sm leading-relaxed">
-                      Think Yahoo Finance for teenagers: real market data, real sources, and explanations that help you learn instead of making you feel behind.
+                      Think Yahoo Finance for teenagers: real market data, real sources, and explanations that help you study without feeling behind.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-8">
-                    {['Real data', 'Plain English', 'Built to learn'].map(tag => (
+                    {['Real data', 'Plain English', 'Built to study'].map(tag => (
                       <span key={tag} className="text-[10px] font-bold px-3 py-1 bg-white/[0.04] rounded-md text-secondary uppercase border border-white/[0.08]">{tag}</span>
                     ))}
                   </div>
@@ -148,7 +148,7 @@ export default function HomePage() {
             <div className="max-w-3xl">
               <p className="text-label mb-4">Yahoo Finance for teenagers</p>
               <h2 className="text-4xl md:text-5xl font-black mb-6">
-                Build a watchlist, then learn what every move actually means.
+                Build a watchlist, then study what every move actually means.
               </h2>
               <p className="text-lg text-secondary max-w-xl mb-8">
                 Save tickers, read related headlines, check filings, and use the glossary when market language gets weird.

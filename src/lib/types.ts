@@ -51,9 +51,16 @@ export interface NewsArticle {
   url: string
   publishedAt: string       // ISO string
   relatedTickers: string[]
-  simpleSummary: string     // Generated 1-sentence plain summary
+  simpleSummary: string     // Generated plain summary
   category: 'tech' | 'energy' | 'finance' | 'economy' | 'general'
   imageUrl?: string
+}
+
+export interface StudyQuickCheck {
+  question: string
+  choices: string[]
+  answer: string
+  explanation: string
 }
 
 export interface GlossaryTerm {
@@ -64,6 +71,12 @@ export interface GlossaryTerm {
   example: string           // "Think of it like..."
   detailedExample?: string  // Longer deep dive for the modal
   imageUrl?: string         // Diagram or chart image
+  brief?: string
+  whyItMatters?: string
+  realWorldExample?: string
+  commonMistake?: string
+  quickCheck?: StudyQuickCheck
+  relatedTermIds?: string[]
 }
 
 export interface WatchlistItem {
@@ -87,6 +100,27 @@ export interface ResearchEvent {
   type: 'earnings' | 'filing' | 'news' | 'education'
   summary: string
   url?: string
+  meaning?: string
+  watchNext?: string
+}
+
+export interface StudyLessonStep {
+  title: string
+  body: string
+  example: string
+  takeaway: string
+}
+
+export interface StudyModule {
+  id: string
+  title: string
+  level: string
+  minutes: number
+  description: string
+  goal: string
+  terms: string[]
+  steps: StudyLessonStep[]
+  quickCheck: StudyQuickCheck
 }
 
 export type ChartRange = '1D' | '1W' | '1M' | '3M' | '1Y'

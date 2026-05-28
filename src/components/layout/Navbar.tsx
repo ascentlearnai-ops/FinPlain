@@ -9,7 +9,7 @@ import GoogleLoginButton from '@/components/auth/GoogleLoginButton'
 const navLinks = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
   { href: '/news', label: 'News', icon: Globe },
-  { href: '/learn', label: 'Learn', icon: BookOpen },
+  { href: '/learn', label: 'Study', icon: BookOpen },
   { href: '/watchlist', label: 'Watchlist', icon: Heart },
 ]
 

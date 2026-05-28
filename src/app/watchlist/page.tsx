@@ -25,7 +25,7 @@ export default function WatchlistPage() {
             <div className="watchlist-command-panel">
               {[
                 [LineChart, 'Prices', 'Follow the moves'],
-                [BookOpen, 'Learn', 'Decode the terms'],
+                [BookOpen, 'Study', 'Decode the terms'],
                 [NotebookPen, 'Notes', 'Build your thesis'],
                 [Bell, 'Alerts', 'Watch catalysts'],
               ].map(([Icon, title, body]) => {
