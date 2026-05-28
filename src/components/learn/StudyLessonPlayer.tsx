@@ -1,15 +1,21 @@
 'use client'
 
 import type { StudyModule } from '@/lib/types'
-import { BookOpen, Check, CheckCircle2, Clock3, ExternalLink, ListVideo, PlaySquare } from 'lucide-react'
+import type { GlossaryTerm } from '@/lib/types'
+import { BookOpen, Check, CheckCircle2, Clock3, ExternalLink, ListVideo, PlaySquare, Target } from 'lucide-react'
 
 interface Props {
   module: StudyModule
   modules: StudyModule[]
   activeModuleId: string
   completedModules: string[]
+  moduleTerms: GlossaryTerm[]
+  selectedAnswer: string
+  answerCorrect: boolean
   onSelectModule: (moduleId: string) => void
   onComplete: () => void
+  onAnswer: (answer: string) => void
+  onOpenTerm: (term: GlossaryTerm) => void
 }
 
 export default function StudyLessonPlayer({
@@ -17,11 +23,17 @@ export default function StudyLessonPlayer({
   modules,
   activeModuleId,
   completedModules,
+  moduleTerms,
+  selectedAnswer,
+  answerCorrect,
   onSelectModule,
   onComplete,
+  onAnswer,
+  onOpenTerm,
 }: Props) {
   const videoUrl = `https://www.youtube-nocookie.com/embed/${module.video.youtubeId}?rel=0&modestbranding=1`
   const completed = completedModules.includes(module.id)
+  const lessonNumber = modules.findIndex(courseModule => courseModule.id === activeModuleId) + 1
 
   return (
     <section className="overflow-hidden rounded-lg border border-white/[0.1] bg-[#070707]">
@@ -45,7 +57,7 @@ export default function StudyLessonPlayer({
               <div className="max-w-2xl">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
-                    Video lesson
+                    Lesson {lessonNumber} / {module.level}
                   </span>
                   <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
                     {module.minutes} min path
@@ -95,6 +107,87 @@ export default function StudyLessonPlayer({
                   <p className="mt-3 text-xs leading-relaxed text-muted">Example: {step.example}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-label mb-1">Lesson {lessonNumber} recap</p>
+                  <h4 className="text-xl font-black text-primary">Practice what this video taught</h4>
+                </div>
+                <div className="hidden rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-[10px] font-black uppercase text-muted sm:block">
+                  Lesson notes
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                {module.steps.map((step, index) => (
+                  <div key={`${step.title}-recap`} className="rounded-lg border border-white/[0.08] bg-black/20 p-4">
+                    <div className="mb-3 flex items-center gap-3">
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white font-mono text-xs font-black text-black">{index + 1}</div>
+                      <h5 className="font-black text-primary">{step.title}</h5>
+                    </div>
+                    <p className="text-sm leading-relaxed text-secondary">{step.takeaway}</p>
+                    <div className="mt-4 rounded-md border border-white/[0.08] bg-white/[0.025] p-3">
+                      <p className="mb-1 text-[10px] font-black uppercase text-muted">Try this</p>
+                      <p className="text-xs leading-relaxed text-secondary">{step.example}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+              <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <Target size={16} className="text-primary" />
+                  <p className="font-black text-primary">Lesson {lessonNumber} quiz</p>
+                </div>
+                <p className="mb-4 text-sm leading-relaxed text-secondary">{module.quickCheck.question}</p>
+                <div className="space-y-2">
+                  {module.quickCheck.choices.map(choice => {
+                    const selected = selectedAnswer === choice
+                    return (
+                      <button
+                        key={choice}
+                        type="button"
+                        onClick={() => onAnswer(choice)}
+                        className={`w-full rounded-md border px-3 py-2 text-left text-sm transition-colors ${
+                          selected ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:border-white/25 hover:text-primary'
+                        }`}
+                      >
+                        {choice}
+                      </button>
+                    )
+                  })}
+                </div>
+                {selectedAnswer && (
+                  <p className={`mt-4 text-sm leading-relaxed ${answerCorrect ? 'text-primary' : 'text-secondary'}`}>
+                    {answerCorrect ? 'Correct. ' : 'Not quite. '}
+                    {module.quickCheck.explanation}
+                  </p>
+                )}
+              </div>
+
+              <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+                <div className="mb-4 flex items-center gap-2">
+                  <BookOpen size={16} className="text-primary" />
+                  <p className="font-black text-primary">Lesson {lessonNumber} terms</p>
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {moduleTerms.map(term => (
+                    <button
+                      key={term.id}
+                      type="button"
+                      onClick={() => onOpenTerm(term)}
+                      className="rounded-md border border-white/[0.1] bg-white/[0.03] p-3 text-left transition-colors hover:border-white/25"
+                    >
+                      <p className="text-sm font-black text-primary">{term.term}</p>
+                      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">{term.brief}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

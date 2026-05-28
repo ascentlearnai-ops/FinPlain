@@ -170,91 +170,14 @@ export default function LearnPage() {
                 modules={studyModules}
                 activeModuleId={activeModuleData.id}
                 completedModules={completedModules}
+                moduleTerms={moduleTerms}
+                selectedAnswer={selectedModuleAnswer}
+                answerCorrect={selectedModuleCorrect}
                 onSelectModule={setActiveModule}
                 onComplete={completeActiveModule}
+                onAnswer={answer => setModuleAnswers(previous => ({ ...previous, [activeModuleData.id]: answer }))}
+                onOpenTerm={setSelectedTerm}
               />
-
-              <div className="glass-card p-5 sm:p-7">
-                <div>
-                  <div className="mb-4 flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-label mb-1">Workbook</p>
-                      <h4 className="text-xl font-black text-primary">Lesson recap and practice</h4>
-                    </div>
-                    <div className="hidden sm:block rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-[10px] font-black uppercase text-muted">
-                      Compact notes
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                  {activeModuleData.steps.map((step, index) => (
-                    <div key={step.title} className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4">
-                      <div className="mb-3 flex items-center gap-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white text-black font-mono text-xs font-black">{index + 1}</div>
-                        <h5 className="font-black text-primary">{step.title}</h5>
-                      </div>
-                      <p className="text-sm leading-relaxed text-secondary">{step.takeaway}</p>
-                      <div className="mt-4 rounded-md border border-white/[0.08] bg-black/20 p-3">
-                        <p className="text-[10px] font-black uppercase text-muted mb-1">Try this</p>
-                        <p className="text-xs leading-relaxed text-secondary">{step.example}</p>
-                      </div>
-                    </div>
-                  ))}
-                  </div>
-                </div>
-
-                <div className="mt-7 grid grid-cols-1 gap-5 xl:grid-cols-2">
-                  <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
-                    <div className="mb-4 flex items-center gap-2">
-                      <Target size={16} className="text-primary" />
-                      <p className="font-black text-primary">Quick check</p>
-                    </div>
-                    <p className="text-sm text-secondary leading-relaxed mb-4">{activeModuleData.quickCheck.question}</p>
-                    <div className="space-y-2">
-                      {activeModuleData.quickCheck.choices.map(choice => {
-                        const selected = selectedModuleAnswer === choice
-                        return (
-                          <button
-                            key={choice}
-                            type="button"
-                            onClick={() => setModuleAnswers(previous => ({ ...previous, [activeModuleData.id]: choice }))}
-                            className={`w-full rounded-md border px-3 py-2 text-left text-sm transition-colors ${
-                              selected ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:text-primary hover:border-white/25'
-                            }`}
-                          >
-                            {choice}
-                          </button>
-                        )
-                      })}
-                    </div>
-                    {selectedModuleAnswer && (
-                      <p className={`mt-4 text-sm leading-relaxed ${selectedModuleCorrect ? 'text-primary' : 'text-secondary'}`}>
-                        {selectedModuleCorrect ? 'Correct. ' : 'Not quite. '}
-                        {activeModuleData.quickCheck.explanation}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
-                    <div className="mb-4 flex items-center gap-2">
-                      <BookOpen size={16} className="text-primary" />
-                      <p className="font-black text-primary">Terms in this module</p>
-                    </div>
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {moduleTerms.map(term => (
-                        <button
-                          key={term.id}
-                          type="button"
-                          onClick={() => setSelectedTerm(term)}
-                          className="rounded-md border border-white/[0.1] bg-white/[0.03] p-3 text-left hover:border-white/25 transition-colors"
-                        >
-                          <p className="font-black text-sm text-primary">{term.term}</p>
-                          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">{term.brief}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
