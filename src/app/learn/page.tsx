@@ -40,7 +40,6 @@ export default function LearnPage() {
   const [activeModule, setActiveModule] = useState(studyModules[0].id)
   const [completedModules, setCompletedModules] = useState<string[]>([])
   const [savedTerms, setSavedTerms] = useState<string[]>([])
-  const [moduleAnswers, setModuleAnswers] = useState<Record<string, string>>({})
   const [termAnswer, setTermAnswer] = useState('')
 
   const allTerms = useMemo(() => glossaryTerms.map(enrichGlossaryTerm), [])
@@ -66,8 +65,6 @@ export default function LearnPage() {
     .filter((term): term is GlossaryTerm => Boolean(term))
 
   const progressPercent = Math.round((completedModules.length / studyModules.length) * 100)
-  const selectedModuleAnswer = moduleAnswers[activeModuleData.id] || ''
-  const selectedModuleCorrect = selectedModuleAnswer === activeModuleData.quickCheck.answer
 
   useEffect(() => {
     setCompletedModules(getStudyProgress())
@@ -171,11 +168,8 @@ export default function LearnPage() {
                 activeModuleId={activeModuleData.id}
                 completedModules={completedModules}
                 moduleTerms={moduleTerms}
-                selectedAnswer={selectedModuleAnswer}
-                answerCorrect={selectedModuleCorrect}
                 onSelectModule={setActiveModule}
                 onComplete={completeActiveModule}
-                onAnswer={answer => setModuleAnswers(previous => ({ ...previous, [activeModuleData.id]: answer }))}
                 onOpenTerm={setSelectedTerm}
               />
             </div>
