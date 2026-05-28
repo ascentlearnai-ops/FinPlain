@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Activity, Globe, BookOpen, Heart, LayoutDashboard } from 'lucide-react'
+import { Menu, X, Globe, BookOpen, Heart, LayoutDashboard } from 'lucide-react'
+import BrandMark from '@/components/brand/BrandMark'
 import SearchBar from '@/components/ui/SearchBar'
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton'
 
@@ -36,8 +37,8 @@ export default function Navbar() {
         <div className="container-full">
           <div className="container-inner h-18 min-h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 group relative z-50">
-              <div className="w-9 h-9 rounded-lg border border-white/20 bg-white text-black flex items-center justify-center">
-                <Activity size={18} />
+              <div className="w-9 h-9 rounded-lg border border-white/20 bg-black flex items-center justify-center">
+                <BrandMark size={24} priority />
               </div>
               <span className="font-['Outfit'] font-black text-xl text-primary hidden sm:block">
                 macroliberium
@@ -102,7 +103,7 @@ export default function Navbar() {
                         <p className={`text-xs ${isActive ? 'text-black/60' : 'text-muted'}`}>Markets made readable</p>
                       </div>
                     </div>
-                    <Activity size={18} className="opacity-40" />
+                    <BrandMark size={18} className={isActive ? 'opacity-45 invert' : 'opacity-45'} />
                   </Link>
                 )
               })}

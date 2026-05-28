@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Activity } from 'lucide-react'
+import BrandMark from '@/components/brand/BrandMark'
 
 export default function Footer() {
   return (
@@ -9,8 +9,8 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-start justify-between gap-10">
             <div className="flex flex-col gap-4 max-w-sm">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg bg-white text-black flex items-center justify-center">
-                  <Activity size={18} />
+                <div className="w-9 h-9 rounded-lg border border-white/20 bg-black flex items-center justify-center">
+                  <BrandMark size={24} />
                 </div>
                 <span className="font-sans font-extrabold text-xl text-primary">macroliberium</span>
               </div>

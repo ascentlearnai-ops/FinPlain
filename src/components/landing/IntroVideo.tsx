@@ -2,15 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { ArrowUpRight, BookOpen, FileText, LineChart, Newspaper, Search, ShieldCheck } from 'lucide-react'
+import { BookOpen, FileText, Newspaper, Search, ShieldCheck } from 'lucide-react'
+import BrandMark from '@/components/brand/BrandMark'
 
 const tickers = ['AAPL', 'NVDA', 'MSFT', 'SPY', 'TSLA', 'META', 'AMZN', 'GOOGL', 'JPM', 'QQQ']
-
-const cards = [
-  ['Headline', 'Apple services margin expands after earnings call'],
-  ['Translation', 'Apple kept more money from each dollar of service sales. That can matter because profit may grow faster than sales.'],
-  ['Word to know', 'Margin means the part of sales a company keeps after paying costs.'],
-]
 
 export default function IntroVideo() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -158,7 +153,9 @@ export default function IntroVideo() {
 
       <div className="hero-terminal">
         <div className="hero-terminal-top">
-          <div className="hero-brand-dot" />
+          <div className="hero-brand-dot">
+            <BrandMark size={16} />
+          </div>
           <strong>Student Market Desk</strong>
           <span>06:00 source sync</span>
         </div>
@@ -203,20 +200,6 @@ export default function IntroVideo() {
             })}
           </div>
         </div>
-      </div>
-
-      <div className="headline-transformer">
-        <div className="transformer-top">
-          <LineChart size={16} />
-          <span>Headline to understanding</span>
-          <ArrowUpRight size={15} />
-        </div>
-        {cards.map(([label, body], index) => (
-          <div key={label} className="transformer-card" style={{ '--d': index } as CSSProperties}>
-            <p>{label}</p>
-            <strong>{body}</strong>
-          </div>
-        ))}
       </div>
     </div>
   )
