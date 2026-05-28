@@ -13,10 +13,10 @@ interface Props {
 }
 
 const PROMPTS = [
-  'What does this company sell, and who pays for it?',
+  'What does this company sell, and who buys it?',
   'What changed in the latest quarter?',
-  'What risks does management keep repeating?',
-  'What metric would matter most for this business?',
+  'What could go wrong for this business?',
+  'What number should I check again next time?',
 ]
 
 export default function ResearchWorkspace({ ticker, companyName, events, filings }: Props) {
@@ -61,7 +61,7 @@ export default function ResearchWorkspace({ ticker, companyName, events, filings
             <p className="text-label mb-2">Research hub</p>
             <h2 className="text-2xl sm:text-3xl font-black text-primary">{companyName}</h2>
             <p className="text-sm text-secondary mt-2 max-w-2xl">
-              Follow the same research flow a professional would use: events, company filings, questions, notes, and alerts.
+              Use the same research flow a serious investor would use, but with student-friendly steps: events, filings, questions, notes, and alerts.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted uppercase">
@@ -123,8 +123,11 @@ export default function ResearchWorkspace({ ticker, companyName, events, filings
             <div className="border border-white/[0.08] rounded-lg p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Lightbulb size={16} className="text-primary" />
-                <p className="font-bold text-primary">Ask better questions</p>
+                <p className="font-bold text-primary">Questions that make research easier</p>
               </div>
+              <p className="text-sm text-secondary leading-relaxed mb-4">
+                Good research starts with simple questions. Add one to your notes, then answer it after reading the chart, news, or filing.
+              </p>
               <div className="space-y-3">
                 {PROMPTS.map(prompt => (
                   <button

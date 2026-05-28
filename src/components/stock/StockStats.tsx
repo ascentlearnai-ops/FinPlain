@@ -7,12 +7,12 @@ interface Props { overview: StockOverview }
 
 export default function StockStats({ overview }: Props) {
   const stats = [
-    { label: 'Market Cap', value: formatMarketCap(overview.marketCap), term: 'Market Cap', definition: 'Total value of all shares.', example: 'The company\'s overall price tag.', icon: Landmark },
-    { label: 'P/E Ratio', value: overview.peRatio ? overview.peRatio.toFixed(1) + 'x' : 'N/A', term: 'P/E Ratio', definition: 'Price vs Earnings.', example: 'How much investors pay for $1 of profit.', icon: Activity },
-    { label: 'EPS', value: overview.eps ? '$' + overview.eps.toFixed(2) : 'N/A', term: 'EPS', definition: 'Earnings per share.', example: 'Profit allocated to each share.', icon: DollarSign },
-    { label: '52W High', value: formatPrice(overview.week52High), term: '52-Week High', definition: '1-year price peak.', example: 'The highest point this year.', icon: TrendingUp },
-    { label: '52W Low', value: formatPrice(overview.week52Low), term: '52-Week Low', definition: '1-year price floor.', example: 'The lowest point this year.', icon: Waves },
-    { label: 'Avg Volume', value: formatVolume(overview.avgVolume), term: 'Volume', definition: 'Average shares traded.', example: 'How busy the trading floor is.', icon: BarChart3 },
+    { label: 'Market Cap', value: formatMarketCap(overview.marketCap), term: 'Market Cap', definition: 'The total value of the whole company in the stock market.', example: 'If each share is a small piece of the company, market cap is the price of all pieces added together.', icon: Landmark },
+    { label: 'P/E Ratio', value: overview.peRatio ? overview.peRatio.toFixed(1) + 'x' : 'N/A', term: 'P/E Ratio', definition: 'A number that compares the stock price to the company profit.', example: 'It shows how much investors are paying for $1 of company profit.', icon: Activity },
+    { label: 'EPS', value: overview.eps ? '$' + overview.eps.toFixed(2) : 'N/A', term: 'EPS', definition: 'Profit divided by each share of stock.', example: 'If the company profit was split across every share, EPS is the amount for one share.', icon: DollarSign },
+    { label: '52W High', value: formatPrice(overview.week52High), term: '52-Week High', definition: 'The highest price the stock reached in the past year.', example: 'This helps you see if today\'s price is near the top of its yearly range.', icon: TrendingUp },
+    { label: '52W Low', value: formatPrice(overview.week52Low), term: '52-Week Low', definition: 'The lowest price the stock reached in the past year.', example: 'This helps you see if today\'s price is near the bottom of its yearly range.', icon: Waves },
+    { label: 'Avg Volume', value: formatVolume(overview.avgVolume), term: 'Volume', definition: 'How many shares usually trade in a day.', example: 'High volume means many people are buying and selling that stock.', icon: BarChart3 },
   ]
 
   return (

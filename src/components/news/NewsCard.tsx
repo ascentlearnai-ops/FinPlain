@@ -40,7 +40,7 @@ export default function NewsCard({ article }: Props) {
         </h3>
 
         <div className="bg-white/[0.03] rounded-lg p-4 border border-white/[0.08] mb-6 flex-1">
-          <p className="text-[10px] font-bold text-muted uppercase mb-2">Plain-English take</p>
+          <p className="text-[10px] font-bold text-muted uppercase mb-2">What this means</p>
           <p className="text-sm text-secondary leading-relaxed line-clamp-3">
             {article.simpleSummary}
           </p>

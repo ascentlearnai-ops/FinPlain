@@ -17,7 +17,7 @@ export default function DailyAISummary() {
     try {
       const res = await fetch('/api/ai-explain', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: 'Write a concise 3-sentence market recap for teenagers. Explain what moved, why it matters, and one term they should understand. No investment advice. Max 85 words.' })
+        body: JSON.stringify({ prompt: 'Write a clear 4-sentence market recap for 8th-grade students. Explain what moved, why it matters, one term they should understand, and what to watch next. Use common words and define any hard word. No investment advice. Max 130 words.' })
       })
       const data = await res.json()
       if (data.explanation) { setSummary(data.explanation); setCachedAISummary(data.explanation) }
@@ -36,8 +36,8 @@ export default function DailyAISummary() {
             <Brain size={22} />
           </div>
           <div>
-            <p className="font-['Outfit'] font-black text-lg text-primary">Plain-English recap</p>
-            <p className="text-xs text-muted font-medium">AI-assisted context for learning, not advice</p>
+            <p className="font-['Outfit'] font-black text-lg text-primary">Student market recap</p>
+            <p className="text-xs text-muted font-medium">8th-grade context for learning, not advice</p>
           </div>
         </div>
         <button onClick={() => fetchSummary(true)} className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-muted hover:text-primary hover:bg-white/[0.08] transition-colors" aria-label="Refresh recap">

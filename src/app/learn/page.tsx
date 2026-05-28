@@ -165,7 +165,7 @@ export default function LearnPage() {
                   <div className="w-8 h-8 rounded-md bg-white text-black flex items-center justify-center mb-4">
                     <Info size={16} />
                   </div>
-                  <p className="text-label mb-2">Analogy</p>
+                  <p className="text-label mb-2">Easy example</p>
                   <p className="text-secondary text-sm leading-relaxed font-medium">
                     {selectedTerm.example}
                   </p>
@@ -175,7 +175,7 @@ export default function LearnPage() {
                   <div className="w-8 h-8 rounded-md bg-white text-black flex items-center justify-center mb-4">
                     <ArrowUpRight size={16} />
                   </div>
-                  <p className="text-label mb-2">Deep dive</p>
+                  <p className="text-label mb-2">Why it matters</p>
                   <p className="text-secondary text-sm leading-relaxed font-medium">
                     {selectedTerm.detailedExample || 'This concept helps you decode market stories and compare companies with more context.'}
                   </p>

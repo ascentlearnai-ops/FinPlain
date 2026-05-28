@@ -64,7 +64,7 @@ export interface GlossaryTerm {
   example: string           // "Think of it like..."
   detailedExample?: string  // Longer deep dive for the modal
   imageUrl?: string         // Diagram or chart image
-  emoji: string
+  emoji?: string
 }
 
 export interface WatchlistItem {

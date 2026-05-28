@@ -171,6 +171,17 @@ body {
   .watchlist-command-panel {
     @apply rounded-lg border border-white/[0.1] bg-white/[0.035] p-4;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    transform: perspective(900px) rotateX(0deg) rotateY(-2deg);
+    transform-style: preserve-3d;
+    transition: transform 0.35s ease, border-color 0.25s ease, background-color 0.25s ease;
+  }
+
+  .pro-hero-panel:hover,
+  .learn-terminal:hover,
+  .watchlist-command-panel:hover {
+    transform: perspective(900px) rotateX(1.5deg) rotateY(0deg) translateY(-3px);
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.052);
   }
 
   .pro-panel-row,
@@ -229,6 +240,7 @@ body {
 
   .stock-source-item {
     @apply flex min-h-20 items-start gap-3 rounded-lg border border-white/[0.08] bg-white/[0.03] p-4;
+    animation: page-rise 0.7s ease both;
   }
 
   .stock-source-item svg {
@@ -245,6 +257,55 @@ body {
 
   .stock-workspace-grid {
     @apply grid grid-cols-1 gap-6 lg:grid-cols-12;
+  }
+
+  .pro-page-hero,
+  .landing-product-stage,
+  .glass-card,
+  .glass-card-deep,
+  .pro-panel-row,
+  .learn-terminal-row,
+  .watchlist-command-row,
+  .landing-feature,
+  .fast-preview-note,
+  .fast-preview-mover {
+    animation: page-rise 0.65s ease both;
+  }
+
+  .pro-panel-row:nth-child(2),
+  .learn-terminal-row:nth-child(2),
+  .watchlist-command-row:nth-child(2),
+  .landing-feature:nth-child(2) {
+    animation-delay: 0.06s;
+  }
+
+  .pro-panel-row:nth-child(3),
+  .learn-terminal-row:nth-child(3),
+  .watchlist-command-row:nth-child(3),
+  .landing-feature:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+
+  .learn-terminal-row:nth-child(4),
+  .watchlist-command-row:nth-child(4),
+  .landing-feature:nth-child(4) {
+    animation-delay: 0.18s;
+  }
+
+  @supports (animation-timeline: view()) {
+    .glass-card,
+    .glass-card-deep,
+    .stock-source-item,
+    .landing-feature,
+    .pro-panel-row,
+    .learn-terminal-row,
+    .watchlist-command-row {
+      animation-name: scroll-rise;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
   }
 
   .intro-video-frame {
@@ -684,6 +745,16 @@ body {
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes page-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scroll-rise {
+  from { opacity: 0; transform: translateY(22px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 ::-webkit-scrollbar {

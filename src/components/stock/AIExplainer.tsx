@@ -12,7 +12,7 @@ export default function AIExplainer({ ticker, companyName, changePercent }: Prop
     const trend = (changePercent || 0) >= 0 ? `up ${Math.abs(changePercent || 0).toFixed(2)}%` : `down ${Math.abs(changePercent || 0).toFixed(2)}%`
     fetch('/api/ai-explain', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: `Explain ${companyName} (${ticker}) to a teenager in 3 concise sentences. Cover what the company does, today's ${trend} move, and one simple market concept. No investment advice. Max 85 words.` })
+      body: JSON.stringify({ prompt: `Explain ${companyName} (${ticker}) to an 8th-grade student in 4 short sentences. Cover what the company does, today's ${trend} move, why that move may matter, and one market word to learn. Define any hard word. No investment advice. Max 120 words.` })
     }).then(r => r.json()).then(d => { setExplanation(d.explanation); setLoading(false) }).catch(() => setLoading(false))
   }, [ticker, companyName, changePercent])
 
@@ -24,8 +24,8 @@ export default function AIExplainer({ ticker, companyName, changePercent }: Prop
         </div>
         <div>
           <div className="mb-2">
-            <p className="font-semibold text-xs text-primary uppercase leading-none">Explain it simply</p>
-            <p className="text-[10px] text-muted uppercase mt-1">Learning summary</p>
+            <p className="font-semibold text-xs text-primary uppercase leading-none">Explain it like a class note</p>
+            <p className="text-[10px] text-muted uppercase mt-1">8th-grade market summary</p>
           </div>
           {loading ? (
             <div className="space-y-2.5">

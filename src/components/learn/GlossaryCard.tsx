@@ -11,8 +11,8 @@ export default function GlossaryCard({ term, style }: Props) {
     >
       <div>
         <div className="flex items-start justify-between mb-4">
-          <div className="w-10 h-10 rounded-md bg-white/[0.04] border border-white/[0.1] flex items-center justify-center text-lg">
-            {term.emoji || '?'}
+          <div className="w-10 h-10 rounded-md bg-white/[0.04] border border-white/[0.1] flex items-center justify-center text-sm font-black text-primary">
+            {term.term.slice(0, 1)}
           </div>
           <div className="flex items-center gap-1 text-muted group-hover:text-primary transition-colors">
             <span className="text-[9px] font-black uppercase">Detail</span>

@@ -3,20 +3,19 @@
 const OPENROUTER_URL = `https://openrouter.ai/api/v1/chat/completions`
 const KEY = process.env.GEMINI_API_KEY
 
-const SYSTEM_INSTRUCTION = `You are a senior equity research analyst writing concise market commentary.
+const SYSTEM_INSTRUCTION = `You explain stock market news to teenagers in clear 8th-grade vocabulary.
 Rules you always follow:
-1. Use clear, professional language accessible to retail investors.
-2. Reference specific metrics and data points when available.
-3. Keep responses tight and institutional in tone — no filler.
-4. Never give investment advice or price targets. Provide factual analysis only.
-5. Write in present tense. Be direct and authoritative.`
+1. Use short sentences and common words. Define hard words the first time you use them.
+2. Explain what happened, why it matters, and what a student should watch next.
+3. Give enough detail to teach, but do not sound like a bank report.
+4. Never give investment advice or price targets. Provide learning context only.
+5. Do not use hype, emojis, slang, or vague AI-sounding phrases.`
 
 const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
 
 export async function askGemini(prompt: string): Promise<string> {
   if (USE_MOCK || !KEY) {
-    // Return mock data for development
-    return "This is a sample learning summary. In production, the AI model reviews live market context, company fundamentals, and recent headlines, then explains the signal in clear language for students without giving investment advice."
+    return 'This is a sample learning summary. In production, the AI model reviews live market context, company fundamentals, and recent headlines, then explains the signal in clear language for students without giving investment advice.'
   }
 
   const res = await fetch(OPENROUTER_URL, {
@@ -31,10 +30,10 @@ export async function askGemini(prompt: string): Promise<string> {
       model: 'stepfun/step-3.5-flash',
       messages: [
         { role: 'system', content: SYSTEM_INSTRUCTION },
-        { role: 'user', content: prompt }
+        { role: 'user', content: prompt },
       ],
-      temperature: 0.5,
-      max_tokens: 400,
+      temperature: 0.45,
+      max_tokens: 500,
     }),
   })
 
@@ -43,33 +42,33 @@ export async function askGemini(prompt: string): Promise<string> {
   return data?.choices?.[0]?.message?.content ?? 'Analysis unavailable at this time.'
 }
 
-// Specific prompt builders
-
 export async function explainStock(ticker: string, companyName: string, changePercent: number): Promise<string> {
   const trend = changePercent >= 0 ? `up ${changePercent.toFixed(2)}%` : `down ${Math.abs(changePercent).toFixed(2)}%`
   return askGemini(
-    `Provide a concise 3-sentence institutional-grade overview of ${companyName} (${ticker}).
-     Sentence 1: Core business model and revenue drivers.
-     Sentence 2: Today's price action — the stock is ${trend}. Contextualize with recent catalysts if applicable.
-     Sentence 3: Key competitive positioning or market narrative.
-     Max 80 words. Professional tone.`
+    `Explain ${companyName} (${ticker}) for an 8th-grade student in 4 short sentences.
+     Sentence 1: What the company does and how it makes money.
+     Sentence 2: Today's price move: the stock is ${trend}.
+     Sentence 3: One likely reason investors may care, using simple words.
+     Sentence 4: One market word to learn from this example.
+     No advice. Max 120 words.`
   )
 }
 
 export async function explainMarketDay(sp500Change: number, topGainer: string, topLoser: string): Promise<string> {
   const trend = sp500Change >= 0 ? `up ${sp500Change.toFixed(2)}%` : `down ${Math.abs(sp500Change).toFixed(2)}%`
   return askGemini(
-    `Write a 3-sentence professional market recap.
+    `Write a clear 4-sentence market recap for 8th-grade students.
      The S&P 500 moved ${trend} today. Top gainer: ${topGainer}. Top decliner: ${topLoser}.
-     Include sector rotation context and macro implications.
-     Keep it under 80 words. Institutional analyst tone.`
+     Explain what moved, why people care, and one word students should learn.
+     Do not give advice. Keep it under 130 words.`
   )
 }
 
 export async function simplifyNewsHeadline(headline: string): Promise<string> {
   return askGemini(
-    `Rewrite this financial headline as a clear, professional one-sentence summary (max 25 words):
+    `Rewrite this financial headline for an 8th-grade student in 1-2 clear sentences.
+     Explain what happened and why it may matter. Avoid hard words unless you define them.
      "${headline}"
-     Output the summary only. No preamble.`
+     Output the summary only. Max 45 words.`
   )
 }
