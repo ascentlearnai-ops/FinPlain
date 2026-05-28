@@ -9,13 +9,13 @@ Rules you always follow:
 2. Explain what happened, why it matters, and what a student should watch next.
 3. Give enough detail to teach, but do not sound like a bank report.
 4. Never give investment advice or price targets. Provide learning context only.
-5. Do not use hype, emojis, slang, or vague AI-sounding phrases.`
+5. Do not use hype, decorative icons, slang, or vague automated-sounding phrases.`
 
 const USE_MOCK = process.env.USE_MOCK_DATA === 'true'
 
 export async function askGemini(prompt: string): Promise<string> {
   if (USE_MOCK || !KEY) {
-    return 'This is a sample learning summary. In production, the AI model reviews live market context, company fundamentals, and recent headlines, then explains the signal in clear language for students without giving investment advice.'
+    return 'This is a sample learning summary. In production, live market context, company fundamentals, and recent headlines are reviewed, then the signal is explained in clear language for students without giving investment advice.'
   }
 
   const res = await fetch(OPENROUTER_URL, {

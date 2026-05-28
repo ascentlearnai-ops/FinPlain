@@ -43,7 +43,7 @@ export function addRecentSearch(ticker: string): void {
   localStorage.setItem(RECENTS_KEY, JSON.stringify([ticker, ...recents].slice(0, 5)))
 }
 
-// AI SUMMARY CACHE (keyed by date so it re-fetches each new day)
+// SUMMARY CACHE (keyed by date so it re-fetches each new day)
 export function getCachedAISummary(): string | null {
   if (typeof window === 'undefined') return null
   try {

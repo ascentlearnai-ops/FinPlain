@@ -8,6 +8,6 @@ export async function POST(req: NextRequest) {
     const explanation = await askGemini(prompt)
     return NextResponse.json({ explanation })
   } catch {
-    return NextResponse.json({ error: 'AI unavailable' }, { status: 500 })
+    return NextResponse.json({ error: 'Explanation unavailable' }, { status: 500 })
   }
 }

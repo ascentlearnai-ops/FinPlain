@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function StockPage({ params }: Props) {
   const ticker = params.ticker.toUpperCase()
 
-  // Fetch all data sources in parallel — direct lib calls, no HTTP roundtrip
+  // Fetch all data sources in parallel with direct lib calls and no HTTP roundtrip.
   const [eodQuote, eodChart, serpQuote, yahooQuote, avOverview, yahooOverview, yahooChartResult, recTrendsResult, earningsResult, filingsResult] = await Promise.allSettled([
     getEodhdQuote(ticker),
     getEodhdChart(ticker, '1M'),

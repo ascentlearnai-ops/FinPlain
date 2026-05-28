@@ -1,4 +1,4 @@
-// lib/mockData.ts — Use when USE_MOCK_DATA=true so you don't burn API quota
+// lib/mockData.ts - Use when USE_MOCK_DATA=true so you don't burn API quota
 
 export const MOCK_MARKET_SUMMARY = {
   indices: [

@@ -194,7 +194,7 @@ export default function ResearchWorkspace({ ticker, companyName, events, filings
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div className="lg:col-span-2 border border-white/[0.08] rounded-lg p-5">
               <p className="font-bold text-primary mb-2">Keyword watch</p>
-              <p className="text-sm text-secondary mb-5">Store words you want to notice in future headlines or filings, like &quot;margin&quot;, &quot;AI&quot;, or &quot;debt&quot;.</p>
+              <p className="text-sm text-secondary mb-5">Store words you want to notice in future headlines or filings, like &quot;margin&quot;, &quot;guidance&quot;, or &quot;debt&quot;.</p>
               <div className="flex gap-2">
                 <input
                   value={alertDraft}

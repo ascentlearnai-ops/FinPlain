@@ -77,12 +77,12 @@ export async function GET(req: NextRequest) {
       rawArticles = result.news || []
     }
 
-    // Process and simplify (limit AI usage to top 15 for homepage, 5 for stock)
+    // Process and simplify, with a smaller generated-summary limit for stock pages.
     const limit = ticker ? 5 : 20
     const processed = await Promise.all(
       rawArticles.slice(0, 50).map(async (article: any, index: number) => {
         let simpleSummary = ''
-        // Only run AI summaries for the first few to save quota
+        // Only run generated summaries for the first few to save quota.
         if (index < limit) {
           try {
             simpleSummary = await simplifyNewsHeadline(article.title || article.headline)

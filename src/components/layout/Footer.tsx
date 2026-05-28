@@ -48,8 +48,8 @@ export default function Footer() {
           </div>
 
           <div className="mt-12 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-xs text-muted">
-            <p>&copy; {new Date().getFullYear()} macroliberium. All rights reserved.</p>
-            <p>AI summaries are for learning context only.</p>
+            <p>Copyright {new Date().getFullYear()} macroliberium. All rights reserved.</p>
+            <p>Learning summaries are for education only.</p>
           </div>
         </div>
       </div>

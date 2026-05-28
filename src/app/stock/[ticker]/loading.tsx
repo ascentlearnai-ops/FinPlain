@@ -17,7 +17,7 @@ export default function StockLoading() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Column */}
         <div className="lg:col-span-8 space-y-6">
-          {/* AI Explainer Skeleton */}
+          {/* Explainer Skeleton */}
           <div className="glass-card p-6 h-40 animate-pulse bg-white/[0.04]" />
           {/* Chart Skeleton */}
           <SkeletonChart />

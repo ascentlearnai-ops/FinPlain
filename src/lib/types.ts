@@ -1,4 +1,4 @@
-// src/lib/types.ts — All shared types used across the app
+// src/lib/types.ts - All shared types used across the app
 
 export interface MarketIndex {
   name: string           // "S&P 500"
@@ -51,7 +51,7 @@ export interface NewsArticle {
   url: string
   publishedAt: string       // ISO string
   relatedTickers: string[]
-  simpleSummary: string     // AI-generated 1-sentence plain summary
+  simpleSummary: string     // Generated 1-sentence plain summary
   category: 'tech' | 'energy' | 'finance' | 'economy' | 'general'
   imageUrl?: string
 }
@@ -64,7 +64,6 @@ export interface GlossaryTerm {
   example: string           // "Think of it like..."
   detailedExample?: string  // Longer deep dive for the modal
   imageUrl?: string         // Diagram or chart image
-  emoji?: string
 }
 
 export interface WatchlistItem {
