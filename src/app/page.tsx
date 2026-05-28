@@ -14,24 +14,28 @@ export const metadata = { title: 'macroliberium - Markets, Explained' }
 export default function HomePage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <section className="landing-hero border-b border-white/[0.08]">
-        <div className="container-full">
+      <section className="landing-hero landing-hero-cinematic border-b border-white/[0.08]">
+        <div className="landing-scene-wrap">
+          <IntroVideo />
+        </div>
+
+        <div className="container-full landing-hero-content">
           <div className="container-inner">
-            <div className="mx-auto max-w-4xl text-center">
-              <div className="mb-7 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.03] px-3 py-2">
+            <div className="landing-copy">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/[0.14] bg-black/40 px-3 py-2 backdrop-blur-md">
                 <span className="w-2 h-2 bg-white rounded-full" />
                 <span className="text-[11px] font-bold uppercase text-secondary">Yahoo Finance for teenagers, rebuilt for learning</span>
               </div>
 
               <h1 className="landing-title text-primary">
-                Understand the market before it starts speaking Wall Street.
+                The market, translated before it starts speaking Wall Street.
               </h1>
 
-              <p className="mx-auto mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
+              <p className="mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
                 macroliberium gives students the useful parts of Yahoo Finance, prices, news, charts, filings, and watchlists, then explains what everything means in clear language.
               </p>
 
-              <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
                 <a href="#dashboard" className="btn-primary inline-flex items-center justify-center gap-2 group">
                   Open the market desk <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </a>
@@ -42,34 +46,32 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="landing-product-stage">
-              <IntroVideo />
-            </div>
+            <div className="landing-bottom-dock">
+              <div className="landing-proof-strip" aria-label="Product capabilities">
+                {['Yahoo Finance', 'SEC EDGAR', 'FMP', 'Finnhub', 'NewsAPI', 'Alpha Vantage'].map(source => (
+                  <span key={source}>{source}</span>
+                ))}
+              </div>
 
-            <div className="landing-proof-strip" aria-label="Product capabilities">
-              {['Yahoo Finance', 'SEC EDGAR', 'FMP', 'Finnhub', 'NewsAPI', 'Alpha Vantage'].map(source => (
-                <span key={source}>{source}</span>
-              ))}
-            </div>
-
-            <div className="landing-feature-grid">
-              {[
-                [Sparkles, 'Headlines made readable', 'Market news rewritten so students can understand the actual takeaway.'],
-                [FileText, 'Company research timeline', 'Earnings, filings, and important events organized by ticker.'],
-                [NotebookPen, 'Your research notebook', 'Save thoughts beside charts, articles, and companies you follow.'],
-                [Bell, 'Catalyst alerts', 'Watch keywords, guidance changes, and events that move prices.'],
-              ].map(([Icon, title, body]) => {
-                const FeatureIcon = Icon as typeof Sparkles
-                return (
-                  <div key={title as string} className="landing-feature">
-                    <FeatureIcon size={17} />
-                    <div>
-                      <p>{title as string}</p>
-                      <span>{body as string}</span>
+              <div className="landing-feature-grid">
+                {[
+                  [Sparkles, 'Headlines made readable', 'Market news rewritten so students can understand the actual takeaway.'],
+                  [FileText, 'Company research timeline', 'Earnings, filings, and important events organized by ticker.'],
+                  [NotebookPen, 'Your research notebook', 'Save thoughts beside charts, articles, and companies you follow.'],
+                  [Bell, 'Catalyst alerts', 'Watch keywords, guidance changes, and events that move prices.'],
+                ].map(([Icon, title, body]) => {
+                  const FeatureIcon = Icon as typeof Sparkles
+                  return (
+                    <div key={title as string} className="landing-feature">
+                      <FeatureIcon size={17} />
+                      <div>
+                        <p>{title as string}</p>
+                        <span>{body as string}</span>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

@@ -1,96 +1,222 @@
-import { Bell, BookOpen, FileText, LineChart, Newspaper, Search, ShieldCheck } from 'lucide-react'
+'use client'
 
-const movers = [
-  ['AAPL', 'Earnings call translated', '+0.82%'],
-  ['NVDA', 'AI demand headline', '+3.12%'],
-  ['MSFT', '10-Q filing surfaced', '+0.64%'],
-  ['SPY', 'Fed comments watch', '-0.22%'],
+import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { ArrowUpRight, BookOpen, FileText, LineChart, Newspaper, Search, ShieldCheck } from 'lucide-react'
+
+const tickers = ['AAPL', 'NVDA', 'MSFT', 'SPY', 'TSLA', 'META', 'AMZN', 'GOOGL', 'JPM', 'QQQ']
+
+const cards = [
+  ['Headline', 'Apple services margin expands after earnings call'],
+  ['Translation', 'Apple kept more money from each dollar of service sales. That can matter because profit may grow faster than sales.'],
+  ['Word to learn', 'Margin means the part of sales a company keeps after paying costs.'],
 ]
 
 export default function IntroVideo() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const shellRef = useRef<HTMLDivElement | null>(null)
+  const [activeTicker, setActiveTicker] = useState(0)
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveTicker(index => (index + 1) % tickers.length)
+    }, 1400)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const shell = shellRef.current
+    if (!canvas || !shell) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const points = Array.from({ length: 56 }, (_, index) => ({
+      x: Math.random(),
+      y: Math.random(),
+      r: 1.2 + Math.random() * 2.8,
+      speed: 0.00045 + Math.random() * 0.0009,
+      phase: index * 0.72,
+    }))
+
+    let width = 0
+    let height = 0
+    let raf = 0
+    let pointerX = 0.5
+    let pointerY = 0.5
+
+    const resize = () => {
+      const rect = shell.getBoundingClientRect()
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      width = rect.width
+      height = rect.height
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = shell.getBoundingClientRect()
+      pointerX = (event.clientX - rect.left) / rect.width
+      pointerY = (event.clientY - rect.top) / rect.height
+      shell.style.setProperty('--mx', `${pointerX}`)
+      shell.style.setProperty('--my', `${pointerY}`)
+      shell.style.setProperty('--rx', `${(pointerY - 0.5) * 5}deg`)
+      shell.style.setProperty('--ry', `${(pointerX - 0.5) * -8}deg`)
+    }
+
+    const draw = (time: number) => {
+      ctx.clearRect(0, 0, width, height)
+      ctx.fillStyle = '#050505'
+      ctx.fillRect(0, 0, width, height)
+
+      const grid = 44
+      ctx.strokeStyle = 'rgba(255,255,255,0.035)'
+      ctx.lineWidth = 1
+      for (let x = (time * 0.006) % grid; x < width; x += grid) {
+        ctx.beginPath()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, height)
+        ctx.stroke()
+      }
+      for (let y = (time * 0.004) % grid; y < height; y += grid) {
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(width, y)
+        ctx.stroke()
+      }
+
+      const resolved = points.map(point => {
+        const drift = time * point.speed
+        return {
+          ...point,
+          px: (point.x * width + Math.sin(drift + point.phase) * 34 + (pointerX - 0.5) * 24),
+          py: (point.y * height + Math.cos(drift + point.phase) * 26 + (pointerY - 0.5) * 18),
+        }
+      })
+
+      resolved.forEach((a, i) => {
+        for (let j = i + 1; j < resolved.length; j++) {
+          const b = resolved[j]
+          const dx = a.px - b.px
+          const dy = a.py - b.py
+          const distance = Math.sqrt(dx * dx + dy * dy)
+          if (distance < 128) {
+            ctx.strokeStyle = `rgba(255,255,255,${0.13 * (1 - distance / 128)})`
+            ctx.beginPath()
+            ctx.moveTo(a.px, a.py)
+            ctx.lineTo(b.px, b.py)
+            ctx.stroke()
+          }
+        }
+      })
+
+      resolved.forEach((point, index) => {
+        const pulse = 0.45 + Math.sin(time * 0.003 + index) * 0.35
+        ctx.fillStyle = `rgba(255,255,255,${0.35 + pulse * 0.35})`
+        ctx.beginPath()
+        ctx.arc(point.px, point.py, point.r + pulse, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      if (!motionQuery.matches) raf = requestAnimationFrame(draw)
+    }
+
+    resize()
+    shell.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('resize', resize)
+    raf = requestAnimationFrame(draw)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      shell.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  const currentTicker = tickers[activeTicker]
+
   return (
-    <div className="fast-preview-shell" aria-label="Product preview">
-      <div className="fast-preview-topbar">
-        <div className="fast-preview-brand">
-          <span />
-          <strong>macroliberium</strong>
-        </div>
-        <div className="fast-preview-search">
-          <Search size={13} />
-          <span>Why did AAPL move today?</span>
-        </div>
-        <div className="fast-preview-status">Yahoo Finance for teenagers</div>
+    <div className="astonish-stage" ref={shellRef}>
+      <canvas ref={canvasRef} className="astonish-canvas" aria-hidden="true" />
+
+      <div className="ticker-ribbon" aria-hidden="true">
+        {[...tickers, ...tickers].map((ticker, index) => (
+          <span key={`${ticker}-${index}`}>{ticker}<em>{index % 3 === 0 ? '+1.4%' : index % 3 === 1 ? '-0.6%' : '+0.2%'}</em></span>
+        ))}
       </div>
 
-      <div className="fast-preview-sidebar">
-        {[
-          [LineChart, 'Prices'],
-          [Newspaper, 'News'],
-          [FileText, 'Filings'],
-          [BookOpen, 'Explain'],
-          [Bell, 'Alerts'],
-        ].map(([Icon, label]) => {
-          const ItemIcon = Icon as typeof LineChart
-          return (
-            <div key={label as string} className="fast-preview-nav-item">
-              <ItemIcon size={14} />
-              <span>{label as string}</span>
-            </div>
-          )
-        })}
+      <div className="market-orbit" aria-hidden="true">
+        {tickers.slice(0, 7).map((ticker, index) => (
+          <span key={ticker} style={{ '--i': index } as CSSProperties}>{ticker}</span>
+        ))}
       </div>
 
-      <div className="fast-preview-main">
-        <div className="fast-preview-heading">
-          <div>
-            <p>Teen market brief</p>
-            <h3>What moved, why it matters, and what the words mean.</h3>
-          </div>
-          <div className="fast-preview-quality">
-            <ShieldCheck size={14} />
-            <span>Sources checked</span>
-          </div>
+      <div className="hero-terminal">
+        <div className="hero-terminal-top">
+          <div className="hero-brand-dot" />
+          <strong>Student Market Desk</strong>
+          <span>06:00 source sync</span>
         </div>
 
-        <div className="fast-preview-chart-card">
-          <div className="fast-preview-chart-header">
-            <div>
-              <span>AAPL</span>
-              <strong>$310.85</strong>
-            </div>
-            <em>Plain-English read</em>
-          </div>
-          <svg viewBox="0 0 520 190" className="fast-preview-chart" role="img" aria-label="Stock chart preview">
-            <g>
-              {[34, 76, 118, 160].map(y => <line key={y} x1="0" y1={y} x2="520" y2={y} />)}
-            </g>
-            <path d="M 18 148 L 70 132 L 122 138 L 174 104 L 226 116 L 278 78 L 330 88 L 382 58 L 434 66 L 486 38" />
-            <circle cx="486" cy="38" r="7" />
-          </svg>
+        <div className="hero-searchbar">
+          <Search size={14} />
+          <span>Why did {currentTicker} move today?</span>
         </div>
 
-        <div className="fast-preview-movers">
-          {movers.map(([ticker, title, change]) => (
-            <div key={ticker} className="fast-preview-mover">
-              <span>{ticker}</span>
-              <strong>{title}</strong>
-              <em>{change}</em>
+        <div className="hero-terminal-grid">
+          <div className="hero-chart-panel">
+            <div className="hero-chart-head">
+              <div>
+                <p>{currentTicker}</p>
+                <strong>{currentTicker === 'SPY' ? '$632.14' : '$310.85'}</strong>
+              </div>
+              <em>Explained for students</em>
             </div>
-          ))}
+            <svg viewBox="0 0 540 230" className="hero-live-chart" role="img" aria-label="Animated market chart">
+              <g>
+                {[44, 92, 140, 188].map(y => <line key={y} x1="0" y1={y} x2="540" y2={y} />)}
+              </g>
+              <path d="M 18 174 C 74 128, 118 194, 171 128 S 268 88, 318 106 S 406 62, 522 48" />
+              <circle cx="522" cy="48" r="7" />
+            </svg>
+          </div>
+
+          <div className="hero-source-stack">
+            {[
+              [ShieldCheck, 'Sources checked', 'Yahoo, filings, news feeds'],
+              [Newspaper, 'Headline simplified', 'What happened, in normal words'],
+              [BookOpen, 'Term explained', 'Learn one idea at a time'],
+              [FileText, 'Research saved', 'Notes stay with the ticker'],
+            ].map(([Icon, title, body]) => {
+              const RowIcon = Icon as typeof ShieldCheck
+              return (
+                <div key={title as string} className="hero-source-row">
+                  <RowIcon size={15} />
+                  <div><strong>{title as string}</strong><span>{body as string}</span></div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="fast-preview-rail">
-        <div className="fast-preview-note">
-          <p>Headline</p>
-          <strong>Apple services margin expands after earnings call.</strong>
-          <span>macroliberium explains the business impact without Wall Street language.</span>
+      <div className="headline-transformer">
+        <div className="transformer-top">
+          <LineChart size={16} />
+          <span>Headline to understanding</span>
+          <ArrowUpRight size={15} />
         </div>
-        <div className="fast-preview-note muted">
-          <p>Student explanation</p>
-          <strong>Margin means how much money the company keeps after costs.</strong>
-          <span>Save it to your ticker notebook and come back later.</span>
-        </div>
+        {cards.map(([label, body], index) => (
+          <div key={label} className="transformer-card" style={{ '--d': index } as CSSProperties}>
+            <p>{label}</p>
+            <strong>{body}</strong>
+          </div>
+        ))}
       </div>
     </div>
   )
