@@ -68,7 +68,7 @@ export default function Navbar() {
               </div>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="fixed right-4 top-5 w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.12] text-primary hover:bg-white/[0.08] transition-colors sm:static"
+                className="fixed right-4 top-5 flex h-10 w-10 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.04] text-primary transition-colors hover:bg-white/[0.08] sm:static lg:hidden"
                 aria-label="Toggle navigation"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}

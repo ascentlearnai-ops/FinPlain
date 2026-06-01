@@ -7,10 +7,8 @@ import Link from 'next/link'
 
 export default function WatchlistPage() {
   const [tickers, setTickers] = useState<string[]>([])
-  const [loaded, setLoaded] = useState(false)
 
-  useEffect(() => { setTickers(getWatchlist()); setLoaded(true) }, [])
-  if (!loaded) return null
+  useEffect(() => { setTickers(getWatchlist()) }, [])
 
   return (
     <>

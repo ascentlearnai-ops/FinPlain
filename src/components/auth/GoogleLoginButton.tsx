@@ -16,9 +16,7 @@ export default function GoogleLoginButton({ compact = false }: { compact?: boole
       .catch(() => setGoogleReady(false))
   }, [])
 
-  if (status === 'loading' || googleReady === null) {
-    return <div className="h-10 w-24 rounded-lg border border-white/[0.1] bg-white/[0.04]" />
-  }
+  if (status === 'loading' || googleReady === null) return null
 
   if (session?.user) {
     return (
@@ -41,18 +39,7 @@ export default function GoogleLoginButton({ compact = false }: { compact?: boole
     )
   }
 
-  if (!googleReady) {
-    return (
-      <button
-        disabled
-        className="inline-flex h-10 cursor-not-allowed items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 text-xs font-black text-muted"
-        title="Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to enable Google login."
-      >
-        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/[0.12] text-[9px] font-black text-white">G</span>
-        <span className={compact ? 'hidden sm:inline' : ''}>Add Google keys</span>
-      </button>
-    )
-  }
+  if (!googleReady) return null
 
   return (
     <button

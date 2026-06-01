@@ -29,8 +29,9 @@ export default function AIExplainer({ ticker, companyName, changePercent }: Prop
           </div>
           {loading ? (
             <div className="space-y-2.5">
-              <div className="h-4 bg-white/[0.06] rounded w-full skeleton-shimmer" />
-              <div className="h-4 bg-white/[0.06] rounded w-5/6 skeleton-shimmer" />
+              <p className="text-sm font-medium text-secondary">Building a short class note from the live stock data.</p>
+              <div className="h-3 bg-white/[0.06] rounded w-full skeleton-shimmer" />
+              <div className="h-3 bg-white/[0.06] rounded w-5/6 skeleton-shimmer" />
             </div>
           ) : (
             <p className="text-sm text-secondary leading-relaxed font-medium">
