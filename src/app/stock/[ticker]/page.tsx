@@ -82,7 +82,7 @@ export default async function StockPage({ params }: Props) {
       {/* Stock Header */}
       <div className="stock-pro-hero relative z-10">
         <div className="container-full">
-          <div className="container-inner">
+          <div className="mx-auto w-full max-w-[1500px] min-w-0">
             <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary mb-5 transition-colors">
               <ArrowLeft size={14} /> Overview
             </Link>
@@ -113,16 +113,16 @@ export default async function StockPage({ params }: Props) {
       {/* Main content */}
       <div className="section-soft py-8">
         <div className="container-full">
-          <div className="container-inner space-y-6">
-            <div className="stock-workspace-grid">
-              <div className="lg:col-span-8 space-y-6">
+          <div className="mx-auto w-full max-w-[1500px] min-w-0 space-y-6">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_410px]">
+              <div className="min-w-0">
                 <AIExplainer ticker={ticker} companyName={overview.companyName} changePercent={quote.changePercent} />
-                <StockChart ticker={ticker} initialData={chartData} initialRange="1M" />
               </div>
-              <div className="lg:col-span-4 space-y-6">
+              <div className="min-w-0">
                  <AnalystConsensus trends={recTrends} />
               </div>
             </div>
+            <StockChart ticker={ticker} initialData={chartData} initialRange="1M" />
             <ResearchWorkspace ticker={ticker} companyName={overview.companyName} events={researchEvents} filings={filings} />
             <StockStats overview={overview as any} />
             <div>
