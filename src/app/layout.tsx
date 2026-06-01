@@ -6,7 +6,7 @@ import AuthProvider from '@/components/auth/AuthProvider'
 import BrandMark from '@/components/brand/BrandMark'
 
 export const metadata: Metadata = {
-  title: 'macroliberium - Markets, Explained',
+  title: 'MacroLibrium - Markets, Explained',
   description: 'A black-and-white market intelligence app that makes stocks, news, and financial language easier for teenagers to understand.',
   icons: {
     icon: '/brand-mark.png',
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <BrandMark size={68} priority />
             </div>
           </div>
-          <div className="splash-text">macroliberium</div>
+          <div className="splash-text">MacroLibrium</div>
         </div>
 
         <AuthProvider>

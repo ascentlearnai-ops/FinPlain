@@ -12,7 +12,7 @@ export default function Footer() {
                 <div className="w-9 h-9 rounded-lg border border-white/20 bg-black flex items-center justify-center">
                   <BrandMark size={24} />
                 </div>
-                <span className="font-sans font-extrabold text-xl text-primary">macroliberium</span>
+                <span className="font-sans font-extrabold text-xl text-primary">MacroLibrium</span>
               </div>
               <p className="text-sm text-secondary leading-relaxed">
                 Yahoo Finance for teenagers: live prices, readable headlines, watchlists, filings, and plain-English finance education in one calm workspace.
@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           <div className="mt-12 pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-xs text-muted">
-            <p>Copyright {new Date().getFullYear()} macroliberium. All rights reserved.</p>
+            <p>Copyright {new Date().getFullYear()} MacroLibrium. All rights reserved.</p>
             <p>Study summaries are for education only.</p>
           </div>
         </div>

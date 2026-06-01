@@ -41,7 +41,7 @@ export default function Navbar() {
                 <BrandMark size={24} priority />
               </div>
               <span className="font-['Outfit'] font-black text-xl text-primary hidden sm:block">
-                macroliberium
+                MacroLibrium
               </span>
             </Link>
 

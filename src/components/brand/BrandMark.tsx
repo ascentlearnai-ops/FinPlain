@@ -10,7 +10,7 @@ export default function BrandMark({ size = 28, className = '', priority = false 
   return (
     <Image
       src="/brand-mark.png"
-      alt="macroliberium"
+      alt="MacroLibrium"
       width={size}
       height={size}
       priority={priority}

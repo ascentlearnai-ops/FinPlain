@@ -14,7 +14,7 @@ const filingsCache = new Map<string, CacheEntry<CompanyFiling[]>>()
 
 function secHeaders() {
   return {
-    'User-Agent': process.env.SEC_USER_AGENT || 'macroliberium app contact@example.com',
+    'User-Agent': process.env.SEC_USER_AGENT || 'MacroLibrium app contact@example.com',
     'Accept-Encoding': 'gzip, deflate',
   }
 }

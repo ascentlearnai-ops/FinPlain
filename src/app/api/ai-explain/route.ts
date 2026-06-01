@@ -8,6 +8,9 @@ export async function POST(req: NextRequest) {
     const explanation = await askGemini(prompt)
     return NextResponse.json({ explanation })
   } catch {
-    return NextResponse.json({ error: 'Explanation unavailable' }, { status: 500 })
+    return NextResponse.json({
+      explanation: 'This explanation is temporarily unavailable from the AI provider. Use the page facts first: identify what changed, why investors may care, one word to know, and one question to check next. This keeps the research useful while live summaries recover.',
+      fallback: true,
+    })
   }
 }

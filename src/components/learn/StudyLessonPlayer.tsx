@@ -41,6 +41,7 @@ export default function StudyLessonPlayer({
   const lessonNumber = modules.findIndex(courseModule => courseModule.id === activeModuleId) + 1
   const quizQuestions = useMemo(() => buildLessonQuiz(module, moduleTerms), [module, moduleTerms])
   const quizCorrect = quizQuestions.filter((question, index) => answers[answerKey(module.id, index)] === question.answer).length
+  const progressPercent = Math.round((completedModules.length / modules.length) * 100)
 
   const selectVideo = (moduleId: string) => {
     onSelectModule(moduleId)
@@ -53,12 +54,12 @@ export default function StudyLessonPlayer({
   }
 
   return (
-    <section className="overflow-hidden rounded-lg border border-white/[0.1] bg-[#070707]">
-      <div className="grid grid-cols-1 xl:grid-cols-12">
-        <div className="xl:col-span-8">
+    <section className="overflow-hidden rounded-lg border border-white/[0.1] bg-[#070707] shadow-2xl shadow-black/30">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_390px] 2xl:grid-cols-[minmax(0,1fr)_430px]">
+        <div className="min-w-0">
           {mode === 'video' ? (
-            <div className="border-b border-white/[0.08] bg-black p-3 sm:p-4">
-              <div className="aspect-video w-full overflow-hidden rounded-md border border-white/[0.1] bg-[#050505]">
+            <div className="border-b border-white/[0.08] bg-black p-4 sm:p-5 lg:p-6">
+              <div className="aspect-video w-full overflow-hidden rounded-lg border border-white/[0.1] bg-[#050505]">
                 <iframe
                   className="h-full w-full"
                   src={videoUrl}
@@ -70,7 +71,7 @@ export default function StudyLessonPlayer({
               </div>
             </div>
           ) : (
-            <div className="border-b border-white/[0.08] bg-black p-5 sm:p-7">
+            <div className="border-b border-white/[0.08] bg-black p-5 sm:p-7 lg:p-8">
               <div className="rounded-lg border border-white/[0.1] bg-white/[0.025] p-6 sm:p-8">
                 <div className="mb-4 flex flex-wrap items-center gap-2">
                   <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
@@ -91,7 +92,7 @@ export default function StudyLessonPlayer({
             </div>
           )}
 
-          <div className="space-y-5 p-5 sm:p-6">
+          <div className="space-y-6 p-5 sm:p-7 lg:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="max-w-2xl">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -145,7 +146,7 @@ export default function StudyLessonPlayer({
               />
             )}
 
-            <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+            <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
               <div className="mb-4 flex items-center gap-2">
                 <BookOpen size={16} className="text-primary" />
                 <p className="font-black text-primary">Lesson {lessonNumber} terms</p>
@@ -167,7 +168,7 @@ export default function StudyLessonPlayer({
           </div>
         </div>
 
-        <aside className="border-t border-white/[0.08] bg-white/[0.025] xl:col-span-4 xl:border-l xl:border-t-0">
+        <aside className="border-t border-white/[0.08] bg-white/[0.025] xl:sticky xl:top-24 xl:max-h-[calc(100vh-7rem)] xl:self-start xl:overflow-hidden xl:border-l xl:border-t-0">
           <div className="border-b border-white/[0.08] p-5">
             <div className="mb-2 flex items-center gap-2 text-primary">
               <ListVideo size={16} />
@@ -176,19 +177,28 @@ export default function StudyLessonPlayer({
             <p className="text-xs leading-relaxed text-muted">
               Move through each lesson like Udemy: video first, quiz second, then continue.
             </p>
+            <div className="mt-4">
+              <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase text-muted">
+                <span>{completedModules.length}/{modules.length} lessons done</span>
+                <span>{progressPercent}%</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+                <div className="h-full rounded-full bg-white" style={{ width: `${progressPercent}%` }} />
+              </div>
+            </div>
           </div>
 
-          <div className="max-h-[42rem] overflow-y-auto p-3">
+          <div className="max-h-[44rem] overflow-y-auto p-3 xl:max-h-[calc(100vh-18rem)]">
             {modules.map((courseModule, index) => {
               const active = courseModule.id === activeModuleId
               const done = completedModules.includes(courseModule.id)
 
               return (
-                <div key={courseModule.id} className="mb-2 overflow-hidden rounded-lg border border-white/[0.08] bg-black/20">
+                <div key={courseModule.id} className="mb-3 overflow-hidden rounded-lg border border-white/[0.08] bg-black/20">
                   <button
                     type="button"
                     onClick={() => selectVideo(courseModule.id)}
-                    className={`w-full p-4 text-left transition-colors ${
+                    className={`w-full p-4 text-left transition-colors sm:p-4 ${
                       active && mode === 'video'
                         ? 'bg-white text-black'
                         : 'text-secondary hover:bg-white/[0.04] hover:text-primary'
@@ -208,7 +218,7 @@ export default function StudyLessonPlayer({
                   <button
                     type="button"
                     onClick={() => selectQuiz(courseModule.id)}
-                    className={`w-full border-t border-white/[0.08] p-4 text-left transition-colors ${
+                    className={`w-full border-t border-white/[0.08] p-4 text-left transition-colors sm:p-4 ${
                       active && mode === 'quiz'
                         ? 'bg-white text-black'
                         : 'text-secondary hover:bg-white/[0.04] hover:text-primary'
@@ -279,7 +289,7 @@ function CourseRow({
 
 function LessonRecap({ lessonNumber, module }: { lessonNumber: number; module: StudyModule }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <p className="text-label mb-1">Lesson {lessonNumber} notes</p>
@@ -290,7 +300,7 @@ function LessonRecap({ lessonNumber, module }: { lessonNumber: number; module: S
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         {module.steps.map((step, index) => (
           <div key={step.title} className="rounded-lg border border-white/[0.08] bg-black/20 p-4">
             <div className="mb-3 flex items-center gap-3">
@@ -323,7 +333,7 @@ function LessonQuiz({
   onAnswer: (index: number, answer: string) => void
 }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5">
+    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-label mb-1">Lesson {lessonNumber} quiz</p>

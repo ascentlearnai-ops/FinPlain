@@ -95,7 +95,7 @@ export default function LearnPage() {
     <div className="relative min-h-screen">
       <section className="pro-page-hero">
         <div className="container-full">
-          <div className="container-inner">
+          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
             <div className="pro-hero-grid">
               <div className="max-w-3xl">
                 <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-4 py-2 mb-6 bg-white/[0.03]">
@@ -150,7 +150,7 @@ export default function LearnPage() {
 
       <section className="py-12">
         <div className="container-full">
-          <div className="container-inner">
+          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
             <div className="pro-section-header">
               <div>
                 <p className="text-label mb-2">Guided path</p>
@@ -393,7 +393,7 @@ function TermDetailModal({
         </div>
 
         <div className="p-5 sm:p-8 border-t border-white/[0.08] bg-white/[0.01]">
-          <p className="text-[10px] text-muted font-bold uppercase">macroliberium study academy</p>
+          <p className="text-[10px] text-muted font-bold uppercase">MacroLibrium study academy</p>
         </div>
       </div>
     </div>

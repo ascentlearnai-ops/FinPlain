@@ -9,7 +9,7 @@ import GoogleLoginButton from '@/components/auth/GoogleLoginButton'
 import { ArrowRight, Bell, BookOpen, FileText, Globe, NotebookPen, ShieldCheck, Sparkles } from 'lucide-react'
 import { getMarketSummary } from '@/lib/market'
 
-export const metadata = { title: 'macroliberium - Markets, Explained' }
+export const metadata = { title: 'MacroLibrium - Markets, Explained' }
 
 export default function HomePage() {
   return (
@@ -32,7 +32,7 @@ export default function HomePage() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-balance text-base font-medium leading-relaxed text-secondary sm:text-lg md:text-xl">
-                macroliberium gives students the useful parts of Yahoo Finance, prices, news, charts, filings, and watchlists, then explains what everything means in clear language.
+                MacroLibrium gives students the useful parts of Yahoo Finance, prices, news, charts, filings, and watchlists, then explains what everything means in clear language.
               </p>
 
               <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">

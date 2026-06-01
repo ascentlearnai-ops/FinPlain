@@ -4,8 +4,8 @@ import { simplifyNewsHeadline } from '@/lib/gemini'
 import { getFmpStockNews } from '@/lib/fmp'
 
 const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] })
-const NEWSAPI_KEY = process.env.NEWSAPI_KEY || ''
-const THENEWSAPI_KEY = process.env.THENEWSAPI_KEY || ''
+const NEWSAPI_KEY = process.env.NEWSAPI_KEY || process.env.NEWS_API_KEY || ''
+const THENEWSAPI_KEY = process.env.THENEWSAPI_KEY || process.env.NEWSDATA_API_KEY || ''
 
 // Server-side cache
 let newsCache: { data: any; ts: number } | null = null

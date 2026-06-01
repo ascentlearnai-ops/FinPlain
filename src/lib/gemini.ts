@@ -24,7 +24,7 @@ export async function askGemini(prompt: string): Promise<string> {
       'Authorization': `Bearer ${KEY}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': 'https://macroliberium.dev',
-      'X-Title': 'macroliberium',
+      'X-Title': 'MacroLibrium',
     },
     body: JSON.stringify({
       model: 'stepfun/step-3.5-flash',

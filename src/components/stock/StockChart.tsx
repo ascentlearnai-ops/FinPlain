@@ -227,7 +227,7 @@ export default function StockChart({ ticker, initialData, initialRange }: Props)
         )}
         <div ref={chartContainerRef} className={loading ? 'opacity-30' : 'transition-opacity duration-500'} />
         <div className="absolute bottom-6 right-6 pointer-events-none opacity-10">
-           <p className="font-['Outfit'] font-black text-4xl text-white">MACROLIBERIUM</p>
+           <p className="font-['Outfit'] font-black text-4xl text-white">MACROLIBRIUM</p>
         </div>
       </div>
     </div>

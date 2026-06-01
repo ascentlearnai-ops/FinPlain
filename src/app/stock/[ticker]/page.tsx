@@ -21,7 +21,7 @@ import type { ResearchEvent } from '@/lib/types'
 interface Props { params: { ticker: string } }
 
 export async function generateMetadata({ params }: Props) {
-  return { title: `${params.ticker.toUpperCase()} | macroliberium` }
+  return { title: `${params.ticker.toUpperCase()} | MacroLibrium` }
 }
 
 export default async function StockPage({ params }: Props) {
