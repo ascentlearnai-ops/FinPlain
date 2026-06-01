@@ -18,12 +18,10 @@ import {
   BookOpen,
   CheckCircle2,
   Clock3,
-  GraduationCap,
   Info,
-  Layers,
   LineChart,
   ListChecks,
-  Newspaper,
+  RotateCcw,
   Search,
   Target,
   X,
@@ -32,10 +30,14 @@ import type { GlossaryTerm } from '@/lib/types'
 
 const CATEGORIES = ['all', 'stocks', 'markets', 'numbers', 'basics'] as const
 type Category = typeof CATEGORIES[number]
+type StudyTab = 'lessons' | 'vocab' | 'flashcards'
 
 export default function LearnPage() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<Category>('all')
+  const [activeTab, setActiveTab] = useState<StudyTab>('lessons')
+  const [flashIndex, setFlashIndex] = useState(0)
+  const [flashFlipped, setFlashFlipped] = useState(false)
   const [selectedTerm, setSelectedTerm] = useState<GlossaryTerm | null>(null)
   const [activeModule, setActiveModule] = useState(studyModules[0].id)
   const [completedModules, setCompletedModules] = useState<string[]>([])
@@ -65,6 +67,8 @@ export default function LearnPage() {
     .filter((term): term is GlossaryTerm => Boolean(term))
 
   const progressPercent = Math.round((completedModules.length / studyModules.length) * 100)
+  const flashTerms = filtered.length > 0 ? filtered : allTerms
+  const activeFlashTerm = flashTerms[flashIndex % flashTerms.length]
 
   useEffect(() => {
     setCompletedModules(getStudyProgress())
@@ -92,75 +96,68 @@ export default function LearnPage() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      <section className="pro-page-hero">
-        <div className="container-full">
-          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            <div className="pro-hero-grid">
-              <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 border border-white/[0.14] rounded-lg px-4 py-2 mb-6 bg-white/[0.03]">
-                  <Layers size={14} className="text-primary" />
-                  <span className="text-[10px] font-bold text-secondary uppercase">Study Academy for student investors</span>
+    <div className="relative min-h-screen overflow-x-hidden">
+      <section className="border-b border-white/[0.08] py-6 sm:py-8">
+        <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_420px]">
+            <div className="min-w-0">
+              <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="text-label mb-2">Study Academy</p>
+                  <h1 className="text-3xl font-black text-primary sm:text-4xl">Stock research course</h1>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-secondary">
+                    Watch a short lesson, take the quiz, then use vocab cards to lock in the terms.
+                  </p>
                 </div>
-                <h1 className="text-display text-primary mb-6 max-w-[11ch] sm:max-w-3xl">
-                  Study stocks with examples, checks, and plain-English research habits.
-                </h1>
-                <p className="max-w-[28ch] text-xl text-secondary mb-10 leading-relaxed font-medium sm:max-w-3xl">
-                  Build the skills behind every company page: read key stats, understand earnings, check SEC filings, question headlines, and turn watchlists into research.
-                </p>
+                <a href="/stock/AAPL" className="btn-secondary inline-flex w-full items-center justify-center gap-2 sm:w-auto">
+                  Practice on AAPL <ArrowRight size={16} />
+                </a>
+              </div>
 
-                <div className="relative group max-w-[calc(100vw-3rem)] sm:max-w-xl">
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                <div className="relative group min-w-0">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
-                    placeholder="Search terms like P/E, ETF, inflation..."
+                    placeholder="Search vocab like P/E, ETF, inflation..."
                     value={query}
                     onChange={event => setQuery(event.target.value)}
-                    className="w-full bg-white/[0.04] border border-white/[0.12] rounded-lg pl-12 pr-6 py-4 text-base text-primary placeholder:text-muted focus:outline-none focus:border-white/30 transition-colors"
+                    className="w-full rounded-lg border border-white/[0.12] bg-white/[0.04] py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-muted transition-colors focus:border-white/30 focus:outline-none"
                   />
                 </div>
-              </div>
-
-              <div className="learn-terminal w-full max-w-[calc(100vw-3rem)] sm:max-w-none">
-                {[
-                  [LineChart, 'Stock page', 'Start with business, price, and key stats'],
-                  [Newspaper, 'News', 'Find the event before forming a view'],
-                  [BookOpen, 'Filing', 'Use official reports to check the story'],
-                  [GraduationCap, 'Quick check', 'Answer a question and save progress'],
-                ].map(([Icon, title, body]) => {
-                  const StudyIcon = Icon as typeof LineChart
-                  return (
-                    <div key={title as string} className="learn-terminal-row">
-                      <StudyIcon size={16} />
-                      <div><strong>{title as string}</strong><span>{body as string}</span></div>
-                    </div>
-                  )
-                })}
+                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                  {([
+                    ['lessons', 'Lessons'],
+                    ['vocab', `Vocab ${filtered.length}`],
+                    ['flashcards', 'Flashcards'],
+                  ] as const).map(([tab, label]) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setActiveTab(tab)}
+                      className={`shrink-0 rounded-lg border px-4 py-3 text-xs font-black uppercase transition-colors ${
+                        activeTab === tab ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:text-primary'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <StudyMetric icon={CheckCircle2} label="Modules done" value={`${completedModules.length}/${studyModules.length}`} />
-              <StudyMetric icon={Bookmark} label="Saved terms" value={savedTerms.length.toString()} />
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <StudyMetric icon={CheckCircle2} label="Done" value={`${completedModules.length}/${studyModules.length}`} />
+              <StudyMetric icon={Bookmark} label="Saved" value={savedTerms.length.toString()} />
               <StudyMetric icon={ListChecks} label="Progress" value={`${progressPercent}%`} />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-12">
-        <div className="container-full">
-          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
-            <div className="pro-section-header">
-              <div>
-                <p className="text-label mb-2">Guided path</p>
-                <h2 className="text-headline">Stock research modules</h2>
-              </div>
-              <a href="/stock/AAPL" className="btn-secondary inline-flex items-center justify-center gap-2">
-                Practice on AAPL <ArrowRight size={16} />
-              </a>
-            </div>
-
+      <section className="py-6 sm:py-8">
+        <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          {activeTab === 'lessons' && (
             <div className="space-y-5">
               <StudyLessonPlayer
                 module={activeModuleData}
@@ -173,22 +170,19 @@ export default function LearnPage() {
                 onOpenTerm={setSelectedTerm}
               />
             </div>
-          </div>
-        </div>
-      </section>
+          )}
 
-      <section className="py-12 border-t border-white/[0.08]">
-        <div className="container-full">
-          <div className="container-inner">
-            <div className="pro-section-header">
-              <div>
-                <p className="text-label mb-2">Glossary library</p>
-                <h2 className="text-headline">Search, save, and practice terms</h2>
+          {activeTab === 'vocab' && (
+            <div className="space-y-5">
+              <div className="flex flex-col gap-3 rounded-lg border border-white/[0.08] bg-white/[0.025] p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-label mb-1">Vocabulary library</p>
+                  <h2 className="text-2xl font-black text-primary">Search, save, and practice terms</h2>
+                </div>
+                <div className="pro-status-pill w-fit">{filtered.length} terms visible</div>
               </div>
-              <div className="pro-status-pill">{filtered.length} terms visible</div>
-            </div>
 
-            <div className="flex gap-2 flex-wrap mb-8 overflow-x-auto no-scrollbar pb-2">
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat}
@@ -203,15 +197,15 @@ export default function LearnPage() {
                   {cat === 'all' ? `All (${allTerms.length})` : cat}
                 </button>
               ))}
-            </div>
+              </div>
 
-            {query && (
-              <p className="text-xs text-muted mb-6 font-bold uppercase">
-                Found {filtered.length} entries matching &quot;{query}&quot;
-              </p>
-            )}
+              {query && (
+                <p className="text-xs text-muted font-bold uppercase">
+                  Found {filtered.length} entries matching &quot;{query}&quot;
+                </p>
+              )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {filtered.map(term => (
                 <GlossaryCard
                   key={term.id}
@@ -228,8 +222,30 @@ export default function LearnPage() {
                   <p className="text-muted text-sm font-medium">Try a broader search or switch categories.</p>
                 </div>
               )}
+              </div>
             </div>
-          </div>
+          )}
+
+          {activeTab === 'flashcards' && activeFlashTerm && (
+            <FlashcardsPanel
+              term={activeFlashTerm}
+              index={flashIndex}
+              total={flashTerms.length}
+              flipped={flashFlipped}
+              saved={savedTerms.includes(activeFlashTerm.id)}
+              onFlip={() => setFlashFlipped(previous => !previous)}
+              onSave={() => toggleSavedTerm(activeFlashTerm.id)}
+              onOpen={() => setSelectedTerm(activeFlashTerm)}
+              onNext={() => {
+                setFlashIndex(previous => (previous + 1) % flashTerms.length)
+                setFlashFlipped(false)
+              }}
+              onPrevious={() => {
+                setFlashIndex(previous => (previous - 1 + flashTerms.length) % flashTerms.length)
+                setFlashFlipped(false)
+              }}
+            />
+          )}
         </div>
       </section>
 
@@ -245,6 +261,84 @@ export default function LearnPage() {
           onOpenTerm={setSelectedTerm}
         />
       )}
+    </div>
+  )
+}
+
+function FlashcardsPanel({
+  term,
+  index,
+  total,
+  flipped,
+  saved,
+  onFlip,
+  onSave,
+  onOpen,
+  onNext,
+  onPrevious,
+}: {
+  term: GlossaryTerm
+  index: number
+  total: number
+  flipped: boolean
+  saved: boolean
+  onFlip: () => void
+  onSave: () => void
+  onOpen: () => void
+  onNext: () => void
+  onPrevious: () => void
+}) {
+  return (
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-label mb-1">Flashcards</p>
+          <h2 className="text-2xl font-black text-primary">Practice vocab without scrolling</h2>
+        </div>
+        <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-[10px] font-black uppercase text-muted">
+          Card {(index % total) + 1} / {total}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={onFlip}
+        className="min-h-[22rem] w-full rounded-lg border border-white/[0.1] bg-white/[0.035] p-6 text-left transition-colors hover:border-white/25 sm:p-8"
+      >
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <span className="rounded-md border border-white/[0.1] bg-black/30 px-3 py-1.5 text-[10px] font-black uppercase text-muted">
+            {flipped ? 'Answer' : 'Term'}
+          </span>
+          <RotateCcw size={18} className="text-muted" />
+        </div>
+        {flipped ? (
+          <div className="space-y-5">
+            <p className="text-2xl font-black leading-tight text-primary sm:text-3xl">{term.brief || term.definition}</p>
+            <div className="rounded-lg border border-white/[0.08] bg-black/25 p-4">
+              <p className="text-label mb-2">Example</p>
+              <p className="text-sm leading-relaxed text-secondary">{term.realWorldExample || term.example}</p>
+            </div>
+            <p className="text-sm leading-relaxed text-muted">{term.whyItMatters || 'Use this term to connect prices, headlines, and company facts.'}</p>
+          </div>
+        ) : (
+          <div>
+            <p className="text-5xl font-black text-primary sm:text-6xl">{term.term}</p>
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-secondary">Tap the card to reveal the plain-English meaning, example, and why it matters.</p>
+          </div>
+        )}
+      </button>
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <button type="button" onClick={onPrevious} className="btn-secondary justify-center">Previous</button>
+        <button type="button" onClick={onFlip} className="btn-secondary justify-center">{flipped ? 'Hide answer' : 'Show answer'}</button>
+        <button type="button" onClick={onSave} className={`justify-center rounded-lg border px-4 py-3 text-xs font-black uppercase ${saved ? 'border-white bg-white text-black' : 'border-white/[0.12] bg-white/[0.04] text-primary'}`}>
+          {saved ? 'Saved' : 'Save'}
+        </button>
+        <button type="button" onClick={onNext} className="btn-primary justify-center">Next</button>
+      </div>
+      <button type="button" onClick={onOpen} className="mt-3 text-sm font-bold text-secondary hover:text-primary">
+        Open full vocab detail
+      </button>
     </div>
   )
 }

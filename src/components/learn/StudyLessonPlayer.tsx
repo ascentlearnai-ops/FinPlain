@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import type { GlossaryTerm, StudyModule } from '@/lib/types'
-import { BookOpen, Check, CheckCircle2, Clock3, ExternalLink, HelpCircle, ListVideo, PlaySquare } from 'lucide-react'
+import { BookOpen, Check, CheckCircle2, CheckCircle, Circle, Clock3, ExternalLink, HelpCircle, ListVideo, PlaySquare } from 'lucide-react'
 
 interface Props {
   module: StudyModule
@@ -54,8 +54,8 @@ export default function StudyLessonPlayer({
   }
 
   return (
-    <section className="overflow-hidden rounded-lg border border-white/[0.1] bg-[#070707] shadow-2xl shadow-black/30">
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_390px] 2xl:grid-cols-[minmax(0,1fr)_430px]">
+    <section className="rounded-lg border border-white/[0.1] bg-[#070707] shadow-2xl shadow-black/30">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_410px] 2xl:grid-cols-[minmax(0,1fr)_450px]">
         <div className="min-w-0">
           {mode === 'video' ? (
             <div className="border-b border-white/[0.08] bg-black p-4 sm:p-5 lg:p-6">
@@ -70,29 +70,23 @@ export default function StudyLessonPlayer({
                 />
               </div>
             </div>
-          ) : (
-            <div className="border-b border-white/[0.08] bg-black p-5 sm:p-7 lg:p-8">
-              <div className="rounded-lg border border-white/[0.1] bg-white/[0.025] p-6 sm:p-8">
-                <div className="mb-4 flex flex-wrap items-center gap-2">
-                  <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
-                    Lesson {lessonNumber} quiz
-                  </span>
-                  <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[10px] font-black uppercase text-muted">
-                    5 questions
-                  </span>
+          ) : null}
+
+          {mode === 'quiz' && (
+            <div className="border-b border-white/[0.08] bg-black px-5 py-4 sm:px-7 lg:px-8">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-label mb-1">Lesson {lessonNumber} quiz</p>
+                  <h3 className="text-2xl font-black text-primary">{module.title}</h3>
                 </div>
-                <h3 className="text-2xl font-black text-primary sm:text-3xl">{module.title} check</h3>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-secondary">
-                  Answer these after watching the video. The goal is to prove you can explain the idea in normal words, not just recognize a term.
-                </p>
-                <div className="mt-5 inline-flex rounded-lg border border-white/[0.1] bg-black/30 px-4 py-2 text-xs font-black uppercase text-muted">
+                <div className="rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-xs font-black uppercase text-primary">
                   Score {quizCorrect}/{quizQuestions.length}
                 </div>
               </div>
             </div>
           )}
 
-          <div className="space-y-6 p-5 sm:p-7 lg:p-8">
+          <div className="space-y-6 p-4 sm:p-6 lg:p-7">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="max-w-2xl">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -105,9 +99,9 @@ export default function StudyLessonPlayer({
                 </div>
                 <h3 className="text-2xl font-black text-primary sm:text-3xl">{module.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-secondary">{module.goal}</p>
-                <p className="mt-3 text-xs leading-relaxed text-muted">
+                {mode === 'video' && <p className="mt-3 text-xs leading-relaxed text-muted">
                   Use the sidebar like a course playlist: watch the lesson video, then open that lesson quiz before moving to the next topic.
-                </p>
+                </p>}
               </div>
 
               <div className="flex shrink-0 flex-wrap gap-2">
@@ -146,7 +140,7 @@ export default function StudyLessonPlayer({
               />
             )}
 
-            <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
+            <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
               <div className="mb-4 flex items-center gap-2">
                 <BookOpen size={16} className="text-primary" />
                 <p className="font-black text-primary">Lesson {lessonNumber} terms</p>
@@ -168,8 +162,8 @@ export default function StudyLessonPlayer({
           </div>
         </div>
 
-        <aside className="border-t border-white/[0.08] bg-white/[0.025] xl:sticky xl:top-24 xl:max-h-[calc(100vh-7rem)] xl:self-start xl:overflow-hidden xl:border-l xl:border-t-0">
-          <div className="border-b border-white/[0.08] p-5">
+        <aside className="border-t border-white/[0.08] bg-white/[0.025] xl:sticky xl:top-24 xl:max-h-[calc(100vh-7rem)] xl:self-start xl:border-l xl:border-t-0">
+          <div className="border-b border-white/[0.08] p-4">
             <div className="mb-2 flex items-center gap-2 text-primary">
               <ListVideo size={16} />
               <p className="font-black">Course content</p>
@@ -188,17 +182,17 @@ export default function StudyLessonPlayer({
             </div>
           </div>
 
-          <div className="max-h-[44rem] overflow-y-auto p-3 xl:max-h-[calc(100vh-18rem)]">
+          <div className="max-h-[44rem] overflow-y-auto p-2 xl:max-h-[calc(100vh-17rem)]">
             {modules.map((courseModule, index) => {
               const active = courseModule.id === activeModuleId
               const done = completedModules.includes(courseModule.id)
 
               return (
-                <div key={courseModule.id} className="mb-3 overflow-hidden rounded-lg border border-white/[0.08] bg-black/20">
+                <div key={courseModule.id} className="mb-2 overflow-hidden rounded-lg border border-white/[0.08] bg-black/20">
                   <button
                     type="button"
                     onClick={() => selectVideo(courseModule.id)}
-                    className={`w-full p-4 text-left transition-colors sm:p-4 ${
+                    className={`w-full p-3 text-left transition-colors sm:p-3.5 ${
                       active && mode === 'video'
                         ? 'bg-white text-black'
                         : 'text-secondary hover:bg-white/[0.04] hover:text-primary'
@@ -218,7 +212,7 @@ export default function StudyLessonPlayer({
                   <button
                     type="button"
                     onClick={() => selectQuiz(courseModule.id)}
-                    className={`w-full border-t border-white/[0.08] p-4 text-left transition-colors sm:p-4 ${
+                    className={`w-full border-t border-white/[0.08] p-3 text-left transition-colors sm:p-3.5 ${
                       active && mode === 'quiz'
                         ? 'bg-white text-black'
                         : 'text-secondary hover:bg-white/[0.04] hover:text-primary'
@@ -289,7 +283,7 @@ function CourseRow({
 
 function LessonRecap({ lessonNumber, module }: { lessonNumber: number; module: StudyModule }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
+    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <p className="text-label mb-1">Lesson {lessonNumber} notes</p>
@@ -333,31 +327,43 @@ function LessonQuiz({
   onAnswer: (index: number, answer: string) => void
 }) {
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-5 sm:p-6">
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-label mb-1">Lesson {lessonNumber} quiz</p>
-          <h4 className="text-xl font-black text-primary">Answer 5 questions before the next lesson</h4>
+          <h4 className="text-xl font-black text-primary">Answer each question, then check the explanation.</h4>
         </div>
         <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-[10px] font-black uppercase text-muted">
           5 questions
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {questions.map((question, index) => {
           const selectedAnswer = answers[answerKey(moduleId, index)] || ''
           const correct = selectedAnswer === question.answer
 
           return (
-            <div key={question.question} className="rounded-lg border border-white/[0.08] bg-black/20 p-4">
-              <div className="mb-3 flex items-start gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white font-mono text-xs font-black text-black">
-                  {index + 1}
+            <div key={question.question} className={`rounded-lg border p-4 transition-colors ${
+              selectedAnswer ? (correct ? 'border-white/25 bg-white/[0.04]' : 'border-white/[0.12] bg-black/25') : 'border-white/[0.08] bg-black/20'
+            }`}>
+              <div className="mb-4 flex items-start gap-3">
+                <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md border font-mono text-xs font-black ${
+                  selectedAnswer ? (correct ? 'border-white bg-white text-black' : 'border-white/[0.18] bg-white/[0.05] text-primary') : 'border-white/[0.12] bg-white/[0.03] text-muted'
+                }`}>
+                  {selectedAnswer ? (correct ? <CheckCircle size={16} /> : <Circle size={16} />) : index + 1}
                 </div>
-                <p className="font-black leading-snug text-primary">{question.question}</p>
+                <div>
+                  <p className="font-black leading-snug text-primary">{question.question}</p>
+                  {selectedAnswer && (
+                    <p className={`mt-2 text-sm leading-relaxed ${correct ? 'text-primary' : 'text-secondary'}`}>
+                      {correct ? 'Correct. ' : 'Not quite. '}
+                      {question.explanation}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 {question.choices.map(choice => {
                   const selected = selectedAnswer === choice
                   return (
@@ -365,8 +371,8 @@ function LessonQuiz({
                       key={choice}
                       type="button"
                       onClick={() => onAnswer(index, choice)}
-                      className={`rounded-md border px-3 py-2 text-left text-sm transition-colors ${
-                        selected ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:border-white/25 hover:text-primary'
+                      className={`min-h-16 rounded-md border px-3 py-3 text-left text-sm leading-snug transition-colors ${
+                        selected ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:border-white/25 hover:bg-white/[0.06] hover:text-primary'
                       }`}
                     >
                       {choice}
@@ -374,12 +380,6 @@ function LessonQuiz({
                   )
                 })}
               </div>
-              {selectedAnswer && (
-                <p className={`mt-3 text-sm leading-relaxed ${correct ? 'text-primary' : 'text-secondary'}`}>
-                  {correct ? 'Correct. ' : 'Not quite. '}
-                  {question.explanation}
-                </p>
-              )}
             </div>
           )
         })}
