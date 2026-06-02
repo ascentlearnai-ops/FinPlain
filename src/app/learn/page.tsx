@@ -114,6 +114,33 @@ export default function LearnPage() {
                 </a>
               </div>
 
+              <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+                <StudyToolCard
+                  active={activeTab === 'lessons'}
+                  icon={BookOpen}
+                  title="Lessons"
+                  stat={`${completedModules.length}/${studyModules.length}`}
+                  body="Watch videos and take the quiz for each topic."
+                  onClick={() => setActiveTab('lessons')}
+                />
+                <StudyToolCard
+                  active={activeTab === 'vocab'}
+                  icon={Bookmark}
+                  title="Vocab"
+                  stat={filtered.length.toString()}
+                  body="Search definitions, examples, mistakes, and related terms."
+                  onClick={() => setActiveTab('vocab')}
+                />
+                <StudyToolCard
+                  active={activeTab === 'flashcards'}
+                  icon={RotateCcw}
+                  title="Flashcards"
+                  stat={flashTerms.length.toString()}
+                  body="Flip cards to practice terms without scrolling."
+                  onClick={() => setActiveTab('flashcards')}
+                />
+              </div>
+
               <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div className="relative group min-w-0">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-primary transition-colors" />
@@ -125,23 +152,11 @@ export default function LearnPage() {
                     className="w-full rounded-lg border border-white/[0.12] bg-white/[0.04] py-3.5 pl-12 pr-4 text-sm text-primary placeholder:text-muted transition-colors focus:border-white/30 focus:outline-none"
                   />
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                  {([
-                    ['lessons', 'Lessons'],
-                    ['vocab', `Vocab ${filtered.length}`],
-                    ['flashcards', 'Flashcards'],
-                  ] as const).map(([tab, label]) => (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => setActiveTab(tab)}
-                      className={`shrink-0 rounded-lg border px-4 py-3 text-xs font-black uppercase transition-colors ${
-                        activeTab === tab ? 'border-white bg-white text-black' : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:text-primary'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] px-4 py-3">
+                  <p className="text-[10px] font-black uppercase text-muted">Current section</p>
+                  <p className="mt-1 text-sm font-black text-primary">
+                    {activeTab === 'lessons' ? 'Lessons and quizzes' : activeTab === 'vocab' ? 'Vocabulary library' : 'Flashcard practice'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -262,6 +277,49 @@ export default function LearnPage() {
         />
       )}
     </div>
+  )
+}
+
+function StudyToolCard({
+  active,
+  icon: Icon,
+  title,
+  stat,
+  body,
+  onClick,
+}: {
+  active: boolean
+  icon: typeof BookOpen
+  title: string
+  stat: string
+  body: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`min-h-32 rounded-lg border p-4 text-left transition-colors ${
+        active
+          ? 'border-white bg-white text-black'
+          : 'border-white/[0.1] bg-white/[0.03] text-secondary hover:border-white/25 hover:bg-white/[0.06] hover:text-primary'
+      }`}
+    >
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div className={`flex h-10 w-10 items-center justify-center rounded-md border ${
+          active ? 'border-black/15 bg-black text-white' : 'border-white/[0.12] bg-white/[0.04] text-primary'
+        }`}>
+          <Icon size={18} />
+        </div>
+        <span className={`rounded-md px-2.5 py-1 text-[10px] font-black uppercase ${
+          active ? 'bg-black/10 text-black' : 'bg-white/[0.04] text-muted'
+        }`}>
+          {stat}
+        </span>
+      </div>
+      <h2 className={`text-lg font-black ${active ? 'text-black' : 'text-primary'}`}>{title}</h2>
+      <p className={`mt-2 text-xs leading-relaxed ${active ? 'text-black/65' : 'text-muted'}`}>{body}</p>
+    </button>
   )
 }
 
